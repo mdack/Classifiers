@@ -2,7 +2,7 @@ package classifiers.knn;
 
 public class KnnQueue implements Iterable<KnnQueueElement> {
 	
-	private MinMaxPriorityQueue<KnnQueueElement> queue;
+	private static MinMaxPriorityQueue<KnnQueueElement> queue;
     private int size;
 
     public KnnQueue(int size){
