@@ -1,7 +1,9 @@
-package classifiers.kmeans;
+package business.classifiers.kmeans;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import presentation.transfers.Pixel;
 
 public class KMeans {
 	  private final static int NUM_CLUSTERS = 6;
@@ -30,8 +32,6 @@ public class KMeans {
 
 	        //Asigno cada pixel a un cluster y recalculo
 	        while(!goal) {
-	            long start = System.currentTimeMillis();
-
 	            for (Pixel pixel : pixels) {
 	                int id_old_cluster = pixel.getId_cluster();
 	                int id_nearest_center = getIdNearestCluster(pixel);
@@ -46,13 +46,7 @@ public class KMeans {
 	                }
 	            }
 
-	            long end = System.currentTimeMillis();
-	            //Log.d("Iteration ended in: " , (end - start) + " ms.");
-
-	            long start2 = System.currentTimeMillis();
 	            goal = recalculateCluster();
-	            long end2 = System.currentTimeMillis();
-	            //Log.d("Recalculation ended in: " , (end2 - start2) + " ms.");
 	        }
 
 	    }

@@ -1,5 +1,7 @@
 package presentation.views;
 
-public class JDendogram {
+import javax.swing.JFrame;
+
+public class JDendogram extends JFrame{
 
 }

@@ -1,4 +1,4 @@
-package classifiers.kmeans;
+package presentation.transfers;
 
 public class Pixel {
 	private double value;

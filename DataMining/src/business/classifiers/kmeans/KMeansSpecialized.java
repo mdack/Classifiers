@@ -1,4 +1,4 @@
-package classifiers.kmeans;
+package business.classifiers.kmeans;
 
 public class KMeansSpecialized {
 
