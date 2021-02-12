@@ -1,10 +1,12 @@
 package main;
 
+import presentation.views.MainView;
+
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		MainView mainWindow = new MainView();
+		mainWindow.setVisible(true);
 	}
 
 }
