@@ -3,10 +3,13 @@ package presentation.views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.TextArea;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,8 +20,8 @@ import javax.swing.JPanel;
 public class MainView extends JFrame{
 	
 	private final static String NAME_TITLE = "Clasificadores - Minería de datos";
-	private final String[] CLASSIFIER_OPTIONS = {"Bayes","Batchelor y Wilkins", "Jerárquico", "KMeans", "KNN", "Tarjan"};		
-		
+	private final String[] CLASSIFIER_OPTIONS = {"Bayes","Batchelor y Wilkins", "Jerárquico", "KMeans", "KNN", "Tarjan"};	
+
 	private ALExplorer ale;
 	
 	public MainView() {
@@ -88,15 +91,30 @@ public class MainView extends JFrame{
 	
 	private JPanel panelClassifiers() {
 		JPanel result = new JPanel();
-		result.setLayout(new GridLayout(1,3));
+		result.setLayout(new GridLayout(1,4));
 		
 		JLabel title = new JLabel("Escoge clasificador");			//Title of the module
 		title.setHorizontalAlignment(JLabel.LEFT);	//Text placed in center
-		title.setFont(new Font("Ja", Font.PLAIN, 20));	//text font. Big and bold
+		title.setFont(new Font("Ja", Font.PLAIN, 15));	//text font. Big and bold
 		result.add(title);							//Label added to result
 		
 		JComboBox<String> comboBox = new JComboBox<String>(this.CLASSIFIER_OPTIONS);	//Option pane for the options
 		result.add(comboBox);							//Combobox added to the result
+		
+		JPanel panelFiles = new JPanel();
+		panelFiles.setLayout(new FlowLayout());
+		JLabel label = new JLabel("Tipo de archivo: ");			//Title of the module
+		label.setHorizontalAlignment(JLabel.LEFT);	//Text placed in center
+		label.setFont(new Font("Ja", Font.PLAIN, 15));	//text font. Big and bold
+		panelFiles.add(label);
+		
+		 JCheckBox opcion1 = new JCheckBox("Señal");
+		 
+		 JCheckBox opcion2 = new JCheckBox("Imagen");
+		 panelFiles.add(opcion1);
+		 panelFiles.add(opcion2);
+		 
+		 result.add(panelFiles);
 	
 		JButton go = new JButton(" Ejecutar ");	//Execute button
 		go.addActionListener(new ALMainView(comboBox, ale.getSelectedFile()));
@@ -107,6 +125,9 @@ public class MainView extends JFrame{
 	
 	private JPanel panelResults() {
 		JPanel result = new JPanel();
+		
+		TextArea taDisplay = new TextArea();
+		result.add(taDisplay);
 		
 		return result;
 	}

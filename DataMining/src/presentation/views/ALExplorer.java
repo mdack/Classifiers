@@ -6,6 +6,7 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ALExplorer implements ActionListener{
 
@@ -28,8 +29,11 @@ public class ALExplorer implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		this.explorerFiles.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		fileInt = this.explorerFiles.showOpenDialog(instance);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos Zip", "zip");
+		explorerFiles.setFileFilter(filter);
 		
+		fileInt = this.explorerFiles.showOpenDialog(instance);
+
 		selectedFile = this.explorerFiles.getSelectedFile();
 
 		if ((selectedFile == null) || (selectedFile.getName().equals(""))) {

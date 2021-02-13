@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 public class ALMainView implements ActionListener{
 	
@@ -18,7 +19,11 @@ public class ALMainView implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-				
+		if(file.exists()) {
+			
+		}else {
+			
+		}
 	}
 
 }
