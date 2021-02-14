@@ -1,4 +1,4 @@
-package presentation.transfers;
+package business.transfers;
 
 public class Pixel {
 	private double value;

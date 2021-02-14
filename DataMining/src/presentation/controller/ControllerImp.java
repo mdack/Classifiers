@@ -7,6 +7,7 @@ import presentation.dispatcher.Dispatcher;
 
 public class ControllerImp extends Controller {
 	
+	@Override
 	public void action(Context contexto) {
 		Context context = null;
 		CommandFactory factoriaComando = CommandFactory.getInstance(true);

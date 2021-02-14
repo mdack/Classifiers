@@ -2,7 +2,8 @@ package business.classifiers.kmeans;
 
 import java.util.ArrayList;
 
-import presentation.transfers.Pixel;
+import business.transfers.Pixel;
+
 
 public class Cluster {
 	private int id_cluster;

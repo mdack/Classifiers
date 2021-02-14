@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 
 @SuppressWarnings("serial")
@@ -49,7 +50,7 @@ public class MainView extends JFrame{
 			north.setFont(new Font("Header",Font.PLAIN, 18));	//Header font. Size 18.
 			north.setBackground(Color.orange);					//Background color
 			north.setForeground(Color.BLACK);					//Font color
-			north.setHorizontalAlignment(JLabel.CENTER);		//Centered alignment
+			north.setHorizontalAlignment(SwingConstants.CENTER);		//Centered alignment
 			north.setOpaque(true);								//Set visible
 		
 			window.add(north, BorderLayout.NORTH);					//Final label added to the panel
@@ -70,7 +71,7 @@ public class MainView extends JFrame{
 		south.setBackground(Color.orange);					//Background color
 		south.setFont(new Font("Header",Font.ITALIC, 12));	//Header font. Size 18.
 		south.setForeground(Color.BLACK);					//Font color
-		south.setHorizontalAlignment(JLabel.RIGHT);			//Centered alignment
+		south.setHorizontalAlignment(SwingConstants.RIGHT);			//Centered alignment
 		south.setOpaque(true);								//Set visible
 		
 		window.add(south, BorderLayout.SOUTH);					//Final label added to the panel
@@ -81,7 +82,7 @@ public class MainView extends JFrame{
 		
 		JButton go = new JButton(" Escoge archivo ");
 		go.setPreferredSize(new Dimension(250,30));
-		go.setHorizontalAlignment(JButton.CENTER);
+		go.setHorizontalAlignment(SwingConstants.CENTER);
 		go.addActionListener(ale);
 		
 		result.add(go);
@@ -94,7 +95,7 @@ public class MainView extends JFrame{
 		result.setLayout(new GridLayout(1,4));
 		
 		JLabel title = new JLabel("Escoge clasificador");			//Title of the module
-		title.setHorizontalAlignment(JLabel.LEFT);	//Text placed in center
+		title.setHorizontalAlignment(SwingConstants.LEFT);	//Text placed in center
 		title.setFont(new Font("Ja", Font.PLAIN, 15));	//text font. Big and bold
 		result.add(title);							//Label added to result
 		
@@ -104,7 +105,7 @@ public class MainView extends JFrame{
 		JPanel panelFiles = new JPanel();
 		panelFiles.setLayout(new FlowLayout());
 		JLabel label = new JLabel("Tipo de archivo: ");			//Title of the module
-		label.setHorizontalAlignment(JLabel.LEFT);	//Text placed in center
+		label.setHorizontalAlignment(SwingConstants.LEFT);	//Text placed in center
 		label.setFont(new Font("Ja", Font.PLAIN, 15));	//text font. Big and bold
 		panelFiles.add(label);
 		

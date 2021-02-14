@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 
 public class ALMainView implements ActionListener{
 	
@@ -20,7 +19,18 @@ public class ALMainView implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(file.exists()) {
-			
+			switch(c.getSelectedIndex()) {
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			}
 		}else {
 			
 		}
