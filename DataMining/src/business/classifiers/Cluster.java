@@ -1,4 +1,4 @@
-package business.classifiers.kmeans;
+package business.classifiers;
 
 import java.util.ArrayList;
 import java.util.List;

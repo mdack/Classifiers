@@ -87,7 +87,7 @@ public class JKMeansImp extends JKMeans {
 		
 		boton.add(btExecute);
 		btExecute.addActionListener(new ALKMeans(BusinessEvent.KMEANS, txK, cbInitializion, transfer_zip));
-		btExecute.setHorizontalAlignment(SwingConstants.CENTER);;
+		btExecute.setHorizontalAlignment(SwingConstants.CENTER);
 				
 		contenedor.add(datos, BorderLayout.CENTER);
 		contenedor.add(boton, BorderLayout.SOUTH);

@@ -50,7 +50,5 @@ public abstract class JKMeans extends JFrame{
 	
 	public abstract void initGUIKmeans();
 
-	public void update(Object datos) {
-		
-	}
+	public abstract void update(Object context);
 }

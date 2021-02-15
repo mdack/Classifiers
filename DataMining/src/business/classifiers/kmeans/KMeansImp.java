@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import business.classifiers.Cluster;
 import business.elements.Image;
 import business.elements.Pixel;
 import business.elements.Signal;

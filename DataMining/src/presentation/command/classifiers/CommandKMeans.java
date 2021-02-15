@@ -1,6 +1,6 @@
 package presentation.command.classifiers;
 
-import business.classifiers.kmeans.Cluster;
+import business.classifiers.Cluster;
 import business.classifiers.kmeans.KMeans;
 import business.factory.FactoryAS;
 import business.transfers.TKMeans;
