@@ -132,10 +132,5 @@ public class KMeansImp implements KMeans{
 	        return clusters;
 	    }
 
-		@Override
-		public Cluster executeKMeans() {
-			// TODO Auto-generated method stub
-			return null;
-		}
 
 }

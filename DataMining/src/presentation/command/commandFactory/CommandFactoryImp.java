@@ -1,6 +1,11 @@
 package presentation.command.commandFactory;
 
 import presentation.command.Command;
+import presentation.command.classifiers.CommandAgrupamientoSec;
+import presentation.command.classifiers.CommandBatchelorWilkins;
+import presentation.command.classifiers.CommandHierarchical;
+import presentation.command.classifiers.CommandKMeans;
+import presentation.command.file.CommandFile;
 import presentation.controller.BusinessEvent;
 
 public class CommandFactoryImp extends CommandFactory {
@@ -10,14 +15,15 @@ public class CommandFactoryImp extends CommandFactory {
 		
 		switch(CommandName){
 		case BusinessEvent.BATCHELOR_WILKINS:
-			return null;
-		case BusinessEvent.BAYES:
-			return null;
+			return new CommandBatchelorWilkins();
+		case BusinessEvent.READ_ZIP:
+			return new CommandFile();
 		case BusinessEvent.HIERARCHICAL:
-			return null;				
+			return new CommandHierarchical();				
 		case BusinessEvent.KMEANS:
-			return null;
-		case BusinessEvent.KNN:
+			return new CommandKMeans();
+		case BusinessEvent.AGRUPAMIENTO_SECUENCIAL:
+			return new CommandAgrupamientoSec();
 		}
 		
 		return null;
