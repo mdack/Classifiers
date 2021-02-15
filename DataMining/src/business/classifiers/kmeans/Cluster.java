@@ -1,52 +1,82 @@
 package business.classifiers.kmeans;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import business.transfers.Pixel;
+import business.elements.Image;
+import business.elements.Signal;
 
 
 public class Cluster {
 	private int id_cluster;
-    private ArrayList<Double> central_values;
-    private ArrayList<Pixel> pixels;
+    private float central_value=0;
+    private boolean areSignals=true;
 
-    public Cluster(int id, Pixel p) {
+    private ArrayList<Object> list_files = new ArrayList<>();;
+
+    public Cluster(int id, Signal signal) {
         this.id_cluster = id;
-        this.central_values = new ArrayList<>();
-        this.pixels = new ArrayList<>();
-        this.pixels.add(p);
-        int v = (int) p.getValue();
-        central_values.add((double) (v>>16&0x000000FF));
-        central_values.add((double) (v>> 8&0x000000FF));
-        central_values.add((double) (v>> 0&0x000000FF));
+        this.list_files.add(signal);
+        this.central_value = signal.calculateValue();
+        }
+    
+    public Cluster(int id, Image image) {
+        this.id_cluster = id;
+        this.list_files.add(image);
+        this.central_value = image.calculateValue();
+        this.areSignals = false;
     }
 
     public int getId_cluster() {
         return id_cluster;
     }
 
-    public ArrayList<Double> getCentral_values() {
-        return central_values;
-    }
+	public List<Image> getImages() {
+		List<Image> list = new ArrayList(this.list_files);
+		return list;
+	}
 
-    public ArrayList<Pixel> getPixels() {
-        return pixels;
-    }
+	public List<Signal> getSignals() {
+		List<Signal> list = new ArrayList(this.list_files);
+		return list;
+	}
+	
+    public float getCentral_value() {
+		return central_value;
+	}
 
-    public double getCentralValue(int i) {
-        return this.central_values.get(i);
-    }
+	public void setCentral_value(float central_value) {
+		this.central_value = central_value;
+	}
 
-    public int getTotalPixels() {
-        return pixels.size();
-    }
+	public ArrayList<Object> getList_files() {
+		return list_files;
+	}
 
-    public double calculateValue(int pos){
-        double sum_values = 0;
+	public void setList_files(ArrayList<Object> list_files) {
+		this.list_files = list_files;
+	}
 
-        for(Pixel p: pixels)
-            sum_values += p.getColorValue(pos);
+	public void setId_cluster(int id_cluster) {
+		this.id_cluster = id_cluster;
+	}
 
-        return sum_values / pixels.size();
-    }
+	public float calculateValue() {
+		float value = 0;
+		
+
+			for(Object sig: this.list_files) {
+				if(this.areSignals) {
+					Signal signal = (Signal) sig;
+					value += signal.calculateValue();
+				}else {
+					Image image = (Image) sig;
+					value += image.calculateValue();
+				}
+			}
+		
+		return value / list_files.size();
+	}
+
+
 }

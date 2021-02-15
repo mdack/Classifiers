@@ -21,7 +21,7 @@ public class CommandKMeans implements Command{
 		Context contexto = new Context();
 		contexto.setDatos(id);
 		if(id != null) 
-			contexto.setEvento(DispatcherResults.KMeansCorrecto);
+			contexto.setEvento(DispatcherResults.KMeansCorrect);
 		else 
 			contexto.setEvento(DispatcherResults.KMeansError);
 		

@@ -30,4 +30,11 @@ public class TKMeans {
 	public void settInit(int tInit) {
 		this.tInit = tInit;
 	}
+	public TZip gettZip() {
+		return tZip;
+	}
+
+	public void settZip(TZip tZip) {
+		this.tZip = tZip;
+	}
 }

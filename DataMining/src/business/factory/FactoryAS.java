@@ -1,6 +1,10 @@
 package business.factory;
 
+import java.io.InputStream;
+import java.util.List;
+
 import business.classifiers.kmeans.KMeans;
+import business.files.Data;
 import business.files.Zip;
 
 public abstract class FactoryAS {
@@ -16,4 +20,6 @@ public abstract class FactoryAS {
 	public abstract Zip readZip(String path);
 	
 	public abstract KMeans executeKmeans();
+	
+	public abstract Data readData(List<InputStream> list);
 }

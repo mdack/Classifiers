@@ -1,72 +1,160 @@
 package business.classifiers.kmeans;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import business.transfers.Pixel;
+import business.elements.Image;
+import business.elements.Pixel;
+import business.elements.Signal;
+import business.factory.FactoryAS;
+import business.files.Data;
+import business.transfers.TKMeans;
 
 
 public class KMeansImp implements KMeans{
 	  private final static int NUM_CLUSTERS = 6;
-	    private final static int VALUES = 3;
 	    private final static double TOL = 0.01;
+	    private int K = NUM_CLUSTERS;
 
-	    private List<Pixel> pixels;
-	    private int total_pixels;
+	    private List<Image> imgs;
+	    private List<Signal> signals;
+	    private int total_files;
 	    private ArrayList<Cluster> clusters;
+	    private boolean areSignals = true;
 
 	    public KMeansImp() {
-	        this.pixels = new ArrayList<>();
-	        this.total_pixels = 0;
+	        this.imgs = new ArrayList<>();
+	        this.signals = new ArrayList<>();
+	        this.total_files = 0;
 	    }
 
 	    /**
-	     * Execute KMeans algorithm
+	     * Get List of clusters
+	     * @return List of Clusters
 	     */
-	    public void algorithm() {
-	        this.total_pixels = this.pixels.size();
-	        this.clusters = new ArrayList<>();
+	    public ArrayList<Cluster> getClusters() {
+	        return clusters;
+	    }
 
-	        initClusters();
-
-	        boolean	goal = false;
+		@Override
+		public Cluster executeKMeans(TKMeans transfer) {
+			
+			Data data = FactoryAS.getInstance().readData(transfer.gettZip().getFiles());
+			
+			if(transfer.gettZip().isAreSignals()) {
+				this.signals = data.readSignals();
+				this.total_files = signals.size();
+			}else {
+				this.imgs = data.readImages();
+				this.total_files = imgs.size();
+				this.areSignals = false;
+			}
+			
+	        this.clusters = new ArrayList();
+			
+			initClusters(transfer.gettInit());
+			
+		    boolean	goal = false;
 
 	        //Asigno cada pixel a un cluster y recalculo
 	        while(!goal) {
-	            for (Pixel pixel : pixels) {
-	                int id_old_cluster = pixel.getId_cluster();
-	                int id_nearest_center = getIdNearestCluster(pixel);
-
-	                if(id_old_cluster != id_nearest_center) { //si le toca un nuevo cluster
-	                    if(id_old_cluster != -1)  //Se borra del anterior
-	                        clusters.get(id_old_cluster).getPixels().remove(pixel);
-
-	                    //Se añade en el nuevo cluster
-	                    pixel.setId_cluster(id_nearest_center);
-	                    clusters.get(id_nearest_center).getPixels().add(pixel);
-	                }
-	            }
-
+	        	if(transfer.gettZip().isAreSignals()) {
+	        		this.loopKMeans_Signals();
+	        	}else {
+	        		this.loopKMeans_Imgs();
+	        	}
 	            goal = recalculateCluster();
+	        }			
+			return null;
+		}
+		
+	    private boolean recalculateCluster(){
+	        boolean done = true;
+
+	        for(Cluster cluster: clusters) {
+	                float new_value = cluster.calculateValue();
+	                float old_value = cluster.getCentral_value();
+	                cluster.setCentral_value(new_value);
+
+	                if(Math.abs(new_value - old_value) > TOL) { //Nivel de tolerancia para ver si los clusters ya están estabilizados
+	                    done = false;
+	                }
 	        }
 
+	        return done;
 	    }
+		
+		private void loopKMeans_Imgs() {
+            for (Image img : this.imgs) {
+                int id_old_cluster = img.getId_cluster();
+                int id_nearest_center = getIdNearestCluster(img);
 
-	    private void initClusters(){
+                if(id_old_cluster != id_nearest_center) { //si le toca un nuevo cluster
+                    if(id_old_cluster != -1)  //Se borra del anterior
+                        clusters.get(id_old_cluster).getImages().remove(img);
+
+                    //Se añade en el nuevo cluster
+                    img.setId_cluster(id_nearest_center);
+                    clusters.get(id_nearest_center).getImages().add(img);
+                }
+            }
+		}
+		
+		private void loopKMeans_Signals() {
+            for (Signal sig : this.signals) {
+                int id_old_cluster = sig.getId_cluster();
+                int id_nearest_center = getIdNearestCluster(sig);
+
+                if(id_old_cluster != id_nearest_center) { //si le toca un nuevo cluster
+                    if(id_old_cluster != -1)  //Se borra del anterior
+                        clusters.get(id_old_cluster).getSignals().remove(sig);
+
+                    //Se añade en el nuevo cluster
+                    sig.setId_cluster(id_nearest_center);
+                    clusters.get(id_nearest_center).getSignals().add(sig);
+                }
+            }
+		}
+
+		private void initClusters(int gettInit) {
+			switch(gettInit) {
+			case 0:
+				this.initClustersArbitraria();
+				break;
+			case 1:
+				initClustersInversa();
+				break;
+			case 2:
+				initClusterDirecta();
+				break;
+			}
+			
+		}
+		
+	    private void initClustersArbitraria(){
 	        ArrayList<Integer> prohibited_indexes = new ArrayList<>();
 
 	        //inicializo los cluster con un pixel aleatorio que no pertenezca a otro cluster
-	        for(int i = 0; i < NUM_CLUSTERS; i++) {
+	        for(int i = 0; i < K; i++) {
 	            boolean found = false;
 
 	            while(!found) {
-	                int index_point = (int) Math.floor(Math.random()*this.total_pixels);
+	                int index_point = (int) Math.floor(Math.random()*this.total_files);
 
 	                if(!prohibited_indexes.contains(index_point)) {
 	                    prohibited_indexes.add(index_point);
-	                    pixels.get(index_point).setId_cluster(i);
-
-	                    Cluster cluster = new Cluster(i, pixels.get(index_point));
+	                    
+	                    Cluster cluster = null;
+	                    if(this.areSignals) {
+	                    	this.signals.get(index_point).setId_cluster(i);
+	                    	cluster = new Cluster(i, signals.get(index_point));
+	                    }
+	                    else {
+	                    	this.imgs.get(index_point).setId_cluster(i);
+	                    	cluster = new Cluster(i, imgs.get(index_point));
+	                    }	                    
 	                    clusters.add(cluster);
 	                    found = true;
 	                }
@@ -74,18 +162,31 @@ public class KMeansImp implements KMeans{
 	        }
 	    }
 
-	    private int getIdNearestCluster(Pixel p) {
-	        double min_dist = Double.MAX_VALUE;
+		private void initClusterDirecta() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		private void initClustersInversa() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	    private int getIdNearestCluster(Object obj) {
+	        double min_dist = Float.MAX_VALUE;
 	        int id_cluster = 0;
 
 	        for(Cluster cluster: clusters) {
 	            double dist;
 	            double sum = 0;
-
-	            for(int i = 0; i < VALUES; i++) { //Distancia Euclidea
-	                sum += Math.pow(cluster.getCentralValue(i) - p.getColorValue(i), 2);
+	            
+	            if(this.areSignals) {
+	            	Signal sig = (Signal) obj;
+	            	sum = this.calculateDistanceSignal(sig, cluster);
+	            }else {
+	            	Image img = (Image) obj;
+	            	sum = this.calculateDistanceImgs(img, cluster);
 	            }
-
 	            dist = Math.sqrt(sum);
 
 	            if(dist < min_dist) {
@@ -96,40 +197,28 @@ public class KMeansImp implements KMeans{
 
 	        return id_cluster;
 	    }
-
-	    private boolean recalculateCluster(){
-	        boolean done = true;
-
-	        for(Cluster cluster: clusters) {
-	            for(int i = 0; i < VALUES; i++) {
-
-	                double new_value = cluster.calculateValue(i);
-	                double old_value = cluster.getCentral_values().get(i);
-	                cluster.getCentral_values().set(i, new_value);
-
-	                if(Math.abs(new_value - old_value) > TOL) { //Nivel de tolerancia para ver si los clusters ya están estabilizados
-	                    done = false;
-	                }
-	            }
-	        }
-
-	        return done;
+	    
+	    private double calculateDistanceImgs(Image img, Cluster cluster) {
+            double sum = 0;
+            
+            for(int i = 0; i < img.getRows(); i++) {
+            	for(int j = 0; j < img.getCols(); j++) {
+            		sum += Math.pow(cluster.getCentral_value() - img.getPixel(i, j), 2);
+            	}
+            }
+            
+			return sum;
 	    }
-
-	    /**
-	     * Get List of pixels from the bitmap
-	     * @return List of Pixels
-	     */
-	    public List<Pixel> getPixels() {
-	        return pixels;
-	    }
-
-	    /**
-	     * Get List of clusters
-	     * @return List of Clusters
-	     */
-	    public ArrayList<Cluster> getClusters() {
-	        return clusters;
+	    
+	    private double calculateDistanceSignal(Signal sig, Cluster cluster) {
+            double sum = 0;
+            List<Float> list = new ArrayList<Float>(sig.getSignal().values());
+            
+            for(int i = 0; i < sig.getSignal().size(); i++) {
+            		sum += Math.pow(cluster.getCentral_value() - list.get(i), 2);
+            }
+            
+			return sum;
 	    }
 
 

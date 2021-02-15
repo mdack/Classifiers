@@ -99,7 +99,7 @@ public class JKMeansImp extends JKMeans {
 		Integer cas = (Integer) c.getEvento();
 		
 		switch(cas) {
-			case(DispatcherResults.KMeansCorrecto):{
+			case(DispatcherResults.KMeansCorrect):{
 				Integer r = (int) c.getDatos();
 							JOptionPane.showMessageDialog(null,
 						"Cluster al que pertenece" + r,
