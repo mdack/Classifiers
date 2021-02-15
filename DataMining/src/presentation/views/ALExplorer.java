@@ -8,9 +8,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import presentation.controller.BusinessEvent;
+import presentation.controller.Controller;
+import presentation.dispatcher.Context;
+
 public class ALExplorer implements ActionListener{
 
-	private int fileInt;
 	private JFileChooser explorerFiles;
 	private File selectedFile;
 	
@@ -32,32 +35,19 @@ public class ALExplorer implements ActionListener{
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos Zip", "zip");
 		explorerFiles.setFileFilter(filter);
 		
-		fileInt = this.explorerFiles.showOpenDialog(instance);
-
 		selectedFile = this.explorerFiles.getSelectedFile();
-
+		
 		if ((selectedFile == null) || (selectedFile.getName().equals(""))) {
 		 JOptionPane.showMessageDialog(instance, "Nombre de archivo inválido", "Nombre de archivo inválido", JOptionPane.ERROR_MESSAGE);
-		} 
-	}
-	
-	public int getFileInt() {
-		return fileInt;
-	}
-
-
-	public void setFileInt(int fileInt) {
-		this.fileInt = fileInt;
-	}
-
-
-	public File getSelectedFile() {
-		return selectedFile;
-	}
-
-
-	public void setSelectedFile(File selectedFile) {
-		this.selectedFile = selectedFile;
+		} else {
+			Controller cont = Controller.getInstance();
+			
+			Context context = new Context();
+			context.setDatos(this.selectedFile.getAbsolutePath());
+			context.setEvento(BusinessEvent.READ_ZIP);
+			
+			cont.action(context);
+		}
 	}
 
 }

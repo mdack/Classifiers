@@ -7,20 +7,24 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
 
 @SuppressWarnings("serial")
-public class JMainKMeansImp extends JMainKMeans {
+public class JKMeansImp extends JKMeans {
 
-	public JMainKMeansImp(int evento) {
+	private final static String[] inits = {"Arbitraria", "Inversa", "Directa"};
+	
+	public JKMeansImp(int evento) {
 		this.initComponents();
 		
 		switch(evento) {
@@ -53,10 +57,13 @@ public class JMainKMeansImp extends JMainKMeans {
 		
 		//label
 		lK = new JLabel("K centros: ");
+		linit = new JLabel("Tipo de inicialización: ");
 		
 		//text
 		txK = new JTextField();
 		txK.setEditable(true);
+		
+		this.cbInitializion = new JComboBox<String>();
 	}
 
 
@@ -67,13 +74,20 @@ public class JMainKMeansImp extends JMainKMeans {
 		this.setLocationRelativeTo(null);
 		
 		//datos
-		datos.setLayout(new GridLayout(1, 2, 50, 50));
+		datos.setLayout(new GridLayout(2, 2, 50, 50));
+		
+		datos.add(linit);
+		cbInitializion.addItem(inits[0]);
+		cbInitializion.addItem(inits[1]);
+		cbInitializion.addItem(inits[2]);
+		datos.add(cbInitializion);
 		
 		datos.add(lK);
 		datos.add(txK);
 		
 		boton.add(btExecute);
-		btExecute.addActionListener(new ALKMeans(BusinessEvent.KMEANS, txK));
+		btExecute.addActionListener(new ALKMeans(BusinessEvent.KMEANS, txK, cbInitializion, transfer_zip));
+		btExecute.setHorizontalAlignment(SwingConstants.CENTER);;
 				
 		contenedor.add(datos, BorderLayout.CENTER);
 		contenedor.add(boton, BorderLayout.SOUTH);

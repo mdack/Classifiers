@@ -8,12 +8,14 @@ import presentation.dispatcher.Dispatcher;
 public class ControllerImp extends Controller {
 	
 	@Override
-	public void action(Context contexto) {
+	public void action(Context ct) {
 		Context context = null;
+		
 		CommandFactory factoriaComando = CommandFactory.getInstance(true);
-		Object evento = contexto.getEvento();
+		Object evento = ct.getEvento();
 		Command comando = factoriaComando.getCommand((int)evento);
-		context = comando.execute(contexto.getDatos());
+		
+		context = comando.execute(ct.getDatos());
 
 		Dispatcher dispatcher = Dispatcher.getInstance(true);
 		dispatcher.update(context);

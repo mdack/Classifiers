@@ -1,6 +1,7 @@
 package business.factory;
 
-import business.classifiers.kmeans.KMeansImp;
+import business.classifiers.kmeans.KMeans;
+import business.files.Zip;
 
 public abstract class FactoryAS {
 	private static FactoryAS instance;
@@ -11,6 +12,8 @@ public abstract class FactoryAS {
 		else
 			return instance;
 	}
-
-	public abstract KMeansImp executeKmeans();
+	
+	public abstract Zip readZip(String path);
+	
+	public abstract KMeans executeKmeans();
 }

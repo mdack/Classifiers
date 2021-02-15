@@ -1,5 +1,29 @@
 package business.transfers;
 
-public class TZip {
+import java.io.InputStream;
+import java.util.List;
 
+public class TZip {
+	private String path;
+	private boolean areSignals;
+	private List<InputStream> files;
+	
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	public List<InputStream> getFiles() {
+		return files;
+	}
+	public void setFiles(List<InputStream> files) {
+		this.files = files;
+	}
+	public boolean isAreSignals() {
+		return areSignals;
+	}
+	public void setAreSignals(boolean areSignals) {
+		this.areSignals = areSignals;
+	}
 }

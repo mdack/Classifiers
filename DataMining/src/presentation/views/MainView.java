@@ -16,14 +16,30 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import business.transfers.TZip;
+import presentation.dispatcher.Context;
+import presentation.dispatcher.DispatcherResults;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame{
 	
 	private final static String NAME_TITLE = "Clasificadores - Minería de datos";
-	private final String[] CLASSIFIER_OPTIONS = {"Bayes","Batchelor y Wilkins", "Jerárquico", "KMeans", "KNN", "Tarjan"};	
+	private final String[] CLASSIFIER_OPTIONS = {"Jerárquico","KMeans", "Jerárquico", "KMeans", "KNN", "Tarjan"};	
 
-	private ALExplorer ale;
+	private TextArea taDisplay = new TextArea();
+	
+	private ALExplorer ale = null;
+	
+	private TZip tZip = null;
+	
+	private static MainView instance;
+	
+	public static MainView getInstance() {
+		if(instance==null){
+			instance = new MainView();
+		}
+		return instance;
+	}
 	
 	public MainView() {
 		this.ale = new ALExplorer(this);
@@ -118,7 +134,7 @@ public class MainView extends JFrame{
 		 result.add(panelFiles);
 	
 		JButton go = new JButton(" Ejecutar ");	//Execute button
-		go.addActionListener(new ALMainView(comboBox, ale.getSelectedFile()));
+		go.addActionListener(new ALMainView(comboBox, opcion1, tZip));
 		result.add(go);
 		
 		return result;
@@ -127,10 +143,26 @@ public class MainView extends JFrame{
 	private JPanel panelResults() {
 		JPanel result = new JPanel();
 		
-		TextArea taDisplay = new TextArea();
+		taDisplay = new TextArea();
 		result.add(taDisplay);
 		
 		return result;
+	}
+
+	public void update(Object datos) {
+		Context c = (Context) datos;
+		Integer cas = (Integer) c.getEvento();
+		
+		switch(cas) {
+		case DispatcherResults.readZipOK:
+			tZip = (TZip) c.getDatos();
+			taDisplay.append("Se han obtenido los archivos del zip correctamente.\n");
+			break;
+		case DispatcherResults.readZipError:
+			taDisplay.append("No se ha podido leer el archivo zip.\n");
+			break;	
+		}
+		
 	}
 	
 }
