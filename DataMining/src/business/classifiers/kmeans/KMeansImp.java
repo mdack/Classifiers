@@ -1,13 +1,12 @@
 package business.classifiers.kmeans;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import business.classifiers.Cluster;
+import business.classifiers.cluster.Cluster;
+import business.classifiers.cluster.ClusterImg;
+import business.classifiers.cluster.ClusterSig;
 import business.elements.Image;
-import business.elements.Pixel;
 import business.elements.Signal;
 import business.factory.FactoryAS;
 import business.files.Data;
@@ -53,7 +52,7 @@ public class KMeansImp implements KMeans{
 				this.areSignals = false;
 			}
 			
-	        this.clusters = new ArrayList();
+	        this.clusters = new ArrayList<>();
 			
 			initClusters(transfer.gettInit());
 			
@@ -104,6 +103,7 @@ public class KMeansImp implements KMeans{
 		}
 		
 		private void loopKMeans_Signals() {
+			
             for (Signal sig : this.signals) {
                 int id_old_cluster = sig.getId_cluster();
                 int id_nearest_center = getIdNearestCluster(sig);
@@ -150,11 +150,11 @@ public class KMeansImp implements KMeans{
 	                    Cluster cluster = null;
 	                    if(this.areSignals) {
 	                    	this.signals.get(index_point).setId_cluster(i);
-	                    	cluster = new Cluster(i, signals.get(index_point));
+	                    	cluster = new ClusterSig(i, signals.get(index_point));
 	                    }
 	                    else {
 	                    	this.imgs.get(index_point).setId_cluster(i);
-	                    	cluster = new Cluster(i, imgs.get(index_point));
+	                    	cluster = new ClusterImg(i, imgs.get(index_point));
 	                    }	                    
 	                    clusters.add(cluster);
 	                    found = true;

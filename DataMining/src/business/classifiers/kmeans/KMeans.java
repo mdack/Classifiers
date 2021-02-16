@@ -1,6 +1,6 @@
 package business.classifiers.kmeans;
 
-import business.classifiers.Cluster;
+import business.classifiers.cluster.Cluster;
 import business.transfers.*;
 
 public interface KMeans {
