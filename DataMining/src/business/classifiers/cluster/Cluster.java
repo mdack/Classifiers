@@ -5,10 +5,10 @@ import java.util.List;
 import business.elements.Image;
 import business.elements.Signal;
 
-public abstract class Cluster {
+public abstract class Cluster implements Comparable<Cluster>{
 
 	protected int id_cluster;
-    protected float central_value=0;
+    protected double central_value=0;
     protected boolean areSignals=true;
 
     public Cluster(String clusterName) {
@@ -25,11 +25,11 @@ public abstract class Cluster {
         return id_cluster;
     }
 	
-    public float getCentral_value() {
+    public double getCentral_value() {
 		return central_value;
 	}
 
-	public void setCentral_value(float central_value) {
+	public void setCentral_value(double central_value) {
 		this.central_value = central_value;
 	}
 

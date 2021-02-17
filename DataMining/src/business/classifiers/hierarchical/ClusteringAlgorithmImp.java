@@ -22,7 +22,7 @@ import java.util.List;
 import business.classifiers.cluster.Cluster;
 import business.classifiers.cluster.ClusterPair;
 
-public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
+public class ClusteringAlgorithmImp implements ClusteringAlgorithm {
 
     @Override
     public Cluster performClustering(double[][] distances,
@@ -45,7 +45,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
         DistanceMap linkages = createLinkages(distances, clusters);
 
         /* Process */
-        HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
+        HierarchicalImp builder = new HierarchicalImp(clusters, linkages);
         while (!builder.isTreeComplete()) {
             builder.agglomerate(linkageStrategy);
         }
@@ -74,7 +74,7 @@ public class PDistClusteringAlgorithm implements ClusteringAlgorithm {
         DistanceMap linkages = createLinkages(distances, clusters);
 
         /* Process */
-        HierarchyBuilder builder = new HierarchyBuilder(clusters, linkages);
+        HierarchicalImp builder = new HierarchicalImp(clusters, linkages);
         return builder.flatAgg(linkageStrategy, threshold);
     }
 

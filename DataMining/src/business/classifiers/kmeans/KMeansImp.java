@@ -74,8 +74,8 @@ public class KMeansImp implements KMeans{
 	        boolean done = true;
 
 	        for(Cluster cluster: clusters) {
-	                float new_value = cluster.calculateValue();
-	                float old_value = cluster.getCentral_value();
+	        	double new_value = cluster.calculateValue();
+	        	double old_value = cluster.getCentral_value();
 	                cluster.setCentral_value(new_value);
 
 	                if(Math.abs(new_value - old_value) > TOL) { //Nivel de tolerancia para ver si los clusters ya están estabilizados
@@ -137,7 +137,7 @@ public class KMeansImp implements KMeans{
 	    private void initClustersArbitraria(){
 	        ArrayList<Integer> prohibited_indexes = new ArrayList<>();
 
-	        //inicializo los cluster con un pixel aleatorio que no pertenezca a otro cluster
+	        //inicializo los cluster con un archivo aleatorio que no pertenezca a otro cluster
 	        for(int i = 0; i < K; i++) {
 	            boolean found = false;
 

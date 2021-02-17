@@ -1,17 +1,16 @@
 package business.transfers;
 
 public class TAgrupamientoSec {
-	private int K, R, C, M, T;
-	private int tMezcla;
+	private int K, M;
+	private double R, C, T;
 	private TZip tZip;
 	
-	public TAgrupamientoSec(int k2, int r2, int c2, int m2, int t2, int tMezcla2, TZip tZip2) {
+	public TAgrupamientoSec(int k2, double r2, double c2, int m2, double t2, TZip tZip2) {
 		K = k2;
 		R = r2;
 		C = c2;
 		M = m2;
 		T = t2;
-		tMezcla = tMezcla2;
 		tZip = tZip2;
 	}
 	public int getK() {
@@ -20,13 +19,13 @@ public class TAgrupamientoSec {
 	public void setK(int k) {
 		K = k;
 	}
-	public int getR() {
+	public double getR() {
 		return R;
 	}
 	public void setR(int r) {
 		R = r;
 	}
-	public int getC() {
+	public double getC() {
 		return C;
 	}
 	public void setC(int c) {
@@ -38,17 +37,11 @@ public class TAgrupamientoSec {
 	public void setM(int m) {
 		M = m;
 	}
-	public int getT() {
+	public double getT() {
 		return T;
 	}
 	public void setT(int t) {
 		T = t;
-	}
-	public int gettMezcla() {
-		return tMezcla;
-	}
-	public void settMezcla(int tMezcla) {
-		this.tMezcla = tMezcla;
 	}
 	public TZip gettZip() {
 		return tZip;

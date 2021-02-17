@@ -1,7 +1,6 @@
 package presentation.views.agrupamientosecuencial;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,13 +27,12 @@ public abstract class JAgrupamientoSec extends JFrame{
 
 	protected JPanel boton;
 
-	protected JLabel lK, lR, lC, lM, lT, lMezcla;
+	protected JLabel lK, lR, lC, lM, lT;
 	
 	protected JButton btExecute;
 	
 	protected JTextField txK, txR, txC, txM, txT;
 	
-	protected JComboBox<String> cbMezcla;
 	
 	public static TZip getTransfer_zip() {
 		return transfer_zip;

@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,8 +21,6 @@ import presentation.dispatcher.DispatcherResults;
 @SuppressWarnings("serial")
 public class JAgrupamientoSecImp extends JAgrupamientoSec {
 
-	private final static String[] mezclas = {"Cercanía", "Tamaño", "Forzada"};
-	
 	public void initComponents() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(400,400);
@@ -46,7 +43,6 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 		
 		//label
 		lK = new JLabel("K centros: ");
-		lMezcla = new JLabel("Tipo de mezcla: ");
 		lR = new JLabel("Umbral R: ");
 		lC = new JLabel("Umbral C: ");
 		lM = new JLabel("Longitud del lote: ");
@@ -64,7 +60,6 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 		txT = new JTextField();
 		txT.setEditable(true);
 		
-		this.cbMezcla = new JComboBox<String>();
 	}
 	
 	@Override
@@ -74,14 +69,8 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 		this.setLocationRelativeTo(null);
 		
 		//datos
-		datos.setLayout(new GridLayout(6, 2, 50, 50));
-		
-		datos.add(lMezcla);
-		cbMezcla.addItem(mezclas[0]);
-		cbMezcla.addItem(mezclas[1]);
-		cbMezcla.addItem(mezclas[2]);
-		datos.add(cbMezcla);
-		
+		datos.setLayout(new GridLayout(5, 2, 50, 50));
+				
 		datos.add(lK);
 		datos.add(txK);
 		
@@ -98,7 +87,7 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 		datos.add(txT);
 		
 		boton.add(btExecute);
-		btExecute.addActionListener(new ALAgrupamientoSec(BusinessEvent.AGRUPAMIENTO_SECUENCIAL, txK, txM, txR, txC, txT, cbMezcla, transfer_zip));
+		btExecute.addActionListener(new ALAgrupamientoSec(BusinessEvent.AGRUPAMIENTO_SECUENCIAL, txK, txM, txR, txC, txT, transfer_zip));
 		btExecute.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		contenedor.add(datos, BorderLayout.CENTER);

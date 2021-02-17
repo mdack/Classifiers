@@ -40,5 +40,11 @@ public class ClusterImg extends Cluster {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int compareTo(Cluster o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

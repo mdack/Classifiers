@@ -44,4 +44,10 @@ public class ClusterSig extends Cluster {
 		return null;
 	}
 
+	@Override
+	public int compareTo(Cluster o) {
+		
+		return 0;
+	}
+
 }

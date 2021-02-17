@@ -12,11 +12,11 @@ import presentation.controller.Controller;
 import presentation.dispatcher.Context;
 
 public class ALBatchelorWilkins implements ActionListener{
-	private int O;
+	private double O;
 	private TZip tZip;
 	
 	public ALBatchelorWilkins(int batchelorWilkins, JTextField txO, TZip transfer_zip) {
-		O = Integer.getInteger(txO.getText());
+		O = Double.valueOf(txO.getText());
 		tZip = transfer_zip;
 	}
 
