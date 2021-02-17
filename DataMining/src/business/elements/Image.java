@@ -1,7 +1,6 @@
 package business.elements;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Image {

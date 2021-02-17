@@ -1,15 +1,8 @@
 package business.transfers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import business.classifiers.cluster.Cluster;
-
 public class TBatchelorWilkins {
 	private double O;
 	private TZip tZip;
-	private int N; //nº agrupamientos
-	List<Cluster> list = new ArrayList<>();
 	
 	public TBatchelorWilkins(double o2, TZip tZip2) {
 		O = o2;
@@ -26,18 +19,6 @@ public class TBatchelorWilkins {
 	}
 	public void settZip(TZip tZip) {
 		this.tZip = tZip;
-	}
-	public int getN() {
-		return N;
-	}
-	public void setN(int n) {
-		N = n;
-	}
-	public List<Cluster> getList() {
-		return list;
-	}
-	public void setList(List<Cluster> list) {
-		this.list = list;
 	}
 	
 }

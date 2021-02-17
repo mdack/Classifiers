@@ -25,10 +25,10 @@ public class DataImp implements Data{
 		List<Image> list = new ArrayList<>();
 		for(InputStream is : list_data) {
 			int row = 0;
-			List<List<Integer>> list_rows = new ArrayList<List<Integer>>();
+			List<List<Double>> list_rows = new ArrayList<List<Double>>();
 				try {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-					List<Integer> list_cols = null;
+					List<Double> list_cols = null;
 					
 					while(reader.ready()) {
 					     String line = reader.readLine();
@@ -39,12 +39,12 @@ public class DataImp implements Data{
 					    	 row = r;
 					    	 if(r != 1) {
 					    		 list_rows.add(list_cols);
-					    		 list_cols  = new ArrayList<Integer>();
+					    		 list_cols  = new ArrayList<Double>();
 					    	 }else {
-					    		 list_cols  = new ArrayList<Integer>();
+					    		 list_cols  = new ArrayList<Double>();
 					    	 }
 					     }
-						int pixel = Integer.parseInt(cols[2]);
+						double pixel = Double.valueOf(cols[2]);
 						list_cols.add(pixel);
 					}
 					
@@ -68,14 +68,14 @@ public class DataImp implements Data{
 		for(InputStream is : list_data) {
 				try {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-					HashMap<Float,Float> list_s = new HashMap<>();
+					HashMap<Double,Double> list_s = new HashMap<>();
 					
 					while(reader.ready()) {
 					     String line = reader.readLine();
 					     String[] cols = line.split("\t");
 					     
-					    float t = Float.parseFloat(cols[0]);
-						float s = Float.parseFloat(cols[1]);
+					    double t = Double.valueOf(cols[0]);
+						double s = Double.valueOf(cols[1]);
 						list_s.put(t, s);
 					}
 					Signal signal = new Signal();

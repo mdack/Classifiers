@@ -43,6 +43,8 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 		if(this.areSignals) {
 			cluster = new ClusterSig(A, signals.get(index));
 			signals.get(index).setId_cluster(A);
+			cluster.setCentroid(signals.get(index));
+			signals.remove(index);
 			
 			clusters.add(cluster);
 			
@@ -50,6 +52,8 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 		}else {
 			cluster = new ClusterImg(A, imgs.get(index));
 			imgs.get(index).setId_cluster(A);
+			cluster.setCentroid(imgs.get(index));
+			imgs.remove(index);
 			
 			clusters.add(cluster);
 			
@@ -151,7 +155,7 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 	private void loopSignals(double R, int M, TAgrupamientoSec transfer) {
 		int p = 0; //patrones
 		int c = 0; //lote
-		while(p < total_files) {
+		while(p < signals.size()) {
 			p++;
 			c++;
 			
@@ -183,7 +187,7 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 	private void loopImgs(double R, int M, TAgrupamientoSec transfer) {
 		int p = 0; //patrones
 		int c = 0; //lote
-		while(p < total_files) {
+		while(p < imgs.size()) {
 			p++;
 			c++;
 			

@@ -24,12 +24,14 @@ public class Signal {
 		this.signal = signal;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	public double calculateValue() {
 		int sum = 0;
 		List<Double> list = new ArrayList<Double>(signal.values());
 		
-		for(int i = 0; i < list.size();i++)
+		for(int i = 0; i < list.size();i++) {
 			sum += signal.get(i);
+		}
 		
 		return sum / list.size();
 	}
