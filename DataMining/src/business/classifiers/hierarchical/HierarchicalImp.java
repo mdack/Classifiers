@@ -6,6 +6,8 @@ import java.util.List;
 
 import business.classifiers.cluster.Cluster;
 import business.classifiers.cluster.ClusterPair;
+import business.classifiers.distance.Distance;
+import business.classifiers.distance.DistanceMap;
 import business.elements.Image;
 import business.elements.Signal;
 import business.factory.FactoryAS;

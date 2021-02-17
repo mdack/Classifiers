@@ -213,7 +213,7 @@ public class KMeansImp implements KMeans{
 	    
 	    private double calculateDistanceSignal(Signal sig, Cluster cluster) {
             double sum = 0;
-            List<Float> list = new ArrayList<Float>(sig.getSignal().values());
+            List<Double> list = new ArrayList<Double>(sig.getSignal().values());
             
             for(int i = 0; i < sig.getSignal().size(); i++) {
             		sum += Math.pow(cluster.getCentral_value() - list.get(i), 2);

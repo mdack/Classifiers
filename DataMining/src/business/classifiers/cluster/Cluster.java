@@ -50,11 +50,23 @@ public abstract class Cluster implements Comparable<Cluster>{
 		// TODO Auto-generated method stub
 		
 	}
+		
 	public abstract float calculateValue();
 
 	public abstract List<Signal> getSignals();
 
 	public abstract List<Image> getImages();
+	
+	public abstract void setCentroid(Object obj);
+	
+	public abstract Object getCentroid();
+	
+	public abstract void recalculateCentroid();
+	
+	public abstract double calculateDistanceTo(Cluster cluster);
 
+	public abstract void addClustersSig(List<Signal> signals);
+
+	public abstract void addClustersImg(List<Image> imgs);
 
 }

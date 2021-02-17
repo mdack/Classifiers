@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Signal {
-	HashMap<Float,Float> signal;
+	HashMap<Double,Double> signal;
     int id_cluster = -1;
 
 	public int getId_cluster() {
@@ -16,17 +16,17 @@ public class Signal {
 		this.id_cluster = id_cluster;
 	}
 
-	public HashMap<Float, Float> getSignal() {
+	public HashMap<Double, Double> getSignal() {
 		return signal;
 	}
 
-	public void setSignal(HashMap<Float, Float> signal) {
+	public void setSignal(HashMap<Double, Double> signal) {
 		this.signal = signal;
 	}
 
-	public float calculateValue() {
+	public double calculateValue() {
 		int sum = 0;
-		List<Float> list = new ArrayList<Float>(signal.values());
+		List<Double> list = new ArrayList<Double>(signal.values());
 		
 		for(int i = 0; i < list.size();i++)
 			sum += signal.get(i);

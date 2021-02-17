@@ -21,6 +21,7 @@ import java.util.List;
 
 import business.classifiers.cluster.Cluster;
 import business.classifiers.cluster.ClusterPair;
+import business.classifiers.distance.DistanceMap;
 
 public class ClusteringAlgorithmImp implements ClusteringAlgorithm {
 

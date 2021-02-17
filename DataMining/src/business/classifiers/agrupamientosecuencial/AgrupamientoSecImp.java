@@ -46,84 +46,168 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 			
 			clusters.add(cluster);
 			
-			this.loopSignals(transfer.getR(), transfer.getM());
+			this.loopSignals(transfer.getR(), transfer.getM(), transfer);
 		}else {
 			cluster = new ClusterImg(A, imgs.get(index));
 			imgs.get(index).setId_cluster(A);
 			
 			clusters.add(cluster);
 			
-			this.loopImgs(transfer.getR(), transfer.getM());
-		}
-				
-		//Cada M patrones se mezclan agrupamientos por cercanía, es decir, si la distancia entre ellos es < C
-		
-		for(int i = 0; i < clusters.size(); i++) {
-			for(int j = 0; j < clusters.size(); i++) {
-				
-			}
+			this.loopImgs(transfer.getR(), transfer.getM(), transfer);
 		}
 		
-		/*
-		 * Si,  tras  la  mezcla  por  cercanía,  quedan  másagrupamientos que los deseados por el usuario (K), 
-		 * se mezclan los agrupamientos por tamaño (semezclan  los  agrupamientos  con  menos  del  T%  de  M  
-		 * miembros  con  sus  agrupamientos  máscercanos).
-		 * Si aún quedan demasiados agrupamientos, se mezclan los agrupamientos más cercanoshasta obtener el 
-		 * número deseado de agrupamientos K.
-		 */
+		TResult result = new TResult();
+		result.setList(clusters);
+		result.setN(A);
 		
 		
-		
-		return null;
+		return result;
 	}
 	
-	private void loopSignals(double R, int M) {
+	private void mezcla(TAgrupamientoSec transfer) {
+		// HEURISTICA
+				//Cada M patrones se mezclan agrupamientos por cercanía, es decir, si la distancia entre ellos es < C
+				
+				for(int i = 0; i < clusters.size(); i++) {
+					for(int j = 0; j < clusters.size(); j++) {
+						if(i != j) {
+							double dist = clusters.get(i).calculateDistanceTo(clusters.get(j));
+							
+							if(dist < transfer.getC()) {
+								this.mezclaClusters(i, j);
+							}
+						}
+					}
+				}
+				
+				A = clusters.size();
+				
+				/*
+				 * Si,  tras  la  mezcla  por  cercanía,  quedan  másagrupamientos que los deseados por el usuario (K), 
+				 * se mezclan los agrupamientos por tamaño (semezclan  los  agrupamientos  con  menos  del  T%  de  M  
+				 * miembros  con  sus  agrupamientos  máscercanos).
+				 * Si aún quedan demasiados agrupamientos, se mezclan los agrupamientos más cercanoshasta obtener el 
+				 * número deseado de agrupamientos K.
+				 */
+				if(A > transfer.getK()) {
+					//MEZCLA POR TAMAÑO
+					double t = transfer.getT() / 100; //%
+					double min = t * transfer.getM();
+					
+					for(int i = 0; i < clusters.size(); i++) {
+						Cluster cl = clusters.get(i);
+						int modulo = 0;
+						if(this.areSignals) {
+							modulo = cl.getSignals().size();
+						}else {
+							modulo = cl.getImages().size();
+						}
+						
+						if(modulo < min) {
+							double distance = Double.MAX_VALUE;
+							int m = this.getIdNearestCluster(cl.getCentroid(), distance);
+							
+							this.mezclaClusters(i, m);
+						}
+					}
+					
+					A = clusters.size();
+				}
+				
+					// MEZCLA FORZADA
+					while(A > transfer.getK()) {
+						this.mezclaClusters(transfer.getK(),A);
+						
+						double min_dist = Double.MAX_VALUE;
+						int c1 = 0, c2 = 0;
+						for(int i = 0; i < clusters.size(); i++) {
+							for(int j = 0; j < clusters.size(); j++) {
+								if(i != j) {
+									double dist = clusters.get(i).calculateDistanceTo(clusters.get(j));
+									
+									if(dist < min_dist) {
+										c1 = i;
+										c2 = j;
+										min_dist = dist;
+									}
+								}
+							}
+						}
+						this.mezclaClusters(c1, c2);
+						A = clusters.size();
+					}
+	}
+	
+	private void mezclaClusters(int i, int j) {
+		if(this.areSignals)
+			clusters.get(i).addClustersSig(clusters.get(j).getSignals());
+		else
+			clusters.get(i).addClustersImg(clusters.get(j).getImages());
+		
+		clusters.get(i).recalculateCentroid();
+		clusters.remove(j);
+	}
+	
+	private void loopSignals(double R, int M, TAgrupamientoSec transfer) {
 		int p = 0; //patrones
 		int c = 0; //lote
-		while(p < total_files && c != M) {
+		while(p < total_files) {
 			p++;
 			c++;
-		//Calcular distancia de patron actual mas cercano (a su centroide)
 			
-			double distance = Double.MAX_VALUE;
-			int nearest_cluster = this.getIdNearestCluster(signals.get(p), distance);
-		
-		//Si distancia <= R -> se asigna a agrupamiento más cercano
-			if(distance <= R) {
-				signals.get(p).setId_cluster(nearest_cluster);
-			}
-		//Sino se crea nuevo agrupamiento
-			else {
-				A++;
-				Cluster cluster = new ClusterSig(A, signals.get(p));
-				signals.get(A);
-				clusters.add(cluster);
+			if(c == M) {
+				c= 0;
+				this.mezcla(transfer);
+			}else {
+			//Calcular distancia de patron actual mas cercano (a su centroide)
+				
+				double distance = Double.MAX_VALUE;
+				int nearest_cluster = this.getIdNearestCluster(signals.get(p), distance);
+			
+			//Si distancia <= R -> se asigna a agrupamiento más cercano y se recalcula centro
+				if(distance <= R) {
+					signals.get(p).setId_cluster(nearest_cluster);
+					clusters.get(nearest_cluster).recalculateCentroid();
+				}
+			//Sino se crea nuevo agrupamiento
+				else {
+					A++;
+					Cluster cluster = new ClusterSig(A, signals.get(p));
+					signals.get(A);
+					clusters.add(cluster);
+				}
 			}
 		}
 	}
 	
-	private void loopImgs(double R, int M) {
+	private void loopImgs(double R, int M, TAgrupamientoSec transfer) {
 		int p = 0; //patrones
 		int c = 0; //lote
-		while(p < total_files && c != M) {
+		while(p < total_files) {
 			p++;
 			c++;
-		//Calcular distancia de patron actual mas cercano (a su centroide)
 			
-			double distance = Double.MAX_VALUE;
-			int nearest_cluster = this.getIdNearestCluster(imgs.get(p), distance);
-		
-		//Si distancia <= R -> se asigna a agrupamiento más cercano
-			if(distance <= R) {
-				imgs.get(p).setId_cluster(nearest_cluster);
-				this.recalculateCentroid(clusters.get(nearest_cluster));
-			}
-		//Sino se crea nuevo agrupamiento
-			else {
-				A++;
-				Cluster cluster = new ClusterImg(A, imgs.get(p));
-				imgs.get(A);
-				clusters.add(cluster);
+			if(c == M) {
+				c= 0;
+				this.mezcla(transfer);
+			}else {
+			//Calcular distancia de patron actual mas cercano (a su centroide)
+				
+				double distance = Double.MAX_VALUE;
+				int nearest_cluster = this.getIdNearestCluster(imgs.get(p), distance);
+			
+			//Si distancia <= R -> se asigna a agrupamiento más cercano y recalculamos centro
+				if(distance <= R) {
+					imgs.get(p).setId_cluster(nearest_cluster);
+					clusters.get(nearest_cluster).recalculateCentroid();
+				}
+			//Sino se crea nuevo agrupamiento
+				else {
+					A++;
+					Cluster cluster = new ClusterImg(A, imgs.get(p));
+					imgs.get(A);
+					clusters.add(cluster);
+				}
 			}
 		}
 	}
@@ -167,7 +251,7 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
     
     private double calculateDistanceSignal(Signal sig, Cluster cluster) {
         double sum = 0;
-        List<Float> list = new ArrayList<Float>(sig.getSignal().values());
+        List<Double> list = new ArrayList<Double>(sig.getSignal().values());
         
         for(int i = 0; i < sig.getSignal().size(); i++) {
         		sum += Math.pow(cluster.getCentral_value() - list.get(i), 2);
@@ -181,26 +265,6 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 		return rdn.nextInt(total_files);
 	}
 	
-    private void recalculateCentroid(Cluster cluster){
-    	double min_dist = Double.MAX_VALUE;
-    	double dist = 0;
-    	if(this.areSignals) {
-            for(int i = 0; i < cluster.getSignals().size(); i++) {
-            	dist = this.calculateDistanceSignal(cluster.getSignals().get(i), cluster);
-            	if(dist < min_dist) {
-            		cluster.setCentral_value(i);
-            		min_dist = dist;
-            	}
-            }
-        }else {
-            for(int i = 0; i < cluster.getImages().size(); i++) {
-            	dist = this.calculateDistanceImgs(cluster.getImages().get(i), cluster);
-            	if(dist < min_dist) {
-            		cluster.setCentral_value(i);
-            		min_dist = dist;
-            	}
-            }
-        }
-    }
+	
 
 }

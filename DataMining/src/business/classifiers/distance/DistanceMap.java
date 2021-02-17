@@ -1,4 +1,4 @@
-package business.classifiers.hierarchical;
+package business.classifiers.distance;
 
 import java.util.*;
 
