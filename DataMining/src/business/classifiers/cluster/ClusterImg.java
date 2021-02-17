@@ -108,6 +108,12 @@ public class ClusterImg extends Cluster {
 	public void addClustersImg(List<Image> imgs) {
 		this.list_files.addAll(imgs);		
 	}
+
+	@Override
+	public void addItem(Object obj) {
+		Image img = (Image) obj;
+		this.list_files.add(img);
+	}
 	
 	
 	

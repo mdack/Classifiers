@@ -63,5 +63,16 @@ public class Image {
 		}
 		
 	}
-	
+		
+	public double calculateDistanceTo(Image img) {
+        double sum = 0;
+        
+        for(int i = 0; i < img.getRows(); i++) {
+        	for(int j = 0; j < img.getCols(); j++) {
+        		sum += Math.pow(this.getPixel(i, j) - img.getPixel(i, j), 2);
+        	}
+        }
+        
+		return sum;
+	}
 }

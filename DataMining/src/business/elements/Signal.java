@@ -35,5 +35,17 @@ public class Signal {
 		
 		return sum / list.size();
 	}
+
+	public double calculateDistanceTo(Signal sig) {		
+        double sum = 0;
+        List<Double> list = new ArrayList<Double>(sig.getSignal().values());
+        List<Double> list_c = new ArrayList<Double>(this.getSignal().values());
+        
+        for(int i = 0; i < sig.getSignal().size(); i++) {
+        		sum += Math.pow(list_c.get(i) - list.get(i), 2);
+        }
+        
+		return sum;
+	}
 	
 }

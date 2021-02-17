@@ -246,7 +246,8 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
         
         for(int i = 0; i < img.getRows(); i++) {
         	for(int j = 0; j < img.getCols(); j++) {
-        		sum += Math.pow(cluster.getCentral_value() - img.getPixel(i, j), 2);
+        		Image centroid = (Image) cluster.getCentroid();
+        		sum += Math.pow(centroid.getPixel(i, j) - img.getPixel(i, j), 2);
         	}
         }
         
@@ -258,7 +259,9 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
         List<Double> list = new ArrayList<Double>(sig.getSignal().values());
         
         for(int i = 0; i < sig.getSignal().size(); i++) {
-        		sum += Math.pow(cluster.getCentral_value() - list.get(i), 2);
+        	Signal centroid = (Signal) cluster.getCentroid();
+        	List<Double> s_centroid = new ArrayList<Double>(centroid.getSignal().values());
+        	sum += Math.pow(s_centroid.get(i) - list.get(i), 2);
         }
         
 		return sum;

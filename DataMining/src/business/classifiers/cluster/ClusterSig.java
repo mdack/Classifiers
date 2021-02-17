@@ -92,9 +92,10 @@ public class ClusterSig extends Cluster {
 		
         double sum = 0;
         List<Double> list = new ArrayList<Double>(sig.getSignal().values());
+        List<Double> list_c = new ArrayList<Double>(centroid.getSignal().values());
         
         for(int i = 0; i < sig.getSignal().size(); i++) {
-        		sum += Math.pow(cluster.getCentral_value() - list.get(i), 2);
+        		sum += Math.pow(list_c.get(i) - list.get(i), 2);
         }
         
 		return sum;
@@ -104,6 +105,12 @@ public class ClusterSig extends Cluster {
 	public void addClustersImg(List<Image> imgs) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void addItem(Object obj) {
+		 Signal sig = (Signal) obj;
+		 this.list_files.add(sig);
 	}
 
 }

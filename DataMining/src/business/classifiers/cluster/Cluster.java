@@ -69,4 +69,6 @@ public abstract class Cluster implements Comparable<Cluster>{
 
 	public abstract void addClustersImg(List<Image> imgs);
 
+	public abstract void addItem(Object obj);
+
 }
