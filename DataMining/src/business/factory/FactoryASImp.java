@@ -1,6 +1,5 @@
 package business.factory;
 
-import java.io.InputStream;
 import java.util.List;
 
 import business.classifiers.agrupamientosecuencial.AgrupamientoSec;
@@ -31,12 +30,6 @@ public class FactoryASImp extends FactoryAS {
 	public Zip readZip(String path) {
 		// TODO Auto-generated method stub
 		return new ZipImp(path);
-	}
-
-	@Override
-	public Data readData(List<InputStream> list, List<String> names) {
-		// TODO Auto-generated method stub
-		return new DataImp(list, names);
 	}
 
 	@Override

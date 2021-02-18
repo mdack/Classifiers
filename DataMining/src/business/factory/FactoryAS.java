@@ -1,6 +1,5 @@
 package business.factory;
 
-import java.io.InputStream;
 import java.util.List;
 
 import business.classifiers.agrupamientosecuencial.AgrupamientoSec;
@@ -33,8 +32,6 @@ public abstract class FactoryAS {
 	public abstract MatrizSim executeMatrizSimilitud();
 	
 	public abstract Hierarchical executeHierarchical();
-	
-	public abstract Data readData(List<InputStream> list, List<String> list2);
-	
+		
 	public abstract Data readData2(List<FileData> list);
 }

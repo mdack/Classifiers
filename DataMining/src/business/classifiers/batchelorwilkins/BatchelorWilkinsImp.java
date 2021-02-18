@@ -25,7 +25,7 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 	
 	@Override
 	public TResult executeAlgorithm(TBatchelorWilkins transfer) {
-		Data data = FactoryAS.getInstance().readData(transfer.gettZip().getFiles(),transfer.gettZip().getNames());
+		Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 		
 		if(transfer.gettZip().isAreSignals()) {
 			this.signals = data.readSignals();
