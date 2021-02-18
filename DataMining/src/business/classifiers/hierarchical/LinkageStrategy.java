@@ -18,8 +18,6 @@ package business.classifiers.hierarchical;
 
 import java.util.Collection;
 
-import business.classifiers.distance.Distance;
-
 public interface LinkageStrategy {
 
     public Distance calculateDistance(Collection<Distance> distances);

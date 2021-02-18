@@ -82,6 +82,7 @@ public class ZipImp implements Zip {
     	TZip transfer = new TZip();
     	
     	List<InputStream> list = new ArrayList<InputStream>();
+    	List<String> list_names = new ArrayList<String>();
         ZipFile zipFile;
         
 		try {
@@ -96,6 +97,7 @@ public class ZipImp implements Zip {
 	            stream.read(buffer);
 	            
 	            list.add(stream);
+	            list_names.add(entry.getName());
 
 	        }
 		} catch (IOException e) {
@@ -105,6 +107,7 @@ public class ZipImp implements Zip {
 		
 		transfer.setFiles(list);
 		transfer.setPath(pathZip);
+		transfer.setNames(list_names);
 
 		return transfer;
     }    

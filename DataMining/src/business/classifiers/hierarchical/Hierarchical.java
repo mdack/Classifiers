@@ -1,8 +1,9 @@
 package business.classifiers.hierarchical;
 
 import business.transfers.THierarchical;
+import business.transfers.TResult;
 
 public interface Hierarchical {
 
-	public void executeHierarchical(THierarchical transfer);
+	public TResult executeHierarchical(THierarchical transfer);
 }

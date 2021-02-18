@@ -11,11 +11,6 @@ public class ClusterSig extends Cluster {
 	
 	private List<Signal> list_files = new ArrayList<>();
 	private Signal centroid;
-	
-    public ClusterSig(String clusterName) {
-		super(clusterName);
-		// TODO Auto-generated constructor stub
-	}
 
 	public ClusterSig(int i, Signal signal) {
 		super(i);
@@ -111,6 +106,13 @@ public class ClusterSig extends Cluster {
 	public void addItem(Object obj) {
 		 Signal sig = (Signal) obj;
 		 this.list_files.add(sig);
+	}
+
+	@Override
+	public String toString() {
+		String cad = "Cluster con centro: " + centroid.getName() + "\n";
+		cad += "Total patrones: " + list_files.size();
+		return cad;
 	}
 
 }

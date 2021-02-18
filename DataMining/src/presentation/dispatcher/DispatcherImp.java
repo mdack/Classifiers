@@ -2,7 +2,11 @@ package presentation.dispatcher;
 
 import presentation.controller.BusinessEvent;
 import presentation.views.MainView;
+import presentation.views.agrupamientosecuencial.JAgrupamientoSec;
+import presentation.views.batchelorwilkins.JBatchelorWilkins;
+import presentation.views.hierarchical.JHierarchical;
 import presentation.views.kmeans.JKMeans;
+import presentation.views.matrizsimilitud.JMatrizSimilitud;
 
 public class DispatcherImp extends Dispatcher {
 
@@ -14,17 +18,38 @@ public class DispatcherImp extends Dispatcher {
 		
 		MainView main;
 		JKMeans kmeans;
+		JAgrupamientoSec as;
+		JBatchelorWilkins bw;
+		JMatrizSimilitud ms;
+		JHierarchical h;
 		
 		switch (evento) {
 		
 		case BusinessEvent.READ_ZIP:
 			main= MainView.getInstance();
-			main.update(contexto.getDatos());	
+			main.update(contexto);	
 			break;	
 		case BusinessEvent.KMEANS:
 			kmeans = JKMeans.getInstance(BusinessEvent.KMEANS);
-			kmeans.update(contexto.getDatos());
+			kmeans.update(contexto);
 			break;
+		case BusinessEvent.AGRUPAMIENTO_SECUENCIAL:
+			as = JAgrupamientoSec.getInstance();
+			as.update(contexto);
+			break;
+		case BusinessEvent.BATCHELOR_WILKINS:
+			bw = JBatchelorWilkins.getInstance();
+			bw.update(contexto);
+			break;
+		case BusinessEvent.HIERARCHICAL:
+			h = JHierarchical.getInstance();
+			h.update(contexto);
+			break;
+		case BusinessEvent.MATRIZSIMILITUD:
+			ms = JMatrizSimilitud.getInstance();
+			ms.update(contexto);
+			break;
+			
 		}
 	}
 }

@@ -11,15 +11,9 @@ public abstract class Cluster implements Comparable<Cluster>{
     protected double central_value=0;
     protected boolean areSignals=true;
 
-    public Cluster(String clusterName) {
-		// TODO Auto-generated constructor stub
-	}
-    
 	public Cluster(int id_cluster) {
 		this.id_cluster = id_cluster;
-	}
-    
-    
+	}   
 
 	public int getId_cluster() {
         return id_cluster;
@@ -35,20 +29,6 @@ public abstract class Cluster implements Comparable<Cluster>{
 
 	public void setId_cluster(int id_cluster) {
 		this.id_cluster = id_cluster;
-	}
-
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public Double getWeightValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void addLeafName(String clusterName) {
-		// TODO Auto-generated method stub
-		
 	}
 		
 	public abstract float calculateValue();
@@ -70,5 +50,7 @@ public abstract class Cluster implements Comparable<Cluster>{
 	public abstract void addClustersImg(List<Image> imgs);
 
 	public abstract void addItem(Object obj);
+	
+	public abstract String toString();
 
 }

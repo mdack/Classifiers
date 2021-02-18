@@ -10,11 +10,6 @@ public class ClusterImg extends Cluster {
 
 	protected List<Image> list_files = new ArrayList<>();
 	private Image centroid = null;
-	
-    public ClusterImg(String clusterName) {
-		super(clusterName);
-		// TODO Auto-generated constructor stub
-	}
 
 	public ClusterImg(int i, Image image) {
 		super(i);
@@ -113,6 +108,13 @@ public class ClusterImg extends Cluster {
 	public void addItem(Object obj) {
 		Image img = (Image) obj;
 		this.list_files.add(img);
+	}
+
+	@Override
+	public String toString() {
+		String cad = "Cluster con centro: " + centroid.getName() + "\n";
+		cad += "Total patrones: " + list_files.size();
+		return cad;
 	}
 	
 	

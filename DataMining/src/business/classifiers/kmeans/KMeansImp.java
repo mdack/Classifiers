@@ -11,6 +11,7 @@ import business.elements.Signal;
 import business.factory.FactoryAS;
 import business.files.Data;
 import business.transfers.TKMeans;
+import business.transfers.TResult;
 
 
 public class KMeansImp implements KMeans{
@@ -39,9 +40,9 @@ public class KMeansImp implements KMeans{
 	    }
 
 		@Override
-		public Cluster executeKMeans(TKMeans transfer) {
+		public TResult executeKMeans(TKMeans transfer) {
 			
-			Data data = FactoryAS.getInstance().readData(transfer.gettZip().getFiles());
+			Data data = FactoryAS.getInstance().readData(transfer.gettZip().getFiles(),transfer.gettZip().getNames());
 			
 			if(transfer.gettZip().isAreSignals()) {
 				this.signals = data.readSignals();
@@ -67,7 +68,10 @@ public class KMeansImp implements KMeans{
 	        	}
 	            goal = recalculateCluster();
 	        }			
-			return null;
+			TResult result = new TResult();
+			result.setList(clusters);
+			result.setN(clusters.size());
+			return result;
 		}
 		
 	    private boolean recalculateCluster(){

@@ -14,9 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import business.transfers.TResult;
 import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
+import presentation.views.MainView;
 
 @SuppressWarnings("serial")
 public class JMatrizSimilitudImp extends JMatrizSimilitud {
@@ -87,10 +89,12 @@ public class JMatrizSimilitudImp extends JMatrizSimilitud {
 						"Cluster al que pertenece" + r,
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
 				this.dispose();
+				TResult transfer = (TResult) c.getDatos();
+				MainView.getInstance().getTaDisplay().append(transfer.toString());
 			}break;
 			case(DispatcherResults.MatrizError):{
 				JOptionPane.showMessageDialog(null,
-						"Error al intentar ejecutar clasificador KMeans",
+						"Error al intentar ejecutar clasificador",
 						"Error crítico", JOptionPane.ERROR_MESSAGE);
 			}break;
 		}

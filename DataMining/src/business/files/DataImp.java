@@ -14,15 +14,18 @@ import business.elements.Signal;
 public class DataImp implements Data{
 
 	private List<InputStream> list_data;
+	private List<String> names;
 	
-	public DataImp(List<InputStream> list) {
+	public DataImp(List<InputStream> list, List<String> names2) {
 		list_data = list;
+		names = names2;
 	}
 	
 	@Override
 	public List<Image> readImages() {
 		
 		List<Image> list = new ArrayList<>();
+		int i = 0;
 		for(InputStream is : list_data) {
 			int row = 0;
 			List<List<Double>> list_rows = new ArrayList<List<Double>>();
@@ -52,12 +55,14 @@ public class DataImp implements Data{
 					img.setImage(list_rows);
 					img.setCols(list_cols.size());
 					img.setRows(list_rows.size());
+					img.setName(names.get(i));
 					list.add(img);
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				i++;
 		}
 		return list;
 	}
@@ -65,6 +70,7 @@ public class DataImp implements Data{
 	@Override
 	public List<Signal> readSignals() {
 		List<Signal> list = new ArrayList<>();
+		int i = 0;
 		for(InputStream is : list_data) {
 				try {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -80,14 +86,24 @@ public class DataImp implements Data{
 					}
 					Signal signal = new Signal();
 					signal.setSignal(list_s);
+					signal.setName(names.get(i));
 					list.add(signal);
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				i++;
 		}
 		return list;
+	}
+
+	public List<String> getNames() {
+		return names;
+	}
+
+	public void setNames(List<String> names) {
+		this.names = names;
 	}
 
 }

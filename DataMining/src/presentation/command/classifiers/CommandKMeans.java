@@ -1,9 +1,9 @@
 package presentation.command.classifiers;
 
-import business.classifiers.cluster.Cluster;
 import business.classifiers.kmeans.KMeans;
 import business.factory.FactoryAS;
 import business.transfers.TKMeans;
+import business.transfers.TResult;
 import presentation.command.Command;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
@@ -16,7 +16,7 @@ public class CommandKMeans implements Command{
 		
 		KMeans kmeans = factory.executeKmeans();
 		Context context_1 = (Context) datos;
-		Cluster id = kmeans.executeKMeans((TKMeans)context_1.getDatos());
+		TResult id = kmeans.executeKMeans((TKMeans)context_1.getDatos());
 		
 		Context contexto = new Context();
 		contexto.setDatos(id);

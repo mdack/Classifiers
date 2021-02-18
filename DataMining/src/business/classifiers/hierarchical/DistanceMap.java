@@ -1,4 +1,4 @@
-package business.classifiers.distance;
+package business.classifiers.hierarchical;
 
 import java.util.*;
 
@@ -109,14 +109,14 @@ public class DistanceMap {
     }
 
     private String hashCodePair(Cluster lCluster, Cluster rCluster) {
-        return hashCodePairNames(lCluster.getName(), rCluster.getName());
+        return hashCodePairNames(lCluster.getId_cluster(), rCluster.getId_cluster());
     }
 
-    private String hashCodePairNames(String lName, String rName) {
-        if (lName.compareTo(rName) < 0) {
-            return lName + "~~~" + rName;//getlCluster().hashCode() + 31 * (getrCluster().hashCode());
+    private String hashCodePairNames(int lName, int rName) {
+        if (lName > rName) {
+            return lName + "~~~" + rName;
         } else {
-            return rName + "~~~" + lName;//return getrCluster().hashCode() + 31 * (getlCluster().hashCode());
+            return rName + "~~~" + lName;
         }
     }
 

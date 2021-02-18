@@ -7,6 +7,7 @@ public class TZip {
 	private String path;
 	private boolean areSignals;
 	private List<InputStream> files;
+	private List<String> names;
 	
 	public String getPath() {
 		return path;
@@ -25,5 +26,11 @@ public class TZip {
 	}
 	public void setAreSignals(boolean areSignals) {
 		this.areSignals = areSignals;
+	}
+	public void setNames(List<String> list_names) {
+		names = list_names;	
+	}
+	public List<String> getNames(){
+		return names;
 	}
 }

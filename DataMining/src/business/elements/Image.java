@@ -9,6 +9,7 @@ public class Image {
 	int rows;
 	int cols;
     int id_cluster = -1;
+    private String name;
 	
 	public int getId_cluster() {
 		return id_cluster;
@@ -74,5 +75,11 @@ public class Image {
         }
         
 		return sum;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }

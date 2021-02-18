@@ -9,11 +9,16 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import business.transfers.TResult;
 import presentation.controller.BusinessEvent;
+import presentation.dispatcher.Context;
+import presentation.dispatcher.DispatcherResults;
+import presentation.views.MainView;
 
 @SuppressWarnings("serial")
 public class JBatchelorWilkinsImp extends JBatchelorWilkins {
@@ -75,7 +80,25 @@ public class JBatchelorWilkinsImp extends JBatchelorWilkins {
 
 	@Override
 	public void update(Object context) {
-		// TODO Auto-generated method stub
+		Context c = (Context) context;
+		Integer cas = (Integer) c.getEvento();
+		
+		switch(cas) {
+			case(DispatcherResults.BatchelorWilkinsCorrect):{
+				Integer r = (int) c.getDatos();
+							JOptionPane.showMessageDialog(null,
+						"Cluster al que pertenece" + r,
+						"Correcto", JOptionPane.PLAIN_MESSAGE);
+				this.dispose();
+				TResult transfer = (TResult) c.getDatos();
+				MainView.getInstance().getTaDisplay().append(transfer.toString());
+			}break;
+			case(DispatcherResults.BatchelorWilkinsError):{
+				JOptionPane.showMessageDialog(null,
+						"Error al intentar ejecutar clasificador",
+						"Error crítico", JOptionPane.ERROR_MESSAGE);
+			}break;
+		}
 		
 	}
 

@@ -7,6 +7,7 @@ import java.util.List;
 public class Signal {
 	HashMap<Double,Double> signal;
     int id_cluster = -1;
+    private String name;
 
 	public int getId_cluster() {
 		return id_cluster;
@@ -46,6 +47,14 @@ public class Signal {
         }
         
 		return sum;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

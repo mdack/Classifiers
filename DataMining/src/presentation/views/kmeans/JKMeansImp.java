@@ -15,9 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import business.transfers.TResult;
 import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
+import presentation.views.MainView;
 
 @SuppressWarnings("serial")
 public class JKMeansImp extends JKMeans {
@@ -105,6 +107,8 @@ public class JKMeansImp extends JKMeans {
 						"Cluster al que pertenece" + r,
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
 				this.dispose();
+				TResult transfer = (TResult) c.getDatos();
+				MainView.getInstance().getTaDisplay().append(transfer.toString());
 			}break;
 			case(DispatcherResults.KMeansError):{
 				JOptionPane.showMessageDialog(null,

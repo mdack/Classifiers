@@ -28,6 +28,14 @@ public class MainView extends JFrame{
 
 	private TextArea taDisplay = new TextArea();
 	
+	public TextArea getTaDisplay() {
+		return taDisplay;
+	}
+
+	public void setTaDisplay(TextArea taDisplay) {
+		this.taDisplay = taDisplay;
+	}
+
 	private ALExplorer ale = null;
 	
 	private TZip tZip = null;

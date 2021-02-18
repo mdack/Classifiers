@@ -2,8 +2,6 @@ package business.classifiers.hierarchical;
 
 import java.util.Collection;
 
-import business.classifiers.distance.Distance;
-
 public class CompleteLinkageStrategy implements LinkageStrategy {
 
 	@Override

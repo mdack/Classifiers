@@ -25,7 +25,7 @@ public class MatrizSimImpl implements MatrizSim{
 	
 	@Override
 	public TResult executeAlgorithm(TMatrizSim transfer) {
-		Data data = FactoryAS.getInstance().readData(transfer.gettZip().getFiles());
+		Data data = FactoryAS.getInstance().readData(transfer.gettZip().getFiles(),transfer.gettZip().getNames());
 		
 		if(transfer.gettZip().isAreSignals()) {
 			this.signals = data.readSignals();

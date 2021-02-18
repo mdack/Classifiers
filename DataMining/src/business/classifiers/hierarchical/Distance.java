@@ -1,4 +1,4 @@
-package business.classifiers.distance;
+package business.classifiers.hierarchical;
 
 public class Distance implements Comparable<Distance>, Cloneable {
 

@@ -25,7 +25,7 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 
 	@Override
 	public TResult executeAlgorithm(TAgrupamientoSec transfer) {
-		Data data = FactoryAS.getInstance().readData(transfer.gettZip().getFiles());
+		Data data = FactoryAS.getInstance().readData(transfer.gettZip().getFiles(),transfer.gettZip().getNames());
 		
 		if(transfer.gettZip().isAreSignals()) {
 			this.signals = data.readSignals();

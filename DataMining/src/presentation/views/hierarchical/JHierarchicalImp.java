@@ -10,14 +10,19 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import business.transfers.TResult;
 import presentation.controller.BusinessEvent;
+import presentation.dispatcher.Context;
+import presentation.dispatcher.DispatcherResults;
+import presentation.views.MainView;
 
 @SuppressWarnings("serial")
 public class JHierarchicalImp extends JHierarchical {
-	
+
 	public JHierarchicalImp() {
 		this.initComponents();
 		this.initGUIHierarchical();
@@ -30,7 +35,7 @@ public class JHierarchicalImp extends JHierarchical {
         this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
-		
+				
 		contenedor =new JPanel();
 		contenedor.setLayout(new BorderLayout());
 		contenedor.setBorder(BorderFactory.createTitledBorder("Parámetros"));
@@ -75,8 +80,20 @@ public class JHierarchicalImp extends JHierarchical {
 
 	@Override
 	public void update(Object context) {
-		// TODO Auto-generated method stub
+		Context c = (Context) context;
+		Integer cas = (Integer) c.getEvento();
 		
+		switch(cas) {
+			case(DispatcherResults.HierarchicalCorrect):{
+				TResult transfer = (TResult) c.getDatos();
+				MainView.getInstance().getTaDisplay().append(transfer.toString());
+			}break;
+			case(DispatcherResults.HierarchicalError):{
+				JOptionPane.showMessageDialog(null,
+						"Error al intentar ejecutar clasificador",
+						"Error crítico", JOptionPane.ERROR_MESSAGE);
+			}break;
+		}		
 	}
 
 }
