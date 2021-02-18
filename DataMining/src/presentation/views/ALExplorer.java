@@ -16,29 +16,22 @@ public class ALExplorer implements ActionListener{
 
 	private JFileChooser explorerFiles;
 	private File selectedFile;
-	
-	private MainView instance;
-	
-	public ALExplorer() {
-		this.explorerFiles = new JFileChooser();
-	}
-	
-	public ALExplorer(MainView mainView) {
-		instance = mainView;
-		this.explorerFiles = new JFileChooser();
+		
+	public ALExplorer(JFileChooser explorer) {
+		this.explorerFiles = explorer;
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		this.explorerFiles.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos Zip", "zip");
 		explorerFiles.setFileFilter(filter);
-		
+		explorerFiles.showOpenDialog(MainView.getInstance());
 		selectedFile = this.explorerFiles.getSelectedFile();
 		
 		if ((selectedFile == null) || (selectedFile.getName().equals(""))) {
-		 JOptionPane.showMessageDialog(instance, "Nombre de archivo inválido", "Nombre de archivo inválido", JOptionPane.ERROR_MESSAGE);
+		 JOptionPane.showMessageDialog(MainView.getInstance(), "Nombre de archivo inválido", "Nombre de archivo inválido", JOptionPane.ERROR_MESSAGE);
 		} else {
 			Controller cont = Controller.getInstance();
 			

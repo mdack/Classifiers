@@ -11,6 +11,7 @@ import java.awt.TextArea;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,9 +25,10 @@ import presentation.dispatcher.DispatcherResults;
 public class MainView extends JFrame{
 	
 	private final static String NAME_TITLE = "Clasificadores - Minería de datos";
-	private final String[] CLASSIFIER_OPTIONS = {"Jerárquico","KMeans", "Jerárquico", "KMeans", "KNN", "Tarjan"};	
+	private final String[] CLASSIFIER_OPTIONS = {"Jerárquico","KMeans", "Agrupamiento secuencial", "Matriz de similitud", "Batchelor y Wilkins"};	
 
 	private TextArea taDisplay = new TextArea();
+	private JFileChooser explorerFiles;
 	
 	public TextArea getTaDisplay() {
 		return taDisplay;
@@ -35,11 +37,17 @@ public class MainView extends JFrame{
 	public void setTaDisplay(TextArea taDisplay) {
 		this.taDisplay = taDisplay;
 	}
-
-	private ALExplorer ale = null;
 	
 	private TZip tZip = null;
 	
+	public TZip gettZip() {
+		return tZip;
+	}
+
+	public void settZip(TZip tZip) {
+		this.tZip = tZip;
+	}
+
 	private static MainView instance;
 	
 	public static MainView getInstance() {
@@ -50,7 +58,6 @@ public class MainView extends JFrame{
 	}
 	
 	public MainView() {
-		this.ale = new ALExplorer(this);
 		
 		//main window configuration
 		this.setTitle(NAME_TITLE);	//Window title
@@ -104,10 +111,12 @@ public class MainView extends JFrame{
 	private JPanel panelExplorer() {
 		JPanel result = new JPanel();
 		
+		this.explorerFiles = new JFileChooser();
+		
 		JButton go = new JButton(" Escoge archivo ");
 		go.setPreferredSize(new Dimension(250,30));
 		go.setHorizontalAlignment(SwingConstants.CENTER);
-		go.addActionListener(ale);
+		go.addActionListener(new ALExplorer(this.explorerFiles));
 		
 		result.add(go);
 		
@@ -142,7 +151,7 @@ public class MainView extends JFrame{
 		 result.add(panelFiles);
 	
 		JButton go = new JButton(" Ejecutar ");	//Execute button
-		go.addActionListener(new ALMainView(comboBox, opcion1, tZip));
+		go.addActionListener(new ALMainView(comboBox, opcion1));
 		result.add(go);
 		
 		return result;
@@ -152,6 +161,8 @@ public class MainView extends JFrame{
 		JPanel result = new JPanel();
 		
 		taDisplay = new TextArea();
+		taDisplay.setEditable(false);
+		taDisplay.setText("Consola de resultados: \n");
 		result.add(taDisplay);
 		
 		return result;
@@ -164,7 +175,7 @@ public class MainView extends JFrame{
 		switch(cas) {
 		case DispatcherResults.readZipOK:
 			tZip = (TZip) c.getDatos();
-			taDisplay.append("Se han obtenido los archivos del zip correctamente.\n");
+			taDisplay.setText("Se han obtenido los archivos del zip correctamente.\n");
 			break;
 		case DispatcherResults.readZipError:
 			taDisplay.append("No se ha podido leer el archivo zip.\n");

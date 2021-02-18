@@ -26,20 +26,15 @@ public class JKMeansImp extends JKMeans {
 
 	private final static String[] inits = {"Arbitraria", "Inversa", "Directa"};
 	
-	public JKMeansImp(int evento) {
+	public JKMeansImp() {
 		this.initComponents();
-		
-		switch(evento) {
-		case BusinessEvent.KMEANS:
-			initGUIKmeans();
-			break;
-		}
+		initGUIKmeans();
 	}
 
 
 	public void initComponents() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400,400);
+        this.setSize(600,600);
         this.setResizable(false); 
         this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -72,11 +67,11 @@ public class JKMeansImp extends JKMeans {
 	@Override
 	public void initGUIKmeans() {
 		this.setTitle("KMeans");
-		this.setSize(250,200);
+		this.setSize(300,300);
 		this.setLocationRelativeTo(null);
 		
 		//datos
-		datos.setLayout(new GridLayout(2, 2, 50, 50));
+		datos.setLayout(new GridLayout(2, 2, 75, 75));
 		
 		datos.add(linit);
 		cbInitializion.addItem(inits[0]);
@@ -87,9 +82,11 @@ public class JKMeansImp extends JKMeans {
 		datos.add(lK);
 		datos.add(txK);
 		
-		boton.add(btExecute);
-		btExecute.addActionListener(new ALKMeans(BusinessEvent.KMEANS, txK, cbInitializion, transfer_zip));
+		btExecute.setText(" Ejecutar ");
+		btExecute.addActionListener(new ALKMeans(BusinessEvent.KMEANS, txK, cbInitializion));
 		btExecute.setHorizontalAlignment(SwingConstants.CENTER);
+		boton.add(btExecute);
+
 				
 		contenedor.add(datos, BorderLayout.CENTER);
 		contenedor.add(boton, BorderLayout.SOUTH);

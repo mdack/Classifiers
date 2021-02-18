@@ -11,31 +11,34 @@ import business.transfers.TZip;
 import presentation.controller.BusinessEvent;
 import presentation.controller.Controller;
 import presentation.dispatcher.Context;
+import presentation.views.MainView;
 
 public class ALKMeans implements ActionListener{
 
 	private int evento;
-	private int K;
-	private int tInit;
+	private JTextField tK;
+	@SuppressWarnings("rawtypes")
+	private JComboBox cb;
 	private TZip tZip;
 	
 	@SuppressWarnings("rawtypes")
-	public ALKMeans(int kmeans, JTextField txK, JComboBox cbInitializion, TZip tz) {
+	public ALKMeans(int kmeans, JTextField txK, JComboBox cbInitializion) {
 		evento = kmeans;
-		K = Integer.getInteger(txK.getText());
-		tInit = cbInitializion.getSelectedIndex();
-		tZip = tz;
+		tK = txK;
+		cb = cbInitializion;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		tZip = MainView.getInstance().gettZip();
 		switch(evento) {
 		case(BusinessEvent.KMEANS):
 			Controller cont = Controller.getInstance();
 		
 			Context context = new Context();
-			TKMeans transfer = new TKMeans(K,tInit,tZip);
+			int k = Integer.parseInt(tK.getText());
+			int option = cb.getSelectedIndex();
+			TKMeans transfer = new TKMeans(k,option,tZip);
 			context.setDatos(transfer);
 			context.setEvento(BusinessEvent.KMEANS);
 			

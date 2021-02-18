@@ -15,8 +15,7 @@ public class CommandKMeans implements Command{
 		FactoryAS factory = FactoryAS.getInstance();
 		
 		KMeans kmeans = factory.executeKmeans();
-		Context context_1 = (Context) datos;
-		TResult id = kmeans.executeKMeans((TKMeans)context_1.getDatos());
+		TResult id = kmeans.executeKMeans((TKMeans)datos);
 		
 		Context contexto = new Context();
 		contexto.setDatos(id);

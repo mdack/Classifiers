@@ -36,7 +36,7 @@ public class DataImp implements Data{
 					while(reader.ready()) {
 					     String line = reader.readLine();
 					     String[] cols = line.split("\t");
-					     
+					     /*
 					     int r = Integer.parseInt(cols[0]);
 					     if(r != row) {
 					    	 row = r;
@@ -47,8 +47,10 @@ public class DataImp implements Data{
 					    		 list_cols  = new ArrayList<Double>();
 					    	 }
 					     }
+					     
 						double pixel = Double.valueOf(cols[2]);
 						list_cols.add(pixel);
+						*/
 					}
 					
 					Image img = new Image();

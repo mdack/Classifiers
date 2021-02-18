@@ -17,11 +17,10 @@ public abstract class JKMeans extends JFrame{
 	protected static int event;
 	protected static TZip transfer_zip;
 	
-	public static JKMeans getInstance(int evento) {
+	public static JKMeans getInstance() {
 		
-		if((instance==null) || (event!=evento)){
-			instance = new JKMeansImp(evento);
-			event=evento;
+		if(instance==null){
+			instance = new JKMeansImp();
 		}
 		return instance;
 	}

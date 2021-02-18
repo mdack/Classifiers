@@ -25,12 +25,12 @@ public class DispatcherImp extends Dispatcher {
 		
 		switch (evento) {
 		
-		case BusinessEvent.READ_ZIP:
+		case DispatcherResults.readZipOK:
 			main= MainView.getInstance();
 			main.update(contexto);	
 			break;	
-		case BusinessEvent.KMEANS:
-			kmeans = JKMeans.getInstance(BusinessEvent.KMEANS);
+		case DispatcherResults.KMeansCorrect:
+			kmeans = JKMeans.getInstance();
 			kmeans.update(contexto);
 			break;
 		case BusinessEvent.AGRUPAMIENTO_SECUENCIAL:
