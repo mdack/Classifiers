@@ -99,13 +99,13 @@ public class JKMeansImp extends JKMeans {
 		
 		switch(cas) {
 			case(DispatcherResults.KMeansCorrect):{
-				Integer r = (int) c.getDatos();
 							JOptionPane.showMessageDialog(null,
-						"Cluster al que pertenece" + r,
+						"Cluster creados!",
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
 				this.dispose();
 				TResult transfer = (TResult) c.getDatos();
 				MainView.getInstance().getTaDisplay().append(transfer.toString());
+				System.out.println(transfer.toString());
 			}break;
 			case(DispatcherResults.KMeansError):{
 				JOptionPane.showMessageDialog(null,

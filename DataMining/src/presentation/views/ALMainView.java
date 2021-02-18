@@ -40,7 +40,7 @@ public class ALMainView implements ActionListener{
 			tZip.setAreSignals(false);
 		
 		
-		if(!tZip.getFiles().isEmpty()) {
+		if(!tZip.getList().isEmpty()) {
 			switch(c.getSelectedIndex()) {
 			case 0:
 				JHierarchical ventana0 = JHierarchical.getInstance();

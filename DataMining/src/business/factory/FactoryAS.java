@@ -8,6 +8,7 @@ import business.classifiers.batchelorwilkins.BatchelorWilkins;
 import business.classifiers.hierarchical.Hierarchical;
 import business.classifiers.kmeans.KMeans;
 import business.classifiers.matrizsimilitud.MatrizSim;
+import business.elements.FileData;
 import business.files.Data;
 import business.files.Zip;
 
@@ -34,4 +35,6 @@ public abstract class FactoryAS {
 	public abstract Hierarchical executeHierarchical();
 	
 	public abstract Data readData(List<InputStream> list, List<String> list2);
+	
+	public abstract Data readData2(List<FileData> list);
 }

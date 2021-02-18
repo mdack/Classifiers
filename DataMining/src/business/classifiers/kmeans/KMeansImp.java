@@ -42,7 +42,7 @@ public class KMeansImp implements KMeans{
 		@Override
 		public TResult executeKMeans(TKMeans transfer) {
 			
-			Data data = FactoryAS.getInstance().readData(transfer.gettZip().getFiles(),transfer.gettZip().getNames());
+			Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 			
 			if(transfer.gettZip().isAreSignals()) {
 				this.signals = data.readSignals();

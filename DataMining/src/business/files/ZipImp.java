@@ -12,6 +12,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import business.elements.FileData;
 import business.transfers.TZip;
 
 public class ZipImp implements Zip {
@@ -81,8 +82,7 @@ public class ZipImp implements Zip {
     	
     	TZip transfer = new TZip();
     	
-    	List<InputStream> list = new ArrayList<InputStream>();
-    	List<String> list_names = new ArrayList<String>();
+    	List<FileData> list_files = new ArrayList<>();
         ZipFile zipFile;
         
 		try {
@@ -91,13 +91,8 @@ public class ZipImp implements Zip {
 
 	        while(entries.hasMoreElements()){               
 	            ZipEntry entry = entries.nextElement();
-	            InputStream stream = zipFile.getInputStream(entry);
-
-	            byte[] buffer = new byte[stream.available()];
-	            stream.read(buffer);
-	            
-	            list.add(stream);
-	            list_names.add(entry.getName());
+	            InputStream stream = zipFile.getInputStream(entry);            	            
+	            list_files.add(new FileData(stream, entry.getName()));
 
 	        }
 		} catch (IOException e) {
@@ -105,9 +100,8 @@ public class ZipImp implements Zip {
 			System.out.println(e.toString());
 		}
 		
-		transfer.setFiles(list);
 		transfer.setPath(pathZip);
-		transfer.setNames(list_names);
+		transfer.setList(list_files);
 
 		return transfer;
     }    

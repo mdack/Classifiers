@@ -3,9 +3,12 @@ package business.transfers;
 import java.io.InputStream;
 import java.util.List;
 
+import business.elements.FileData;
+
 public class TZip {
 	private String path;
 	private boolean areSignals;
+	private List<FileData> list;
 	private List<InputStream> files;
 	private List<String> names;
 	
@@ -32,5 +35,11 @@ public class TZip {
 	}
 	public List<String> getNames(){
 		return names;
+	}
+	public List<FileData> getList() {
+		return list;
+	}
+	public void setList(List<FileData> list) {
+		this.list = list;
 	}
 }

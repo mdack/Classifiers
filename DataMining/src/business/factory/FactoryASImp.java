@@ -13,6 +13,7 @@ import business.classifiers.kmeans.KMeans;
 import business.classifiers.kmeans.KMeansImp;
 import business.classifiers.matrizsimilitud.MatrizSim;
 import business.classifiers.matrizsimilitud.MatrizSimImpl;
+import business.elements.FileData;
 import business.files.Data;
 import business.files.DataImp;
 import business.files.Zip;
@@ -60,6 +61,12 @@ public class FactoryASImp extends FactoryAS {
 	public Hierarchical executeHierarchical() {
 		// TODO Auto-generated method stub
 		return new HierarchicalImp();
+	}
+
+	@Override
+	public Data readData2(List<FileData> list) {
+		// TODO Auto-generated method stub
+		return new DataImp(list);
 	}
 	
 
