@@ -5,6 +5,7 @@ import business.factory.FactoryAS;
 import business.transfers.TAgrupamientoSec;
 import business.transfers.TResult;
 import presentation.command.Command;
+import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
 
@@ -15,15 +16,15 @@ public class CommandAgrupamientoSec implements Command{
 		FactoryAS factory = FactoryAS.getInstance();
 		
 		AgrupamientoSec alg = factory.executeAgrupamientoSec();
-		Context context_1 = (Context) datos;
-		TResult id = alg.executeAlgorithm((TAgrupamientoSec)context_1.getDatos());
+		TResult id = alg.executeAlgorithm((TAgrupamientoSec)datos);
 		
 		Context contexto = new Context();
 		contexto.setDatos(id);
+		int event = BusinessEvent.AGRUPAMIENTO_SECUENCIAL;
 		if(id != null) 
-			contexto.setEvento(DispatcherResults.Agrupamientocorrect);
+			contexto.setEvento(event + DispatcherResults.Agrupamientocorrect);
 		else 
-			contexto.setEvento(DispatcherResults.AgrupamientoError);
+			contexto.setEvento(event + DispatcherResults.AgrupamientoError);
 		
 		return contexto;
 	}

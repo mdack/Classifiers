@@ -21,7 +21,7 @@ public class MatrizSimImpl implements MatrizSim{
 	private List<Cluster> clusters = new ArrayList<>();
 	private double[][] matrix;
 	private int A = 0;
-	private int teta = 0;
+	private double teta = 0;
 	
 	@Override
 	public TResult executeAlgorithm(TMatrizSim transfer) {

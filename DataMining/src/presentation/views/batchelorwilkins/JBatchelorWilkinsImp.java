@@ -15,7 +15,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import business.transfers.TResult;
-import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
 import presentation.views.MainView;
@@ -29,8 +28,9 @@ public class JBatchelorWilkinsImp extends JBatchelorWilkins {
 	}
 	
 	public void initComponents() {
+		this.setTitle("Batchelor y Wilkins");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400,400);
+        this.setSize(600,400);
         this.setResizable(false); 
         this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -54,23 +54,21 @@ public class JBatchelorWilkinsImp extends JBatchelorWilkins {
 		//text
 		txO = new JTextField();
 		txO.setEditable(true);
+		txO.setText("0.5");
 	}
 	
 	@Override
 	public void initGUIBatchelorWilkins() {
-		this.setTitle("Batchelor y Wilkins");
-		this.setSize(250,200);
-		this.setLocationRelativeTo(null);
-		
 		//datos
 		datos.setLayout(new GridLayout(1, 2, 50, 50));
 		
 		datos.add(lO);
 		datos.add(txO);
 		
-		boton.add(btExecute);
-		btExecute.addActionListener(new ALBatchelorWilkins(BusinessEvent.BATCHELOR_WILKINS, txO, transfer_zip));
+		btExecute.setText(" Ejecutar ");
+		btExecute.addActionListener(new ALBatchelorWilkins(txO));
 		btExecute.setHorizontalAlignment(SwingConstants.CENTER);
+		boton.add(btExecute);
 				
 		contenedor.add(datos, BorderLayout.CENTER);
 		contenedor.add(boton, BorderLayout.SOUTH);

@@ -2,6 +2,8 @@ package business.factory;
 
 import java.util.List;
 
+import business.classifiers.adaptative.Adaptative;
+import business.classifiers.adaptative.AdaptativeImp;
 import business.classifiers.agrupamientosecuencial.AgrupamientoSec;
 import business.classifiers.agrupamientosecuencial.AgrupamientoSecImp;
 import business.classifiers.batchelorwilkins.BatchelorWilkins;
@@ -60,6 +62,12 @@ public class FactoryASImp extends FactoryAS {
 	public Data readData2(List<FileData> list) {
 		// TODO Auto-generated method stub
 		return new DataImp(list);
+	}
+
+	@Override
+	public Adaptative executeAdaptative() {
+		// TODO Auto-generated method stub
+		return new AdaptativeImp();
 	}
 	
 

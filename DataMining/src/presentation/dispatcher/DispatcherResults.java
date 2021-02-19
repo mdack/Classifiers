@@ -5,8 +5,10 @@ public class DispatcherResults {
 	//ZIP
 	public static final int readZipOK = 1;
 	public static final int readZipError = 2;
-	public static final int unzipZipOK = 3;
-	public static final int unzipZipError = 4;
+	
+	//MÉTODO ADAPTATIVO
+	public static final int AdaptativeCorrect = 3;
+	public static final int AdaptativeError = 4;
 	
 	//KMEANS
 	public static final int KMeansCorrect= 5;
@@ -27,4 +29,6 @@ public class DispatcherResults {
 	//MATRIZ DE SIMILITUD
 	public static final int MatrizCorrect = 13;
 	public static final int MatrizError = 14;
+	
+
 }

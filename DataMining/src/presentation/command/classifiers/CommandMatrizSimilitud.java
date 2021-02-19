@@ -5,6 +5,7 @@ import business.factory.FactoryAS;
 import business.transfers.TMatrizSim;
 import business.transfers.TResult;
 import presentation.command.Command;
+import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
 
@@ -20,10 +21,11 @@ public class CommandMatrizSimilitud implements Command{
 		
 		Context contexto = new Context();
 		contexto.setDatos(id);
+		int event = BusinessEvent.MATRIZSIMILITUD;
 		if(id != null) 
-			contexto.setEvento(DispatcherResults.MatrizCorrect);
+			contexto.setEvento(event + DispatcherResults.MatrizCorrect);
 		else 
-			contexto.setEvento(DispatcherResults.MatrizError);
+			contexto.setEvento(event + DispatcherResults.MatrizError);
 		
 		return contexto;
 	}

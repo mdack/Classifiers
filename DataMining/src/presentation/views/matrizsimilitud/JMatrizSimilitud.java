@@ -6,13 +6,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import business.transfers.TZip;
-
 @SuppressWarnings("serial")
 public abstract class JMatrizSimilitud extends JFrame{
 	
 	protected static JMatrizSimilitud instance;
-	protected static TZip transfer_zip;
 	
 	public static JMatrizSimilitud getInstance() {
 		if(instance == null)
@@ -31,14 +28,6 @@ public abstract class JMatrizSimilitud extends JFrame{
 	protected JButton btExecute;
 	
 	protected JTextField txO;
-	
-	public static TZip getTransfer_zip() {
-		return transfer_zip;
-	}
-
-	public static void setTransfer_zip(TZip tz) {
-		transfer_zip = tz;
-	}
 	
 	public abstract void initGUIMatrizSim();
 

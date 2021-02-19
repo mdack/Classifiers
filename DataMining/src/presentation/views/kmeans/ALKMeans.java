@@ -15,15 +15,11 @@ import presentation.views.MainView;
 
 public class ALKMeans implements ActionListener{
 
-	private int evento;
 	private JTextField tK;
-	@SuppressWarnings("rawtypes")
-	private JComboBox cb;
+	private JComboBox<String> cb;
 	private TZip tZip;
 	
-	@SuppressWarnings("rawtypes")
-	public ALKMeans(int kmeans, JTextField txK, JComboBox cbInitializion) {
-		evento = kmeans;
+	public ALKMeans(JTextField txK, JComboBox<String> cbInitializion) {
 		tK = txK;
 		cb = cbInitializion;
 	}
@@ -31,8 +27,6 @@ public class ALKMeans implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		tZip = MainView.getInstance().gettZip();
-		switch(evento) {
-		case(BusinessEvent.KMEANS):
 			Controller cont = Controller.getInstance();
 		
 			Context context = new Context();
@@ -43,8 +37,6 @@ public class ALKMeans implements ActionListener{
 			context.setEvento(BusinessEvent.KMEANS);
 			
 			cont.action(context);
-			break;
-		}
 		
 	}
 

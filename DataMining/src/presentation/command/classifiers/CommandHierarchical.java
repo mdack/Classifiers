@@ -5,6 +5,7 @@ import business.factory.FactoryAS;
 import business.transfers.THierarchical;
 import business.transfers.TResult;
 import presentation.command.Command;
+import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
 
@@ -20,10 +21,12 @@ public class CommandHierarchical implements Command{
 		
 		Context contexto = new Context();
 		contexto.setDatos(id);
+		
+		int event = BusinessEvent.HIERARCHICAL;
 		if(id != null) 
-			contexto.setEvento(DispatcherResults.HierarchicalCorrect);
+			contexto.setEvento(event + DispatcherResults.HierarchicalCorrect);
 		else 
-			contexto.setEvento(DispatcherResults.HierarchicalError);
+			contexto.setEvento(event + DispatcherResults.HierarchicalError);
 		
 		return contexto;
 	}

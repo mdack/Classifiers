@@ -1,14 +1,14 @@
 package business.transfers;
 
 public class TMatrizSim {
-	private int O;
+	private double O;
 	private TZip tZip;
 	
-	public TMatrizSim(int o2, TZip tZip2) {
+	public TMatrizSim(double o2, TZip tZip2) {
 		O = o2;
 		tZip = tZip2;
 	}
-	public int getO() {
+	public double getO() {
 		return O;
 	}
 	public void setO(int o) {

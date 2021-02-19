@@ -3,9 +3,9 @@ package business.transfers;
 public class TKMeans {
 	private final static int NUM_CLUSTERS = 6;
 	
-	int K;
-	int tInit;
-	TZip tZip;
+	private int K;
+	private int tInit;
+	private TZip tZip;
 	
 	public TKMeans() {
 		K = NUM_CLUSTERS;

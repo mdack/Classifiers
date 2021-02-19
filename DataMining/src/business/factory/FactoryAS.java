@@ -2,6 +2,7 @@ package business.factory;
 
 import java.util.List;
 
+import business.classifiers.adaptative.Adaptative;
 import business.classifiers.agrupamientosecuencial.AgrupamientoSec;
 import business.classifiers.batchelorwilkins.BatchelorWilkins;
 import business.classifiers.hierarchical.Hierarchical;
@@ -32,6 +33,8 @@ public abstract class FactoryAS {
 	public abstract MatrizSim executeMatrizSimilitud();
 	
 	public abstract Hierarchical executeHierarchical();
+	
+	public abstract Adaptative executeAdaptative();
 		
 	public abstract Data readData2(List<FileData> list);
 }

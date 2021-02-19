@@ -10,25 +10,27 @@ import business.transfers.TZip;
 import presentation.controller.BusinessEvent;
 import presentation.controller.Controller;
 import presentation.dispatcher.Context;
+import presentation.views.MainView;
 
 public class ALHierarchical implements ActionListener{
 
-	private int tLink;
+	private JComboBox<String> cb;
 	private TZip tZip;
 	
-	public ALHierarchical(int hierarchical, JComboBox<String> cbLinked, TZip transfer_zip) {
-		tLink = cbLinked.getSelectedIndex();
-		tZip = transfer_zip;
+	public ALHierarchical(JComboBox<String> cbLinked) {
+		cb = cbLinked;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		tZip = MainView.getInstance().gettZip();
 		Controller cont = Controller.getInstance();
 		
 		Context context = new Context();
+		int tLink = cb.getSelectedIndex();
 		THierarchical transfer = new THierarchical(tLink, tZip);
 		context.setDatos(transfer);
-		context.setEvento(BusinessEvent.MATRIZSIMILITUD);
+		context.setEvento(BusinessEvent.HIERARCHICAL);
 		
 		cont.action(context);
 		

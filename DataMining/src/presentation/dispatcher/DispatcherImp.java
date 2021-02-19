@@ -1,7 +1,7 @@
 package presentation.dispatcher;
 
-import presentation.controller.BusinessEvent;
 import presentation.views.MainView;
+import presentation.views.adaptative.JAdaptative;
 import presentation.views.agrupamientosecuencial.JAgrupamientoSec;
 import presentation.views.batchelorwilkins.JBatchelorWilkins;
 import presentation.views.hierarchical.JHierarchical;
@@ -14,7 +14,8 @@ public class DispatcherImp extends Dispatcher {
 	@Override
 	public void update(Context contexto) {
 				
-		int evento = (int) contexto.getEvento();
+		int evento = (int) contexto.getEvento() - 100;
+		int aux = (int) contexto.getEvento();
 		
 		MainView main;
 		JKMeans kmeans;
@@ -22,34 +23,36 @@ public class DispatcherImp extends Dispatcher {
 		JBatchelorWilkins bw;
 		JMatrizSimilitud ms;
 		JHierarchical h;
+		JAdaptative a;
 		
-		switch (evento) {
-		
-		case DispatcherResults.readZipOK:
+		if(evento < 0) {
 			main= MainView.getInstance();
 			main.update(contexto);	
-			break;	
-		case DispatcherResults.KMeansCorrect:
-			kmeans = JKMeans.getInstance();
-			kmeans.update(contexto);
-			break;
-		case BusinessEvent.AGRUPAMIENTO_SECUENCIAL:
-			as = JAgrupamientoSec.getInstance();
-			as.update(contexto);
-			break;
-		case BusinessEvent.BATCHELOR_WILKINS:
+		}else if(evento > 0 && evento < 100) {
+			a = JAdaptative.getInstance();
+			contexto.setEvento(evento);
+			a.update(contexto);
+		}else if(evento > 100 && evento < 200) {
 			bw = JBatchelorWilkins.getInstance();
+			contexto.setEvento(aux - 200);
 			bw.update(contexto);
-			break;
-		case BusinessEvent.HIERARCHICAL:
+		}
+		else if(evento > 200 && evento < 300) {
 			h = JHierarchical.getInstance();
+			contexto.setEvento(aux - 300);
 			h.update(contexto);
-			break;
-		case BusinessEvent.MATRIZSIMILITUD:
+		}else if(evento > 300 && evento < 400) {
+			kmeans = JKMeans.getInstance();
+			contexto.setEvento(aux - 400);
+			kmeans.update(contexto);
+		}else if(evento > 400 && evento < 500) {
+			as = JAgrupamientoSec.getInstance();
+			contexto.setEvento(aux - 500);
+			as.update(contexto);
+		}else if(evento > 500){
 			ms = JMatrizSimilitud.getInstance();
+			contexto.setEvento(aux - 600);
 			ms.update(contexto);
-			break;
-			
 		}
 	}
 }

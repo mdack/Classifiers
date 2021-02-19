@@ -5,6 +5,7 @@ import business.factory.FactoryAS;
 import business.transfers.TBatchelorWilkins;
 import business.transfers.TResult;
 import presentation.command.Command;
+import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
 
@@ -20,10 +21,11 @@ public class CommandBatchelorWilkins implements Command{
 		
 		Context contexto = new Context();
 		contexto.setDatos(id);
+		int event = BusinessEvent.BATCHELOR_WILKINS;
 		if(id != null) 
-			contexto.setEvento(DispatcherResults.BatchelorWilkinsCorrect);
+			contexto.setEvento(event + DispatcherResults.BatchelorWilkinsCorrect);
 		else 
-			contexto.setEvento(DispatcherResults.BatchelorWilkinsError);
+			contexto.setEvento(event + DispatcherResults.BatchelorWilkinsError);
 		
 		return contexto;
 	}

@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.TextArea;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -15,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import business.transfers.TZip;
@@ -24,38 +24,15 @@ import presentation.dispatcher.DispatcherResults;
 @SuppressWarnings("serial")
 public class MainView extends JFrame{
 	
-	private final static String NAME_TITLE = "Clasificadores - Minería de datos";
-	private final String[] CLASSIFIER_OPTIONS = {"Jerárquico","KMeans", "Agrupamiento secuencial", "Matriz de similitud", "Batchelor y Wilkins"};	
+	private final static String NAME_TITLE = "Clasificador por clustering - Minería de datos";
+	private final String[] CLASSIFIER_OPTIONS = {"Adaptativo", "Batchelor y Wilkins", "Jerárquico","KMeans", "Agrupamiento secuencial", "Matriz de similitud"};	
 
-	private TextArea taDisplay = new TextArea();
+	private JTextArea taDisplay = new JTextArea();
 	private JFileChooser explorerFiles;
-	
-	public TextArea getTaDisplay() {
-		return taDisplay;
-	}
-
-	public void setTaDisplay(TextArea taDisplay) {
-		this.taDisplay = taDisplay;
-	}
-	
+		
 	private TZip tZip = null;
 	
-	public TZip gettZip() {
-		return tZip;
-	}
-
-	public void settZip(TZip tZip) {
-		this.tZip = tZip;
-	}
-
 	private static MainView instance;
-	
-	public static MainView getInstance() {
-		if(instance==null){
-			instance = new MainView();
-		}
-		return instance;
-	}
 	
 	public MainView() {
 		
@@ -75,6 +52,19 @@ public class MainView extends JFrame{
 		//Panel added to the frame
 		this.add(window);
 	}
+	
+	public static MainView getInstance() {
+		if(instance==null){
+			instance = new MainView();
+		}
+		return instance;
+	}
+	
+	/*
+	 * ********************************************
+	 * 				PANELES
+	 * ********************************************
+	 */
 	
 	private void addTop(JPanel window){
 		JLabel north = new JLabel ("");		//Label for the header with the app title.
@@ -98,7 +88,7 @@ public class MainView extends JFrame{
 	}
 	
 	private void addBottom(JPanel window){
-		JLabel south = new JLabel ("Software v1.0.0");		//Label for the bottom info
+		JLabel south = new JLabel ("Software v2.0.0");		//Label for the bottom info
 		south.setBackground(Color.orange);					//Background color
 		south.setFont(new Font("Header",Font.ITALIC, 12));	//Header font. Size 18.
 		south.setForeground(Color.BLACK);					//Font color
@@ -160,13 +150,19 @@ public class MainView extends JFrame{
 	private JPanel panelResults() {
 		JPanel result = new JPanel();
 		
-		taDisplay = new TextArea();
+		taDisplay = new JTextArea();
 		taDisplay.setEditable(false);
 		taDisplay.setText("Consola de resultados: \n");
 		result.add(taDisplay);
 		
 		return result;
 	}
+	
+	/*
+	 * ********************************************
+	 * 				DISPATCHER
+	 * ********************************************
+	 */
 
 	public void update(Object datos) {
 		Context c = (Context) datos;
@@ -175,7 +171,8 @@ public class MainView extends JFrame{
 		switch(cas) {
 		case DispatcherResults.readZipOK:
 			tZip = (TZip) c.getDatos();
-			taDisplay.setText("Se han obtenido los archivos del zip correctamente.\n");
+			taDisplay.append(tZip.toString());
+			taDisplay.append("Se han obtenido los archivos del zip correctamente.\\n");
 			break;
 		case DispatcherResults.readZipError:
 			taDisplay.append("No se ha podido leer el archivo zip.\n");
@@ -183,5 +180,30 @@ public class MainView extends JFrame{
 		}
 		
 	}
+	
+	/*
+	 * ********************************************
+	 * 				OTROS
+	 * ********************************************
+	 */
+	
+	public TZip gettZip() {
+		return tZip;
+	}
+
+	public void settZip(TZip tZip) {
+		this.tZip = tZip;
+	}
+	
+	public JTextArea getTaDisplay() {
+		return taDisplay;
+	}
+
+	public void setTaDisplay(JTextArea taDisplay) {
+		this.taDisplay = taDisplay;
+	}
+
+
+
 	
 }

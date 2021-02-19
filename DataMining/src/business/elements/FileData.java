@@ -2,7 +2,7 @@ package business.elements;
 
 import java.io.InputStream;
 
-public class FileData {
+public class FileData implements Comparable<FileData>{
 
 	private InputStream data;
 	private String name;
@@ -24,4 +24,11 @@ public class FileData {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public int compareTo(FileData o) {
+		return name.compareTo(o.name);
+	}
+	
+	
 }

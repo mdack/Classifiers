@@ -1,6 +1,7 @@
 package presentation.command.commandFactory;
 
 import presentation.command.Command;
+import presentation.command.classifiers.CommandAdaptative;
 import presentation.command.classifiers.CommandAgrupamientoSec;
 import presentation.command.classifiers.CommandBatchelorWilkins;
 import presentation.command.classifiers.CommandHierarchical;
@@ -24,6 +25,8 @@ public class CommandFactoryImp extends CommandFactory {
 			return new CommandKMeans();
 		case BusinessEvent.AGRUPAMIENTO_SECUENCIAL:
 			return new CommandAgrupamientoSec();
+		case BusinessEvent.ADAPTATIVE:
+			return new CommandAdaptative();
 		}
 		
 		return null;

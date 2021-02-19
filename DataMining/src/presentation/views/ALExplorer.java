@@ -19,14 +19,14 @@ public class ALExplorer implements ActionListener{
 		
 	public ALExplorer(JFileChooser explorer) {
 		this.explorerFiles = explorer;
-
+		this.explorerFiles.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos Zip", "zip");
+		explorerFiles.setFileFilter(filter);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		this.explorerFiles.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos Zip", "zip");
-		explorerFiles.setFileFilter(filter);
+
 		explorerFiles.showOpenDialog(MainView.getInstance());
 		selectedFile = this.explorerFiles.getSelectedFile();
 		

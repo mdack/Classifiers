@@ -10,26 +10,26 @@ import business.transfers.TZip;
 import presentation.controller.BusinessEvent;
 import presentation.controller.Controller;
 import presentation.dispatcher.Context;
+import presentation.views.MainView;
 
 public class ALMatrizSimilitud implements ActionListener{
-	@SuppressWarnings("unused")
-	private int evento;
-	private int O;
+
+	private JTextField tO;
 	private TZip tZip;
 	
 	
-	public ALMatrizSimilitud(int agrupamientoSecuencial, JTextField txO, TZip transfer_zip) {
-		evento = agrupamientoSecuencial;
-		O = Integer.getInteger(txO.getText());
-		tZip = transfer_zip;
+	public ALMatrizSimilitud(JTextField txO) {
+		tO = txO;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		tZip = MainView.getInstance().gettZip();
 		Controller cont = Controller.getInstance();
 		
 		Context context = new Context();
-		TMatrizSim transfer = new TMatrizSim(O, tZip);
+		double o = Double.valueOf(tO.getText());
+		TMatrizSim transfer = new TMatrizSim(o, tZip);
 		context.setDatos(transfer);
 		context.setEvento(BusinessEvent.MATRIZSIMILITUD);
 		

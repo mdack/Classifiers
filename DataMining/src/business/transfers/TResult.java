@@ -38,7 +38,7 @@ public class TResult {
 	}
 	
 	public String toString() {
-		String cad = "Hay " + N + "clusters:\n";
+		String cad = "Hay " + N + " clusters:\n";
 		for(Cluster cl: list) {
 			cad += cl.toString() + "\n";
 		}

@@ -22,12 +22,18 @@ import presentation.views.MainView;
 
 @SuppressWarnings("serial")
 public class JAgrupamientoSecImp extends JAgrupamientoSec {
+	
+	public JAgrupamientoSecImp() {
+		this.initComponents();
+		this.initGUIAgrupamientoSec();
+	}
 
 	public void initComponents() {
+		this.setTitle("Agrupamiento Secuencial");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400,400);
         this.setResizable(false); 
         this.setLocationRelativeTo(null);
+        this.setSize(600,600);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
 		
@@ -53,22 +59,24 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 		//text
 		txK = new JTextField();
 		txK.setEditable(true);
+		txK.setText("4");
 		txR = new JTextField();
 		txR.setEditable(true);
+		txR.setText("2");
 		txC = new JTextField();
 		txC.setEditable(true);
+		txC.setText("3.5");
 		txM = new JTextField();
 		txM.setEditable(true);
+		txM.setText("10");
 		txT = new JTextField();
 		txT.setEditable(true);
+		txT.setText("20");
 		
 	}
 	
 	@Override
 	public void initGUIAgrupamientoSec() {
-		this.setTitle("Agrupamiento Secuencial");
-		this.setSize(250,200);
-		this.setLocationRelativeTo(null);
 		
 		//datos
 		datos.setLayout(new GridLayout(5, 2, 50, 50));
@@ -88,10 +96,11 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 		datos.add(lT);
 		datos.add(txT);
 		
-		boton.add(btExecute);
-		btExecute.addActionListener(new ALAgrupamientoSec(BusinessEvent.AGRUPAMIENTO_SECUENCIAL, txK, txM, txR, txC, txT, transfer_zip));
+		btExecute.addActionListener(new ALAgrupamientoSec(BusinessEvent.AGRUPAMIENTO_SECUENCIAL, txK, txM, txR, txC, txT));
 		btExecute.setHorizontalAlignment(SwingConstants.CENTER);
-		
+		btExecute.setText(" Ejecutar ");
+		boton.add(btExecute);
+
 		contenedor.add(datos, BorderLayout.CENTER);
 		contenedor.add(boton, BorderLayout.SOUTH);
 		add(contenedor);

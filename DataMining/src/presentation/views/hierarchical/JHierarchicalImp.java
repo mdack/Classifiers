@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import business.transfers.TResult;
-import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
 import presentation.views.MainView;
@@ -29,8 +28,9 @@ public class JHierarchicalImp extends JHierarchical {
 	}
 	
 	public void initComponents() {
+		this.setTitle("Jerárquico");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400,400);
+	    this.setSize(600,400);
         this.setResizable(false); 
         this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -55,11 +55,7 @@ public class JHierarchicalImp extends JHierarchical {
 	}
 
 	@Override
-	public void initGUIHierarchical() {
-		this.setTitle("Jerárquico");
-		this.setSize(250,200);
-		this.setLocationRelativeTo(null);
-		
+	public void initGUIHierarchical() {		
 		//datos
 		datos.setLayout(new GridLayout(1, 2, 50, 50));
 		
@@ -68,9 +64,10 @@ public class JHierarchicalImp extends JHierarchical {
 		cbLinked.addItem("Complete Link");
 		datos.add(cbLinked);
 		
-		boton.add(btExecute);
-		btExecute.addActionListener(new ALHierarchical(BusinessEvent.HIERARCHICAL, cbLinked, transfer_zip));
+		btExecute.setText(" Ejecutar ");
+		btExecute.addActionListener(new ALHierarchical(cbLinked));
 		btExecute.setHorizontalAlignment(SwingConstants.CENTER);
+		boton.add(btExecute);
 				
 		contenedor.add(datos, BorderLayout.CENTER);
 		contenedor.add(boton, BorderLayout.SOUTH);

@@ -7,15 +7,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import business.transfers.TZip;
-
-
 @SuppressWarnings("serial")
 public abstract class JKMeans extends JFrame{
 	
 	private static JKMeans instance;
-	protected static int event;
-	protected static TZip transfer_zip;
 	
 	public static JKMeans getInstance() {
 		
@@ -38,14 +33,6 @@ public abstract class JKMeans extends JFrame{
 	protected JTextField txK;
 	
 	protected JComboBox<String> cbInitializion;
-	
-	public static TZip getTransfer_zip() {
-		return transfer_zip;
-	}
-
-	public static void setTransfer_zip(TZip tz) {
-		transfer_zip = tz;
-	}
 	
 	public abstract void initGUIKmeans();
 

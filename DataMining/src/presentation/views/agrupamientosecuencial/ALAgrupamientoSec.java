@@ -6,25 +6,22 @@ import java.awt.event.ActionListener;
 import javax.swing.JTextField;
 
 import business.transfers.TAgrupamientoSec;
-import business.transfers.TZip;
 import presentation.controller.BusinessEvent;
 import presentation.controller.Controller;
 import presentation.dispatcher.Context;
+import presentation.views.MainView;
 
 public class ALAgrupamientoSec implements ActionListener{
 
-	private int K, M;
-	private double R, C, T;
-	private TZip tZip;
+	private JTextField tK, tM, tR, tC, tT;
 
-	public ALAgrupamientoSec(int agrupamientoSecuencial, JTextField txK, JTextField txM, JTextField txR, JTextField txC,
-			JTextField txT, TZip transfer_zip) {
-		K = Integer.getInteger(txK.getText());
-		R = Double.valueOf(txR.getText());
-		C = Double.valueOf(txC.getText());
-		M = Integer.getInteger(txM.getText());
-		T = Double.valueOf(txR.getText());
-		tZip = transfer_zip;
+	public ALAgrupamientoSec(int agrupamientoSecuencial, JTextField txK, JTextField txM, JTextField txR, JTextField txC, JTextField txT) {
+		tK = txK;
+		tR = txR;
+		tC = txC;
+		tM = txM;
+		tT = txT;
+
 	}
 
 	@Override
@@ -32,7 +29,14 @@ public class ALAgrupamientoSec implements ActionListener{
 		Controller cont = Controller.getInstance();
 		
 		Context context = new Context();
-		TAgrupamientoSec transfer = new TAgrupamientoSec(K, R, C, M, T,tZip);
+		
+		int K = Integer.parseInt(tK.getText());
+		double R = Double.valueOf(tR.getText());
+		double C = Double.valueOf(tC.getText());
+		int M = Integer.parseInt(tM.getText());
+		double T = Double.valueOf(tT.getText());
+		
+		TAgrupamientoSec transfer = new TAgrupamientoSec(K, R, C, M, T,MainView.getInstance().gettZip());
 		context.setDatos(transfer);
 		context.setEvento(BusinessEvent.AGRUPAMIENTO_SECUENCIAL);
 		

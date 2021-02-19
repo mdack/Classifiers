@@ -1,4 +1,4 @@
-package presentation.views.kmeans;
+package presentation.views.adaptative;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,20 +20,17 @@ import presentation.dispatcher.DispatcherResults;
 import presentation.views.MainView;
 
 @SuppressWarnings("serial")
-public class JKMeansImp extends JKMeans{
+public class JAdaptativeImp extends JAdaptative {
 
-	private final static String[] inits = {"Arbitraria", "Inversa", "Directa"};
-	
 	private TResult transfer;
 	
-	public JKMeansImp() {
+	public JAdaptativeImp() {
 		this.initComponents();
-		initGUIKmeans();
+		this.initGUIAAdaptative();
 	}
-
-
+	
 	public void initComponents() {
-		this.setTitle("KMeans");
+		this.setTitle("Método adaptativo");	
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(600,400);
         this.setResizable(false); 
@@ -55,34 +51,33 @@ public class JKMeansImp extends JKMeans{
 		btExecute = new JButton();
 		
 		//label
-		lK = new JLabel("K centros: ");
-		linit = new JLabel("Tipo de inicialización: ");
+		lT = new JLabel("Umbral de distancia: ");
+		lO = new JLabel("Total confianza: ");
 		
 		//text
-		txK = new JTextField();
-		txK.setEditable(true);
+		txT = new JTextField();
+		txT.setEditable(true);
+		txT.setText("3");
 		
-		this.cbInitializion = new JComboBox<String>();
+		txO = new JTextField();
+		txO.setEditable(true);
+		txO.setText("0.6");
+		
 	}
-
-
+	
 	@Override
-	public void initGUIKmeans() {
-		
+	public void initGUIAAdaptative() {
 		//datos
 		datos.setLayout(new GridLayout(2, 2, 75, 75));
 		
-		datos.add(linit);
-		cbInitializion.addItem(inits[0]);
-		cbInitializion.addItem(inits[1]);
-		cbInitializion.addItem(inits[2]);
-		datos.add(cbInitializion);
+		datos.add(lT);
+		datos.add(txT);
 		
-		datos.add(lK);
-		datos.add(txK);
+		datos.add(lO);
+		datos.add(txO);
 		
 		btExecute.setText(" Ejecutar ");
-		btExecute.addActionListener(new ALKMeans(txK, cbInitializion));
+		btExecute.addActionListener(new ALAdaptative(txO,txT));
 		btExecute.setHorizontalAlignment(SwingConstants.CENTER);
 		boton.add(btExecute);
 
@@ -90,14 +85,17 @@ public class JKMeansImp extends JKMeans{
 		contenedor.add(datos, BorderLayout.CENTER);
 		contenedor.add(boton, BorderLayout.SOUTH);
 		add(contenedor);
-	}
+		
+	}	
 	
-	public void update(Object context) {
-		Context c = (Context) context;
+
+	@Override
+	public void update(Object datos) {
+		Context c = (Context) datos;
 		Integer cas = (Integer) c.getEvento();
 		
 		switch(cas) {
-			case(DispatcherResults.KMeansCorrect):{
+			case(DispatcherResults.AdaptativeCorrect):{
 							JOptionPane.showMessageDialog(null,
 						"Cluster creados!",
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
@@ -106,12 +104,14 @@ public class JKMeansImp extends JKMeans{
 				MainView.getInstance().getTaDisplay().append(transfer.toString());
 				System.out.println(transfer.toString());
 			}break;
-			case(DispatcherResults.KMeansError):{
+			case(DispatcherResults.AdaptativeError):{
 				JOptionPane.showMessageDialog(null,
-						"Error al intentar ejecutar clasificador KMeans",
+						"Error al intentar ejecutar clasificador.",
 						"Error crítico", JOptionPane.ERROR_MESSAGE);
 			}break;
 		}
 	}
+
+
 
 }

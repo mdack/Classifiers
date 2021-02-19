@@ -99,6 +99,7 @@ public class DataImp implements Data{
 		                }
 						list_s.put(nums[0], nums[1]);
 	            	}
+	            	
 					Signal signal = new Signal();
 					signal.setSignal(list_s);
 					signal.setName(fd.getName());

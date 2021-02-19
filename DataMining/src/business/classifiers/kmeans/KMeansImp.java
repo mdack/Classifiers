@@ -53,13 +53,14 @@ public class KMeansImp implements KMeans{
 				this.areSignals = false;
 			}
 			
+			this.K = transfer.getK();
 	        this.clusters = new ArrayList<>();
 			
 			initClusters(transfer.gettInit());
 			
 		    boolean	goal = false;
 
-	        //Asigno cada pixel a un cluster y recalculo
+	        //Asigno cada patron a un cluster y recalculo
 	        while(!goal) {
 	        	if(transfer.gettZip().isAreSignals()) {
 	        		this.loopKMeans_Signals();
@@ -67,7 +68,8 @@ public class KMeansImp implements KMeans{
 	        		this.loopKMeans_Imgs();
 	        	}
 	            goal = recalculateCluster();
-	        }			
+	        }		
+	        
 			TResult result = new TResult();
 			result.setList(clusters);
 			result.setN(clusters.size());
@@ -155,10 +157,12 @@ public class KMeansImp implements KMeans{
 	                    if(this.areSignals) {
 	                    	this.signals.get(index_point).setId_cluster(i);
 	                    	cluster = new ClusterSig(i, signals.get(index_point));
+	                    	cluster.setCentroid(signals.get(index_point));
 	                    }
 	                    else {
 	                    	this.imgs.get(index_point).setId_cluster(i);
 	                    	cluster = new ClusterImg(i, imgs.get(index_point));
+	                    	cluster.setCentroid(imgs.get(index_point));
 	                    }	                    
 	                    clusters.add(cluster);
 	                    found = true;

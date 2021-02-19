@@ -6,12 +6,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import business.transfers.TZip;
-
 @SuppressWarnings("serial")
 public abstract class JAgrupamientoSec extends JFrame{
 	private static JAgrupamientoSec instance;
-	protected static TZip transfer_zip;
 	
 	public static JAgrupamientoSec getInstance() {
 		
@@ -32,15 +29,6 @@ public abstract class JAgrupamientoSec extends JFrame{
 	protected JButton btExecute;
 	
 	protected JTextField txK, txR, txC, txM, txT;
-	
-	
-	public static TZip getTransfer_zip() {
-		return transfer_zip;
-	}
-
-	public static void setTransfer_zip(TZip tz) {
-		transfer_zip = tz;
-	}
 	
 	public abstract void initGUIAgrupamientoSec();
 

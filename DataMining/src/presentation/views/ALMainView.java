@@ -30,7 +30,6 @@ public class ALMainView implements ActionListener{
 		file = opcion1;
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		tZip = MainView.getInstance().gettZip();
@@ -44,27 +43,22 @@ public class ALMainView implements ActionListener{
 			switch(c.getSelectedIndex()) {
 			case 0:
 				JHierarchical ventana0 = JHierarchical.getInstance();
-				JHierarchical.setTransfer_zip(tZip);
 				ventana0.setVisible(true);
 				break;
 			case 1:
-				JKMeans ventana1 = JKMeans.getInstance();
-				ventana1.setTransfer_zip(tZip);
+				JKMeans ventana1 = JKMeans.getInstance();;
 				ventana1.setVisible(true);
 				break;
 			case 2:
 				JAgrupamientoSec ventana2 = JAgrupamientoSec.getInstance();
-				JAgrupamientoSec.setTransfer_zip(tZip);
 				ventana2.setVisible(true);
 				break;
 			case 3:
 				JMatrizSimilitud ventana3 = JMatrizSimilitud.getInstance();
-				JMatrizSimilitud.setTransfer_zip(tZip);
 				ventana3.setVisible(true);
 				break;
 			case 4:
 				JBatchelorWilkins ventana4 = JBatchelorWilkins.getInstance();
-				JBatchelorWilkins.setTransfer_zip(tZip);
 				ventana4.setVisible(true);
 				break;
 			}

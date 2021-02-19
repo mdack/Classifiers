@@ -19,7 +19,7 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 	private List<Signal> signals;
 	private int total_files;
 	private List<Image> imgs;
-	private boolean areSignals;
+	private boolean areSignals =true;
 	private List<Cluster> clusters = new ArrayList<>();
 	private int A = 0;
 
@@ -257,10 +257,10 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
     private double calculateDistanceSignal(Signal sig, Cluster cluster) {
         double sum = 0;
         List<Double> list = new ArrayList<Double>(sig.getSignal().values());
-        
+    	Signal centroid = (Signal) cluster.getCentroid();
+    	List<Double> s_centroid = new ArrayList<Double>(centroid.getSignal().values());
+    	
         for(int i = 0; i < sig.getSignal().size(); i++) {
-        	Signal centroid = (Signal) cluster.getCentroid();
-        	List<Double> s_centroid = new ArrayList<Double>(centroid.getSignal().values());
         	sum += Math.pow(s_centroid.get(i) - list.get(i), 2);
         }
         
