@@ -34,6 +34,7 @@ public class ALMainView implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		tZip = MainView.getInstance().gettZip();
+		
 		if(file.isSelected())
 			tZip.setAreSignals(true);
 		else

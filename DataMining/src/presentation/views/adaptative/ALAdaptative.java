@@ -3,6 +3,7 @@ package presentation.views.adaptative;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import business.transfers.TAdaptative;
@@ -26,6 +27,8 @@ public class ALAdaptative implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		tZip = MainView.getInstance().gettZip();
 		
+		if(tZip != null) {
+		
 		Controller cont = Controller.getInstance();
 		
 		Context context = new Context();
@@ -36,6 +39,11 @@ public class ALAdaptative implements ActionListener{
 		context.setEvento(BusinessEvent.ADAPTATIVE);
 		
 		cont.action(context);
+		}else {
+			JOptionPane.showMessageDialog(null,
+					"Error: No se ha elegido fichero.",
+					"Error crítico", JOptionPane.ERROR_MESSAGE);
+		}
 		
 	}
 

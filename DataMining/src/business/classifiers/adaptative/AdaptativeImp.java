@@ -40,9 +40,9 @@ public class AdaptativeImp implements Adaptative {
 		Cluster cl_1 = null;
 		if(transfer.getZip().isAreSignals()) {
 			this.signals = data.readSignals();
-			MainView.getInstance().updateTextarea("Se han cargado todos los archivos : " + hourdateFormat.format(date));
+			System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
 			
-			MainView.getInstance().updateTextarea("Empieza el método adaptativo : " + hourdateFormat.format(date));
+			System.out.println("Empieza el método adaptativo : " + hourdateFormat.format(date));
 			// Creamos primer agrupamiento con patrón 1.
 			signals.get(0).changeState(MyState.ASIGNED, A);
 			cl_1 = new ClusterSig(A,signals.get(0));
@@ -80,7 +80,7 @@ public class AdaptativeImp implements Adaptative {
 			this.regroupImages();
 		}
 
-		MainView.getInstance().updateTextarea("El algoritmo ha terminado : " + hourdateFormat.format(date));
+		System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
 		
 		TResult result = new TResult();
 		result.setCluste_rejection(true);
@@ -100,7 +100,6 @@ public class AdaptativeImp implements Adaptative {
 			
 			//Obtenemos la distancia de ese patron al cluster
 			double d = this.calculateDistanceImgs(imgs.get(i), clusters.get(m));
-			System.out.println("Distancia " + i + ": " + d);
 			
 			if(d > T) {
 				imgs.get(i).changeState(MyState.ASIGNED, A);
@@ -127,7 +126,6 @@ public class AdaptativeImp implements Adaptative {
 			
 			//Obtenemos la distancia de ese patron al cluster
 			double d = this.calculateDistanceSignal(signals.get(i), clusters.get(m));
-			System.out.println("Distancia " + i + ": " + d);
 			
 			if(d > T) {
 				signals.get(i).changeState(MyState.ASIGNED, A);

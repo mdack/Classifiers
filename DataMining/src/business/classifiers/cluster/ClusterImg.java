@@ -9,7 +9,7 @@ import business.elements.Signal;
 public class ClusterImg extends Cluster {
 
 	protected List<Image> list_files = new ArrayList<>();
-	private Image centroid = null;
+	private Image centroid;
 
 	public ClusterImg(int i, Image image) {
 		super(i);

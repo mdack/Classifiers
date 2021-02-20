@@ -57,7 +57,7 @@ public class JAdaptativeImp extends JAdaptative {
 		//text
 		txT = new JTextField();
 		txT.setEditable(true);
-		txT.setText("35000");
+		txT.setText("25000");
 		
 		txO = new JTextField();
 		txO.setEditable(true);

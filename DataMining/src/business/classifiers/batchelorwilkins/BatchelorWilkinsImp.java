@@ -1,6 +1,9 @@
 package business.classifiers.batchelorwilkins;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -18,15 +21,19 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 	private List<Signal> signals;
 	private int total_files;
 	private List<Image> imgs;
-	private boolean areSignals;
+	private boolean areSignals = true;
 	private List<Cluster> clusters = new ArrayList<>();
 	private int A = 0;
 	private double teta = 0;
 	
 	@Override
 	public TResult executeAlgorithm(TBatchelorWilkins transfer) {
+		Date date = new Date();
+		DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+		
 		Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 		
+		System.out.println("Obteniendo información de archivos : " + hourdateFormat.format(date));
 		if(transfer.gettZip().isAreSignals()) {
 			this.signals = data.readSignals();
 			this.total_files = signals.size();
@@ -37,7 +44,11 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 		}
 		teta = transfer.getO();
 		
-		//1º Centro: Escogemos un archivo al azar
+		System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
+		
+		System.out.println("Empieza el algoritmo Batchelor y Wilkins : " + hourdateFormat.format(date));
+		
+		//1º Centro: Escogemos un patrón al azar
 		int index = this.getFirstCluster();
 		Cluster cluster = null;
 		double max_dist = Double.MIN_VALUE;
@@ -46,12 +57,12 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 		if(this.areSignals) {
 			cluster = new ClusterSig(A, signals.get(index));
 			signals.get(index).setId_cluster(A);
-			cluster.setCentroid(signals.get(index));
 			signals.remove(index);
 			
 			clusters.add(cluster);
 			A++;
-			//2ª Centro: Escogemos archivo más alejado del primero
+			
+			//2ª Centro: Escogemos patrones más alejado del primero
 			for(int i = 0; i < signals.size();i++) {
 				double dist = this.calculateDistanceSignal(signals.get(i), cluster);
 				
@@ -69,10 +80,10 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 			
 			//Agrupamos libremente
 			this.agruparPatronesSig();
-		}else {
+		}
+		else {
 			cluster = new ClusterImg(A, imgs.get(index));
 			imgs.get(index).setId_cluster(A);
-			cluster.setCentroid(imgs.get(index));
 			imgs.remove(index);
 			
 			clusters.add(cluster);
@@ -96,8 +107,11 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 			agruparPatronesImg();
 		}
 		
+		System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
+		
 		TResult result = new TResult();
 		result.setList(clusters);
+		result.setCluste_rejection(false);
 		result.setN(A);
 				
 		return result;
@@ -183,6 +197,21 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 		}
 		return max_dist;
 	}
+	
+	private double findMaxDistanceofSignals(int n) {
+		double max_dist = Double.MIN_VALUE;
+		
+		for(int i = 0; i< signals.size(); i++) {
+			int id = signals.get(i).getId_cluster();
+			double dist =  this.calculateDistanceSignal(signals.get(i), clusters.get(id));
+			
+			if(dist > max_dist) {
+				max_dist = dist;
+				n = i;
+			}
+		}
+		return max_dist;
+	}
 
 	/**
 	 * Creamos T con las imagenes 
@@ -208,7 +237,7 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 			
 			//Si la distancia de Xn > umbral -> se crea nuevo agrupamiento 
 			int n = 0;
-			double max_dist = findMaxDistanceofTImgs(n);
+			double max_dist = this.findMaxDistanceofSignals(n);
 			
 			if(max_dist > umbral) {
 				Cluster cl = new ClusterSig(A, signals.get(n));
@@ -244,17 +273,15 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 	        int id_cluster = 0;
 
 	        for(Cluster cluster: clusters) {
-	            double dist;
-	            double sum = 0;
+	            double dist = 0;
 	            
 	            if(this.areSignals) {
 	            	Signal sig = (Signal) obj;
-	            	sum = this.calculateDistanceSignal(sig, cluster);
+	            	dist = this.calculateDistanceSignal(sig, cluster);
 	            }else {
 	            	Image img = (Image) obj;
-	            	sum = this.calculateDistanceImgs(img, cluster);
+	            	dist = this.calculateDistanceImgs(img, cluster);
 	            }
-	            dist = Math.sqrt(sum);
 
 	            if(dist < distance) {
 	                distance = dist;
@@ -277,20 +304,34 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
         	}
         }
         
-		return sum;
+		return Math.sqrt(sum);
     }
     
     private double calculateDistanceSignal(Signal sig, Cluster cluster) {
-        double sum = 0;
-        List<Double> list = new ArrayList<Double>(sig.getSignal().values());
-        
-        for(int i = 0; i < sig.getSignal().size(); i++) {
-        	Signal centroid = (Signal) cluster.getCentroid();
-        	List<Double> s_centroid = new ArrayList<Double>(centroid.getSignal().values());
-        	sum += Math.pow(s_centroid.get(i) - list.get(i), 2);
-        }
-        
-		return sum;
+    	 double sum = 0;
+
+	    	Signal centroid = (Signal) cluster.getCentroid();
+	    	
+	    	int size=0;
+	    	
+	    	//Elegimos el menor tamaño de la señal para no salirnos del array
+	        if(sig.getSignal().size() > centroid.getSignal().size())
+	        	size = centroid.getSignal().size();
+	        else
+	        	size = sig.getSignal().size();
+	        	        
+	        Object[] list_t = sig.getSignal().keySet().toArray();
+	        Object[] list_t_centroid = centroid.getSignal().keySet().toArray();
+	        
+	        for(int i = 0; i < size; i++) {
+	        	double key1 = (Double) list_t[i];
+	        	double key2 = (Double) list_t_centroid[i];
+	        	
+	        	sum += Math.pow(key1 - key2 , 2);
+	        	sum += Math.pow(sig.getSignal().get(key1) - centroid.getSignal().get(key2) , 2);
+	        }
+
+			return Math.sqrt(sum);
     }
 
 	private int getFirstCluster() {

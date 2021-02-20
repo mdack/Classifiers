@@ -36,15 +36,15 @@ public class TZip {
 	public String toString() {
 		String text = "Archivos del zip: " + this.path + "\n";
 		
-		text += "\\n****************************************************************\\n";
+		text += "\n****************************************************************\n";
 		
 		for(int i = 0; i < list.size(); i++) {
-			text += "Archivo 1: " + list.get(i).toString() + "\n";
+			text += "Archivo " + i + ": " + list.get(i).toString() + "\n";
 		}
 		
-		text += "\\n****************************************************************\\n";
+		text += "\n****************************************************************\n";
 		
-		text += "\\nUn total de " + list.size() + " archivos obtenidos\\n";
+		text += "\nUn total de " + list.size() + " archivos obtenidos\n";
 		
 		return text;
 	}
