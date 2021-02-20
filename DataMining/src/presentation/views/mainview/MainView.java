@@ -1,4 +1,4 @@
-package presentation.views;
+package presentation.views.mainview;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -14,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
@@ -27,10 +29,10 @@ public class MainView extends JFrame{
 	private final static String NAME_TITLE = "Clasificador por clustering - Minería de datos";
 	private final String[] CLASSIFIER_OPTIONS = {"Adaptativo", "Batchelor y Wilkins", "Jerárquico","KMeans", "Agrupamiento secuencial", "Matriz de similitud"};	
 
-	private JTextArea taDisplay = new JTextArea();
 	private JFileChooser explorerFiles;
 		
 	private TZip tZip = null;
+	private JTextArea taDisplay;
 	
 	private static MainView instance;
 	
@@ -48,7 +50,7 @@ public class MainView extends JFrame{
 		addTop(window);	//Header added (North region)
 		addCenter(window);	//Body added (Center region)
 		addBottom(window);	//Bottom added (South region)
-		
+				
 		//Panel added to the frame
 		this.add(window);
 	}
@@ -82,8 +84,7 @@ public class MainView extends JFrame{
 		modules.setLayout(new GridLayout(3, 1));
 		modules.add(panelExplorer());	
 		modules.add(panelClassifiers());
-		modules.add(panelResults());
-		
+		modules.add(panelResults());		
 		window.add(modules, BorderLayout.CENTER);		//Final panel added to the window
 	}
 	
@@ -100,7 +101,6 @@ public class MainView extends JFrame{
 	
 	private JPanel panelExplorer() {
 		JPanel result = new JPanel();
-		
 		this.explorerFiles = new JFileChooser();
 		
 		JButton go = new JButton(" Escoge archivo ");
@@ -115,21 +115,24 @@ public class MainView extends JFrame{
 	
 	private JPanel panelClassifiers() {
 		JPanel result = new JPanel();
+		result.setBorder(BorderFactory.createEmptyBorder(40,40,40,40));
 		result.setLayout(new GridLayout(1,4));
 		
-		JLabel title = new JLabel("Escoge clasificador");			//Title of the module
-		title.setHorizontalAlignment(SwingConstants.LEFT);	//Text placed in center
-		title.setFont(new Font("Ja", Font.PLAIN, 15));	//text font. Big and bold
+		JLabel title = new JLabel("Escoge clasificador:  ");			//Title of the module
+		title.setHorizontalAlignment(SwingConstants.CENTER);	//Text placed in center
+		title.setFont(new Font("Ja", Font.PLAIN, 12));	//text font. Big and bold
+		title.setPreferredSize(new Dimension(100,30));
 		result.add(title);							//Label added to result
 		
 		JComboBox<String> comboBox = new JComboBox<String>(this.CLASSIFIER_OPTIONS);	//Option pane for the options
+		comboBox.setBorder(BorderFactory.createEmptyBorder(15,5,15,5));
 		result.add(comboBox);							//Combobox added to the result
 		
 		JPanel panelFiles = new JPanel();
 		panelFiles.setLayout(new FlowLayout());
 		JLabel label = new JLabel("Tipo de archivo: ");			//Title of the module
 		label.setHorizontalAlignment(SwingConstants.LEFT);	//Text placed in center
-		label.setFont(new Font("Ja", Font.PLAIN, 15));	//text font. Big and bold
+		label.setFont(new Font("Ja", Font.PLAIN, 12));	//text font. Big and bold
 		panelFiles.add(label);
 		
 		 JCheckBox opcion1 = new JCheckBox("Señal");
@@ -141,21 +144,25 @@ public class MainView extends JFrame{
 		 result.add(panelFiles);
 	
 		JButton go = new JButton(" Ejecutar ");	//Execute button
+		go.setPreferredSize(new Dimension(40, 40));
 		go.addActionListener(new ALMainView(comboBox, opcion1));
 		result.add(go);
-		
+				
 		return result;
 	}
 	
-	private JPanel panelResults() {
-		JPanel result = new JPanel();
-		
+	private JScrollPane panelResults() {
+		JScrollPane scroll;
+				
 		taDisplay = new JTextArea();
+		taDisplay.setLineWrap(true);
 		taDisplay.setEditable(false);
 		taDisplay.setText("Consola de resultados: \n");
-		result.add(taDisplay);
 		
-		return result;
+		scroll = new JScrollPane(taDisplay);
+		scroll.setBounds(30, 30, 300, 200);	
+		
+		return scroll;
 	}
 	
 	/*

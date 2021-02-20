@@ -18,6 +18,10 @@ public class ClusterSig extends Cluster {
 		
 	}
 
+	public ClusterSig() {
+		super();
+	}
+
 	@Override
 	public float calculateValue() {
 		float value = 0;

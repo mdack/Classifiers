@@ -10,7 +10,7 @@ import business.transfers.TZip;
 import presentation.controller.BusinessEvent;
 import presentation.controller.Controller;
 import presentation.dispatcher.Context;
-import presentation.views.MainView;
+import presentation.views.mainview.MainView;
 
 public class ALBatchelorWilkins implements ActionListener{
 	private JTextField tO;

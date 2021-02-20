@@ -9,7 +9,7 @@ import business.transfers.TAgrupamientoSec;
 import presentation.controller.BusinessEvent;
 import presentation.controller.Controller;
 import presentation.dispatcher.Context;
-import presentation.views.MainView;
+import presentation.views.mainview.MainView;
 
 public class ALAgrupamientoSec implements ActionListener{
 

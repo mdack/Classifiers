@@ -16,6 +16,10 @@ public class ClusterImg extends Cluster {
 		list_files.add(image);
 	}	
 	
+	public ClusterImg() {
+		super();
+	}
+
 	public List<Image> getImages() {;
 		return list_files;
 	}

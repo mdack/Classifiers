@@ -10,10 +10,14 @@ public abstract class Cluster implements Comparable<Cluster>{
 	protected int id_cluster;
     protected double central_value=0;
     protected boolean areSignals=true;
-
+    
 	public Cluster(int id_cluster) {
 		this.id_cluster = id_cluster;
 	}   
+
+	public Cluster() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public int getId_cluster() {
         return id_cluster;
@@ -41,6 +45,9 @@ public abstract class Cluster implements Comparable<Cluster>{
 	
 	public abstract Object getCentroid();
 	
+	/**
+	 * Recalcula el centro del cluster.
+	 */
 	public abstract void recalculateCentroid();
 	
 	public abstract double calculateDistanceTo(Cluster cluster);

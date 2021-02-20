@@ -18,7 +18,7 @@ import business.transfers.TResult;
 import presentation.controller.BusinessEvent;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
-import presentation.views.MainView;
+import presentation.views.mainview.MainView;
 
 @SuppressWarnings("serial")
 public class JAgrupamientoSecImp extends JAgrupamientoSec {

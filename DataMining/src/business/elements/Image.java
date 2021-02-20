@@ -3,7 +3,9 @@ package business.elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Image {
+import business.classifiers.adaptative.AdaptativeElement;
+
+public class Image implements AdaptativeElement{
 
 	List<List<Double>> image;
 	int rows;
@@ -76,10 +78,56 @@ public class Image {
         
 		return sum;
 	}
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	// -----------------------------------------------------------------------------------
+	// PARA MÉTODO ADAPTATIVO
+	// -----------------------------------------------------------------------------------
+    private MyState state;
+    
+	@Override
+	public int getCurrentState() {
+		int id;
+		
+		switch(state) {
+		case ASIGNED:
+			id = this.id_cluster;
+			break;
+		case INDETERMINATE:
+			id = -1;
+			break;
+		default:
+			id = -2;
+			break;
+		}
+		
+		return id;
+	}
+	
+	public MyState getState() {
+		return state;
+	}
+	public void setState(MyState state) {
+		this.state = state;
+	}
+	
+	@Override
+	public void changeState(MyState newState, int id_c) {	
+		
+		if(newState == MyState.INDETERMINATE) {
+			this.id_cluster = 0;
+		}else if(newState == MyState.ASIGNED) {
+			if(this.id_cluster != id_c) {
+				this.id_cluster = id_c;
+			}
+		}
+		
+		state = newState;
 	}
 }

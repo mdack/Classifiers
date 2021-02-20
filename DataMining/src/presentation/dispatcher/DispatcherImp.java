@@ -1,11 +1,11 @@
 package presentation.dispatcher;
 
-import presentation.views.MainView;
 import presentation.views.adaptative.JAdaptative;
 import presentation.views.agrupamientosecuencial.JAgrupamientoSec;
 import presentation.views.batchelorwilkins.JBatchelorWilkins;
 import presentation.views.hierarchical.JHierarchical;
 import presentation.views.kmeans.JKMeans;
+import presentation.views.mainview.MainView;
 import presentation.views.matrizsimilitud.JMatrizSimilitud;
 
 public class DispatcherImp extends Dispatcher {

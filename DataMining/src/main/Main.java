@@ -1,6 +1,6 @@
 package main;
 
-import presentation.views.MainView;
+import presentation.views.mainview.MainView;
 
 public class Main {
 
