@@ -79,7 +79,9 @@ public class AdaptativeImp implements Adaptative {
 	}
 	
 	// --------------------------------------------------------------------------------------------	
-
+	// INICIALIZACION
+	// --------------------------------------------------------------------------------------------	
+	
 	private void initImages() {
 		for(int i = 1; i < imgs.size();i++) {
 			double distance = Double.MAX_VALUE;
@@ -136,7 +138,9 @@ public class AdaptativeImp implements Adaptative {
 	}
 	
 	// --------------------------------------------------------------------------------------------
-
+	// BUCLE PRINCIPAL
+	// --------------------------------------------------------------------------------------------	
+	
 	private void loopSignals() {
 		boolean stable = false;
 		
@@ -146,7 +150,8 @@ public class AdaptativeImp implements Adaptative {
 				double distance = Double.MAX_VALUE;
 				int m = this.getIdNearestCluster(signals.get(i), distance);
 				
-				MyState newState = MyState.ASIGNED;
+				
+				MyState newState = getNewStateSig(signals.get(i),m);
 				
 				if(signals.get(i).getState() == newState) {
 					if(signals.get(i).getState() == MyState.ASIGNED) {
@@ -203,6 +208,17 @@ public class AdaptativeImp implements Adaptative {
 		}
 	}
 	
+	private MyState getNewStateSig(Signal signal, int m) {
+		MyState new_state = MyState.INCOMING;
+		
+		if(signal.getState() == MyState.INDETERMINATE && m != signal.getId_cluster())
+			new_state = MyState.ASIGNED;
+		else if(m == signal.getId_cluster())
+			new_state = MyState.ASIGNED;
+		
+		return new_state;
+	}
+
 	private void loopImgs() {
 		boolean stable = false;
 		
@@ -212,7 +228,7 @@ public class AdaptativeImp implements Adaptative {
 				double distance = Double.MAX_VALUE;
 				int m = this.getIdNearestCluster(imgs.get(i), distance);
 				
-				MyState newState = MyState.ASIGNED;
+				MyState newState = this.getNewStateImg(imgs.get(i), m);
 				
 				if(imgs.get(i).getState() == newState) {
 					if(imgs.get(i).getState() == MyState.ASIGNED) {
@@ -269,7 +285,20 @@ public class AdaptativeImp implements Adaptative {
 		}
 	}
 	
+	private MyState getNewStateImg(Image img, int m) {
+		MyState new_state = MyState.INCOMING;
+		
+		if(img.getState() == MyState.INDETERMINATE && m != img.getId_cluster())
+			new_state = MyState.ASIGNED;
+		else if(m == img.getId_cluster())
+			new_state = MyState.ASIGNED;
+		
+		return new_state;
+	}
+	
 	// --------------------------------------------------------------------------------------------
+	// REAGRUPAMIENTO
+	// --------------------------------------------------------------------------------------------	
 	
 	private void regroupSignals() {
 		Cluster cl_rechazo = new ClusterSig();
@@ -311,6 +340,8 @@ public class AdaptativeImp implements Adaptative {
 	}
 	
 	// --------------------------------------------------------------------------------------------
+	// OTROS
+	// --------------------------------------------------------------------------------------------	
 	
 	/**
 	 * Devuelve el nº del agrupamiento más cercano al patrón X.
