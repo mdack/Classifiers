@@ -57,7 +57,7 @@ public class JAdaptativeImp extends JAdaptative {
 		//text
 		txT = new JTextField();
 		txT.setEditable(true);
-		txT.setText("3");
+		txT.setText("35000");
 		
 		txO = new JTextField();
 		txO.setEditable(true);
@@ -101,7 +101,7 @@ public class JAdaptativeImp extends JAdaptative {
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
 				this.dispose();
 				transfer = (TResult) c.getDatos();
-				MainView.getInstance().getTaDisplay().append(transfer.toString());
+				MainView.getInstance().updateTextarea(transfer.toString());
 				System.out.println(transfer.toString());
 			}break;
 			case(DispatcherResults.AdaptativeError):{

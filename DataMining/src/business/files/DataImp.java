@@ -2,9 +2,9 @@ package business.files;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import business.elements.FileData;
 import business.elements.Image;
@@ -82,7 +82,7 @@ public class DataImp implements Data{
 			
 			String text = null;
 			try (Scanner scanner = new Scanner(fd.getData(), StandardCharsets.UTF_8.name())) {
-					HashMap<Double,Double> list_s = new HashMap<>();
+				TreeMap<Double,Double> list_s = new TreeMap<>();
 	            	while(scanner.hasNext()) {
 		                text = scanner.nextLine();
 

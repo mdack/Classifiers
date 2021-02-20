@@ -1,13 +1,13 @@
 package business.elements;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import business.classifiers.adaptative.AdaptativeElement;
 
 public class Signal implements AdaptativeElement{
-	HashMap<Double,Double> signal;
+	private TreeMap<Double,Double> signal;
     int id_cluster = -1;
     private String name;
 
@@ -19,11 +19,11 @@ public class Signal implements AdaptativeElement{
 		this.id_cluster = id_cluster;
 	}
 
-	public HashMap<Double, Double> getSignal() {
+	public TreeMap<Double, Double> getSignal() {
 		return signal;
 	}
 
-	public void setSignal(HashMap<Double, Double> signal) {
+	public void setSignal(TreeMap<Double, Double> signal) {
 		this.signal = signal;
 	}
 

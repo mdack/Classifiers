@@ -1,8 +1,8 @@
 package business.classifiers.cluster;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import business.elements.Image;
 import business.elements.Signal;
@@ -15,7 +15,7 @@ public class ClusterSig extends Cluster {
 	public ClusterSig(int i, Signal signal) {
 		super(i);
 		list_files.add(signal);
-		
+		centroid = signal;
 	}
 
 	public ClusterSig() {
@@ -68,11 +68,28 @@ public class ClusterSig extends Cluster {
 		
 		Signal sig = list_files.get(p);
 		
-		HashMap<Double,Double> new_sig = new HashMap<Double, Double>();
-		double sum =  0;
-		for(HashMap.Entry<Double,Double> entry: centroid.getSignal().entrySet()) {
-			sum += entry.getValue() + sig.getSignal().get(entry.getKey());
-			new_sig.put(entry.getKey(), sum/p);
+		TreeMap<Double,Double> new_sig = new TreeMap<Double, Double>();
+		
+		int size=0;
+    	
+    	//Elegimos el menor tamaño de la señal para no salirnos del array
+        if(sig.getSignal().size() > centroid.getSignal().size())
+        	size = centroid.getSignal().size();
+        else
+        	size = sig.getSignal().size();
+        	        
+        Object[] list_t = sig.getSignal().keySet().toArray();
+        Object[] list_t_centroid = centroid.getSignal().keySet().toArray();
+		double sum1 =  0;
+		double sum2 = 0;
+		
+        for(int i = 0; i < size; i++) {
+        	double key1 = (Double) list_t[i];
+        	double key2 = (Double) list_t_centroid[i];
+        	sum1 += key1 + key2;
+        	sum2 += sig.getSignal().get(key1) + centroid.getSignal().get(key2);
+
+			new_sig.put(sum1/list_files.size(), sum2/list_files.size());
 		}
 		
 		centroid.setSignal(new_sig);

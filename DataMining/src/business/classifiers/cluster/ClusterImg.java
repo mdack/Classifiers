@@ -14,6 +14,7 @@ public class ClusterImg extends Cluster {
 	public ClusterImg(int i, Image image) {
 		super(i);
 		list_files.add(image);
+		centroid = image;
 	}	
 	
 	public ClusterImg() {

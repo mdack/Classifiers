@@ -11,6 +11,7 @@ public class TResult {
 	private List<Cluster> list = new ArrayList<>();
 	private LinkageStrategy strategy;
 	private Cluster root_cluster;
+	private boolean cluster_rejection;
 	
 	public int getN() {
 		return N;
@@ -39,10 +40,31 @@ public class TResult {
 	
 	public String toString() {
 		String cad = "Hay " + N + " clusters:\n";
-		for(Cluster cl: list) {
-			cad += cl.toString() + "\n";
+		int size = list.size();
+		
+		if(this.cluster_rejection) {
+			size-=1;
+			
+			if(list.get(size).getImages() != null) {
+				cad += "El cluster de rechazo contiene " + list.get(size).getImages().size() + " patrones.\n";
+			}else {
+				cad += "El cluster de rechazo contiene " + list.get(size).getSignals().size() + " patrones.\n";
+			}
 		}
+		
+		
+		for(int i = 0; i < size; i++) {
+			
+			cad += list.get(i).toString() + "\n";
+		}
+		
 		return cad;	
+	}
+	public boolean isCluste_rejection() {
+		return cluster_rejection;
+	}
+	public void setCluste_rejection(boolean cluste_rejection) {
+		this.cluster_rejection = cluste_rejection;
 	}
 	
 	

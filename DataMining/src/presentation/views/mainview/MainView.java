@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import business.transfers.TZip;
 import presentation.dispatcher.Context;
@@ -37,7 +38,14 @@ public class MainView extends JFrame{
 	private static MainView instance;
 	
 	public MainView() {
-		
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	initComponents();
+		    }
+		  });
+	}
+	
+	private void initComponents(){
 		//main window configuration
 		this.setTitle(NAME_TITLE);	//Window title
 		this.setMinimumSize(new Dimension(700,500));	//Minimum size of the window
@@ -52,9 +60,8 @@ public class MainView extends JFrame{
 		addBottom(window);	//Bottom added (South region)
 				
 		//Panel added to the frame
-		this.add(window);
+		this.add(window);	
 	}
-	
 	public static MainView getInstance() {
 		if(instance==null){
 			instance = new MainView();
@@ -101,9 +108,10 @@ public class MainView extends JFrame{
 	
 	private JPanel panelExplorer() {
 		JPanel result = new JPanel();
+		result.setBorder(BorderFactory.createEmptyBorder(50,10,40,10));
 		this.explorerFiles = new JFileChooser();
 		
-		JButton go = new JButton(" Escoge archivo ");
+		JButton go = new JButton(" Escoge archivo .zip ");
 		go.setPreferredSize(new Dimension(250,30));
 		go.setHorizontalAlignment(SwingConstants.CENTER);
 		go.addActionListener(new ALExplorer(this.explorerFiles));
@@ -115,7 +123,7 @@ public class MainView extends JFrame{
 	
 	private JPanel panelClassifiers() {
 		JPanel result = new JPanel();
-		result.setBorder(BorderFactory.createEmptyBorder(40,40,40,40));
+		result.setBorder(BorderFactory.createTitledBorder("Parámetros"));
 		result.setLayout(new GridLayout(1,4));
 		
 		JLabel title = new JLabel("Escoge clasificador:  ");			//Title of the module
@@ -125,10 +133,11 @@ public class MainView extends JFrame{
 		result.add(title);							//Label added to result
 		
 		JComboBox<String> comboBox = new JComboBox<String>(this.CLASSIFIER_OPTIONS);	//Option pane for the options
-		comboBox.setBorder(BorderFactory.createEmptyBorder(15,5,15,5));
+		comboBox.setBorder(BorderFactory.createEmptyBorder(40,5,40,5));
 		result.add(comboBox);							//Combobox added to the result
 		
 		JPanel panelFiles = new JPanel();
+		panelFiles.setBorder(BorderFactory.createEmptyBorder(40,10,40,10));
 		panelFiles.setLayout(new FlowLayout());
 		JLabel label = new JLabel("Tipo de archivo: ");			//Title of the module
 		label.setHorizontalAlignment(SwingConstants.LEFT);	//Text placed in center
@@ -144,7 +153,6 @@ public class MainView extends JFrame{
 		 result.add(panelFiles);
 	
 		JButton go = new JButton(" Ejecutar ");	//Execute button
-		go.setPreferredSize(new Dimension(40, 40));
 		go.addActionListener(new ALMainView(comboBox, opcion1));
 		result.add(go);
 				
@@ -210,7 +218,9 @@ public class MainView extends JFrame{
 		this.taDisplay = taDisplay;
 	}
 
-
+	public void updateTextarea(String text) {
+		taDisplay.append(text);
+	}
 
 	
 }

@@ -1,6 +1,9 @@
 package business.classifiers.adaptative;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import business.classifiers.adaptative.AdaptativeElement.MyState;
@@ -13,6 +16,7 @@ import business.factory.FactoryAS;
 import business.files.Data;
 import business.transfers.TAdaptative;
 import business.transfers.TResult;
+import presentation.views.mainview.MainView;
 
 public class AdaptativeImp implements Adaptative {
 	private List<Signal> signals;
@@ -25,6 +29,9 @@ public class AdaptativeImp implements Adaptative {
 	
 	@Override
 	public TResult executeAlgorithm(TAdaptative transfer) {
+		Date date = new Date();
+		DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+		
 		Data data = FactoryAS.getInstance().readData2(transfer.getZip().getList());
 		
 		T = transfer.getT();
@@ -33,7 +40,9 @@ public class AdaptativeImp implements Adaptative {
 		Cluster cl_1 = null;
 		if(transfer.getZip().isAreSignals()) {
 			this.signals = data.readSignals();
+			MainView.getInstance().updateTextarea("Se han cargado todos los archivos : " + hourdateFormat.format(date));
 			
+			MainView.getInstance().updateTextarea("Empieza el método adaptativo : " + hourdateFormat.format(date));
 			// Creamos primer agrupamiento con patrón 1.
 			signals.get(0).changeState(MyState.ASIGNED, A);
 			cl_1 = new ClusterSig(A,signals.get(0));
@@ -71,7 +80,10 @@ public class AdaptativeImp implements Adaptative {
 			this.regroupImages();
 		}
 
+		MainView.getInstance().updateTextarea("El algoritmo ha terminado : " + hourdateFormat.format(date));
+		
 		TResult result = new TResult();
+		result.setCluste_rejection(true);
 		result.setList(clusters);
 		result.setN(A);
 		
@@ -84,11 +96,11 @@ public class AdaptativeImp implements Adaptative {
 	
 	private void initImages() {
 		for(int i = 1; i < imgs.size();i++) {
-			double distance = Double.MAX_VALUE;
-			int m = this.getIdNearestCluster(imgs.get(i), distance);
+			int m = this.getIdNearestCluster(imgs.get(i), Double.MAX_VALUE);
 			
-			//A lo mejor no hace falta calcular distancia por la primera
+			//Obtenemos la distancia de ese patron al cluster
 			double d = this.calculateDistanceImgs(imgs.get(i), clusters.get(m));
+			System.out.println("Distancia " + i + ": " + d);
 			
 			if(d > T) {
 				imgs.get(i).changeState(MyState.ASIGNED, A);
@@ -111,11 +123,11 @@ public class AdaptativeImp implements Adaptative {
 
 	private void initSignals() {
 		for(int i = 1; i < signals.size();i++) {
-			double distance = Double.MAX_VALUE;
-			int m = this.getIdNearestCluster(signals.get(i), distance);
+			int m = this.getIdNearestCluster(signals.get(i), Double.MAX_VALUE);
 			
-			//A lo mejor no hace falta calcular distancia por la primera
+			//Obtenemos la distancia de ese patron al cluster
 			double d = this.calculateDistanceSignal(signals.get(i), clusters.get(m));
+			System.out.println("Distancia " + i + ": " + d);
 			
 			if(d > T) {
 				signals.get(i).changeState(MyState.ASIGNED, A);
@@ -147,8 +159,7 @@ public class AdaptativeImp implements Adaptative {
 		while(!stable) {
 			stable = true;
 			for(int i = 0; i < signals.size(); i++) {
-				double distance = Double.MAX_VALUE;
-				int m = this.getIdNearestCluster(signals.get(i), distance);
+				int m = this.getIdNearestCluster(signals.get(i), Double.MAX_VALUE);
 				
 				
 				MyState newState = getNewStateSig(signals.get(i),m);
@@ -354,16 +365,14 @@ public class AdaptativeImp implements Adaptative {
 
         for(Cluster cluster: clusters) {
             double dist;
-            double sum = 0;
             
             if(this.areSignals) {
             	Signal sig = (Signal) obj;
-            	sum = this.calculateDistanceSignal(sig, cluster);
+            	dist = this.calculateDistanceSignal(sig, cluster);
             }else {
             	Image img = (Image) obj;
-            	sum = this.calculateDistanceImgs(img, cluster);
+            	dist = this.calculateDistanceImgs(img, cluster);
             }
-            dist = Math.sqrt(sum);
 
             if(dist < distance) {
                 distance = dist;
@@ -384,20 +393,34 @@ public class AdaptativeImp implements Adaptative {
 	        	}
 	        }
 	        
-			return sum;
+			return Math.sqrt(sum);
 	    }
 	    
 	    private double calculateDistanceSignal(Signal sig, Cluster cluster) {
 	        double sum = 0;
-	        List<Double> list = new ArrayList<Double>(sig.getSignal().values());
+
 	    	Signal centroid = (Signal) cluster.getCentroid();
-	    	List<Double> s_centroid = new ArrayList<Double>(centroid.getSignal().values());
 	    	
-	        for(int i = 0; i < sig.getSignal().size(); i++) {
-	        	sum += Math.pow(s_centroid.get(i) - list.get(i), 2);
-	        }
+	    	int size=0;
+	    	
+	    	//Elegimos el menor tamaño de la señal para no salirnos del array
+	        if(sig.getSignal().size() > centroid.getSignal().size())
+	        	size = centroid.getSignal().size();
+	        else
+	        	size = sig.getSignal().size();
+	        	        
+	        Object[] list_t = sig.getSignal().keySet().toArray();
+	        Object[] list_t_centroid = centroid.getSignal().keySet().toArray();
 	        
-			return sum;
+	        for(int i = 0; i < size; i++) {
+	        	double key1 = (Double) list_t[i];
+	        	double key2 = (Double) list_t_centroid[i];
+	        	
+	        	sum += Math.pow(key1 - key2 , 2);
+	        	sum += Math.pow(sig.getSignal().get(key1) - centroid.getSignal().get(key2) , 2);
+	        }
+
+			return Math.sqrt(sum);
 	    }
 
 }
