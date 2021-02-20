@@ -81,13 +81,12 @@ public class JMatrizSimilitudImp extends JMatrizSimilitud {
 		
 		switch(cas) {
 			case(DispatcherResults.MatrizCorrect):{
-				Integer r = (int) c.getDatos();
-							JOptionPane.showMessageDialog(null,
-						"Cluster al que pertenece" + r,
-						"Correcto", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null,
+			"Cluster creados!",
+			"Correcto", JOptionPane.PLAIN_MESSAGE);
 				this.dispose();
 				TResult transfer = (TResult) c.getDatos();
-				MainView.getInstance().getTaDisplay().append(transfer.toString());
+				System.out.println(transfer.toString());
 			}break;
 			case(DispatcherResults.MatrizError):{
 				JOptionPane.showMessageDialog(null,

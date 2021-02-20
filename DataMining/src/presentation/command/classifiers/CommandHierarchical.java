@@ -16,14 +16,13 @@ public class CommandHierarchical implements Command{
 		FactoryAS factory = FactoryAS.getInstance();
 		
 		Hierarchical alg = factory.executeHierarchical();
-		Context context_1 = (Context) datos;
-		TResult id = alg.executeHierarchical((THierarchical)context_1.getDatos());
+		TResult t = alg.executeHierarchical((THierarchical)datos);
 		
 		Context contexto = new Context();
-		contexto.setDatos(id);
+		contexto.setDatos(t);
 		
 		int event = BusinessEvent.HIERARCHICAL;
-		if(id != null) 
+		if(t != null) 
 			contexto.setEvento(event + DispatcherResults.HierarchicalCorrect);
 		else 
 			contexto.setEvento(event + DispatcherResults.HierarchicalError);

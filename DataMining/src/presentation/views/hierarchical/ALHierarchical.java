@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 import business.transfers.THierarchical;
 import business.transfers.TZip;
@@ -24,6 +25,8 @@ public class ALHierarchical implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		tZip = MainView.getInstance().gettZip();
+		
+		if(tZip != null) {
 		Controller cont = Controller.getInstance();
 		
 		Context context = new Context();
@@ -33,7 +36,12 @@ public class ALHierarchical implements ActionListener{
 		context.setEvento(BusinessEvent.HIERARCHICAL);
 		
 		cont.action(context);
-		
+		}
+		else {
+			JOptionPane.showMessageDialog(null,
+					"Error: No se ha elegido fichero.",
+					"Error crítico", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 }

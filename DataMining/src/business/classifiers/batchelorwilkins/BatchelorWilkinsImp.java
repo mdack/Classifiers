@@ -88,6 +88,7 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 			
 			clusters.add(cluster);
 			A++;
+			
 			//2ª Centro: Escogemos archivo más alejado del primero
 			for(int i = 0; i < imgs.size(); i++) {
 				double dist = this.calculateDistanceImgs(imgs.get(i), cluster);
@@ -133,10 +134,8 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 	
 	private void agruparPatronesSig() {
 		
-		for(int i = 0; i < signals.size();i++) {
-			double distance = Double.MAX_VALUE;
-			
-			int m = this.getIdNearestCluster(signals.get(i), distance);
+		for(int i = 0; i < signals.size();i++) {			
+			int m = this.getIdNearestCluster(signals.get(i), Double.MAX_VALUE);
 			clusters.get(m).getSignals().add(signals.get(i));
 			clusters.get(m).recalculateCentroid();
 		}
@@ -164,9 +163,9 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 			if(max_dist > umbral) {
 				Cluster cl = new ClusterImg(A, imgs.get(n));
 				cl.recalculateCentroid();
-				
-				imgs.remove(n);
 				clusters.add(cl);
+				imgs.remove(n);
+				
 				A++;
 			}
 			else {

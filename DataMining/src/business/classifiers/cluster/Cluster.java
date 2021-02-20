@@ -7,7 +7,7 @@ import business.elements.Signal;
 
 public abstract class Cluster implements Comparable<Cluster>{
 
-	protected int id_cluster;
+	protected int id_cluster=-1;
     protected double central_value=0;
     protected boolean areSignals=true;
     
@@ -16,7 +16,9 @@ public abstract class Cluster implements Comparable<Cluster>{
 	}   
 
 	public Cluster() {
-		// TODO Auto-generated constructor stub
+		id_cluster=-1;
+		central_value=0;
+		areSignals=true;
 	}
 
 	public int getId_cluster() {
@@ -45,9 +47,6 @@ public abstract class Cluster implements Comparable<Cluster>{
 	
 	public abstract Object getCentroid();
 	
-	/**
-	 * Recalcula el centro del cluster.
-	 */
 	public abstract void recalculateCentroid();
 	
 	public abstract double calculateDistanceTo(Cluster cluster);

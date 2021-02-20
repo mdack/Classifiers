@@ -117,7 +117,7 @@ public class ClusterImg extends Cluster {
 
 	@Override
 	public String toString() {
-		String cad = "Cluster con centro: " + centroid.getName() + "\n";
+		String cad = "Cluster " + this.id_cluster +  " con centro: " + centroid.getName() + "\n";
 		cad += "Total patrones: " + list_files.size();
 		return cad;
 	}

@@ -106,15 +106,27 @@ public class ClusterSig extends Cluster {
 		
 		Signal sig = (Signal) cluster.getCentroid();
 		
-        double sum = 0;
-        List<Double> list = new ArrayList<Double>(sig.getSignal().values());
-        List<Double> list_c = new ArrayList<Double>(centroid.getSignal().values());
+        double sum = 0;        
+        int size=0;
+    	
+    	//Elegimos el menor tamaño de la señal para no salirnos del array
+        if(sig.getSignal().size() > centroid.getSignal().size())
+        	size = centroid.getSignal().size();
+        else
+        	size = sig.getSignal().size();
+        	        
+        Object[] list_t = sig.getSignal().keySet().toArray();
+        Object[] list_t_centroid = centroid.getSignal().keySet().toArray();
+		
+        for(int i = 0; i < size; i++) {
+        	double key1 = (Double) list_t[i];
+        	double key2 = (Double) list_t_centroid[i];
+        	
+        	sum += Math.pow(key1 - key2 , 2);
+        	sum += Math.pow(sig.getSignal().get(key1) - centroid.getSignal().get(key2) , 2);
+		}
         
-        for(int i = 0; i < sig.getSignal().size(); i++) {
-        		sum += Math.pow(list_c.get(i) - list.get(i), 2);
-        }
-        
-		return sum;
+		return Math.sqrt(sum);
 	}
 
 	@Override

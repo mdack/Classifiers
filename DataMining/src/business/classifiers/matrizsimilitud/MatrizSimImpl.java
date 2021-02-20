@@ -1,6 +1,9 @@
 package business.classifiers.matrizsimilitud;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import business.classifiers.cluster.Cluster;
@@ -17,7 +20,7 @@ public class MatrizSimImpl implements MatrizSim{
 	private List<Signal> signals;
 	private int total_files;
 	private List<Image> imgs;
-	private boolean areSignals;
+	private boolean areSignals = true;;
 	private List<Cluster> clusters = new ArrayList<>();
 	private double[][] matrix;
 	private int A = 0;
@@ -25,6 +28,9 @@ public class MatrizSimImpl implements MatrizSim{
 	
 	@Override
 	public TResult executeAlgorithm(TMatrizSim transfer) {
+		Date date = new Date();
+		DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+		
 		Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 		
 		if(transfer.gettZip().isAreSignals()) {
@@ -35,6 +41,11 @@ public class MatrizSimImpl implements MatrizSim{
 			this.total_files = imgs.size();
 			this.areSignals = false;
 		}
+		
+		System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
+		
+		System.out.println("Empieza el algoritmo de matriz por similitud : " + hourdateFormat.format(date));
+		
 		teta = transfer.getO();
 		matrix = new double[total_files][total_files];
 		
@@ -66,6 +77,7 @@ public class MatrizSimImpl implements MatrizSim{
 				pos++;
 			}
 		}
+		System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
 		
 		TResult result = new TResult();
 		result.setList(clusters);
@@ -118,7 +130,6 @@ public class MatrizSimImpl implements MatrizSim{
 					}
 			}
 		}
-		
 	}
 
 	private void loopImgs(int row, double[] r) {

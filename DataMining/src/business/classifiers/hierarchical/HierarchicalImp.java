@@ -1,7 +1,10 @@
 package business.classifiers.hierarchical;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import business.classifiers.cluster.Cluster;
@@ -23,13 +26,17 @@ public class HierarchicalImp implements Hierarchical{
     private List<Cluster> clusters = new ArrayList<Cluster>();
     private int globalClusterIndex = 0;
 	private int total_files;
-	private boolean areSignals;
+	private boolean areSignals = true;
 	private double[][] m_distances;
 	
 	@Override
 	public TResult executeHierarchical(THierarchical transfer) {
+		Date date = new Date();
+		DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+		
 		Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 		
+		System.out.println("Obteniendo información de archivos : " + hourdateFormat.format(date));
 		if(transfer.gettZip().isAreSignals()) {
 			this.signals = data.readSignals();
 			this.total_files = signals.size();
@@ -38,7 +45,9 @@ public class HierarchicalImp implements Hierarchical{
 			this.total_files = imgs.size();
 			this.areSignals = false;
 		}
+		System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
 		
+		System.out.println("Empieza el algoritmo Jerárquico aglomerativo : " + hourdateFormat.format(date));
 		m_distances = new double[total_files][total_files];
 		
 		//Calcular las distancias entre todas las parejas de patrones
@@ -54,6 +63,9 @@ public class HierarchicalImp implements Hierarchical{
 		while (!isTreeComplete()) {
 			agglomerate(strategy);
 		}
+		
+		
+		System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
 		
 		TResult result = new TResult();
 		result.setList(clusters);
@@ -101,12 +113,15 @@ public class HierarchicalImp implements Hierarchical{
 	        for (int col = 0; col < clusters.size(); col++) {
 	            Cluster cluster_col = clusters.get(col);
 	            for (int row = col + 1; row < clusters.size(); row++) {
-	                ClusterPair link = new ClusterPair();
-	                Double d = m_distances[0][accessFunction(row, col, clusters.size())];
-	                link.setLinkageDistance(d);
-	                link.setlCluster(cluster_col);
-	                link.setrCluster(clusters.get(row));
-	                linkages.add(link);
+	            	int index = accessFunction(row, col, clusters.size());
+	            	if(index < clusters.size()) {
+		                ClusterPair link = new ClusterPair();
+		                Double d = m_distances[0][index];
+		                link.setLinkageDistance(d);
+		                link.setlCluster(cluster_col);
+		                link.setrCluster(clusters.get(row));
+		                linkages.add(link);
+	            	}
 	            }
 	        }
 	        return linkages;
@@ -116,11 +131,14 @@ public class HierarchicalImp implements Hierarchical{
 
 		for (int i = 0; i < this.total_files; i++) {
 			Cluster cluster = null;
+			
 			if(this.areSignals) {
-			 cluster = new ClusterSig(i, signals.get(i));
+				cluster = new ClusterSig(i, signals.get(i));
 			}
-			else
+			else {
 				cluster = new ClusterImg(i, imgs.get(i));
+			}
+			
 			clusters.add(cluster);
 		}
 	}

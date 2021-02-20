@@ -62,6 +62,9 @@ public class AdaptativeImp implements Adaptative {
 		}else {
 			this.imgs = data.readImages();
 			this.areSignals = false;
+			System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
+			
+			System.out.println("Empieza el método adaptativo : " + hourdateFormat.format(date));
 			
 			// Creamos primer agrupamiento con patrón 1.
 			imgs.get(0).changeState(MyState.ASIGNED, A);

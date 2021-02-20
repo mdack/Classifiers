@@ -54,8 +54,8 @@ public class TResult {
 		
 		
 		for(int i = 0; i < size; i++) {
-			
-			cad += list.get(i).toString() + "\n";
+			if(list.get(i) != null)
+				cad += list.get(i).toString() + "\n";
 		}
 		
 		return cad;	

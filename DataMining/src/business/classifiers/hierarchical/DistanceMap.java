@@ -44,9 +44,17 @@ public class DistanceMap {
         return l;
     }
 
-    public ClusterPair findByCodePair(Cluster c1, Cluster c2) {
+	public ClusterPair findByCodePair(Cluster c1, Cluster c2) {
         String inCode = hashCodePair(c1, c2);
-        return pairHash.get(inCode).pair;
+        ClusterPair cl = null;
+        
+        if(inCode != "") {
+        	if(pairHash.containsKey(inCode))
+        		cl =  pairHash.get(inCode).pair;
+        }
+        
+        return cl;
+
     }
 
     public ClusterPair removeFirst() {
@@ -76,9 +84,8 @@ public class DistanceMap {
     public boolean add(ClusterPair link) {
         Item e = new Item(link);
         Item existingItem = pairHash.get(e.hash);
+        
         if (existingItem != null) {
-            System.err.println("hashCode = " + existingItem.hash +
-                    " adding redundant link:" + link + " (exist:" + existingItem + ")");
             return false;
         } else {
             pairHash.put(e.hash, e);
@@ -109,14 +116,17 @@ public class DistanceMap {
     }
 
     private String hashCodePair(Cluster lCluster, Cluster rCluster) {
-        return hashCodePairNames(lCluster.getId_cluster(), rCluster.getId_cluster());
+        String text= "";
+        if(lCluster != null && rCluster != null)
+        	text = hashCodePairNames(lCluster.getId_cluster(), rCluster.getId_cluster());
+        return text;
     }
 
-    private String hashCodePairNames(int lName, int rName) {
-        if (lName > rName) {
-            return lName + "~~~" + rName;
+    private String hashCodePairNames(int lId, int rId) {
+        if (lId > rId) {
+            return lId + "-" + rId;
         } else {
-            return rName + "~~~" + lName;
+            return rId + "-" + lId;
         }
     }
 

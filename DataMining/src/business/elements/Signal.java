@@ -40,15 +40,27 @@ public class Signal implements AdaptativeElement{
 	}
 
 	public double calculateDistanceTo(Signal sig) {		
-        double sum = 0;
-        List<Double> list = new ArrayList<Double>(sig.getSignal().values());
-        List<Double> list_c = new ArrayList<Double>(this.getSignal().values());
-        
-        for(int i = 0; i < sig.getSignal().size(); i++) {
-        		sum += Math.pow(list_c.get(i) - list.get(i), 2);
-        }
-        
-		return sum;
+		 double sum = 0;        
+	        int size=0;
+	    	
+	    	//Elegimos el menor tamaño de la señal para no salirnos del array
+	        if(sig.getSignal().size() > this.signal.size())
+	        	size = this.signal.size();
+	        else
+	        	size = sig.getSignal().size();
+	        	        
+	        Object[] list_t = sig.getSignal().keySet().toArray();
+	        Object[] list = this.signal.keySet().toArray();
+			
+	        for(int i = 0; i < size; i++) {
+	        	double key1 = (Double) list_t[i];
+	        	double key2 = (Double) list[i];
+	        	
+	        	sum += Math.pow(key1 - key2 , 2);
+	        	sum += Math.pow(sig.getSignal().get(key1) - this.signal.get(key2) , 2);
+			}
+	        
+			return Math.sqrt(sum);
 	}
 
 	public String getName() {

@@ -1,6 +1,9 @@
 package business.classifiers.kmeans;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import business.classifiers.cluster.Cluster;
@@ -41,6 +44,8 @@ public class KMeansImp implements KMeans{
 
 		@Override
 		public TResult executeKMeans(TKMeans transfer) {
+			Date date = new Date();
+			DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
 			
 			Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 			
@@ -52,6 +57,10 @@ public class KMeansImp implements KMeans{
 				this.total_files = imgs.size();
 				this.areSignals = false;
 			}
+			
+			System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
+			
+			System.out.println("Empieza algoritmo K-Means : " + hourdateFormat.format(date));
 			
 			this.K = transfer.getK();
 	        this.clusters = new ArrayList<>();
@@ -69,6 +78,8 @@ public class KMeansImp implements KMeans{
 	        	}
 	            goal = recalculateCluster();
 	        }		
+	        
+	        System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
 	        
 			TResult result = new TResult();
 			result.setList(clusters);
@@ -172,13 +183,83 @@ public class KMeansImp implements KMeans{
 	    }
 
 		private void initClusterDirecta() {
-			// TODO Auto-generated method stub
+			double max_dist = Double.MIN_VALUE;
+			double min_dist = Double.MAX_VALUE;
 			
+			//Obtener la menor y mayor distancia entre los patrones
+			if(this.areSignals) {
+				double dist = 0;
+				for(int i = 0; i < signals.size();i++) {
+					for(int j = 0; j < signals.size(); j++) {
+						if(i != j) {
+							dist = signals.get(i).calculateDistanceTo(signals.get(j));
+							if(dist > max_dist) {
+								max_dist = dist;
+							}
+							else if(dist < min_dist) {
+								min_dist = dist;
+							}
+						}
+					}
+				}
+				double seg = (max_dist - min_dist) / (K+1);
+				Cluster c1 = new ClusterSig();
+				c1.setCentral_value(seg);
+				c1.setId_cluster(0);
+				
+				Cluster c2 = new ClusterSig();
+				c2.setCentral_value(seg*2);
+				c2.setId_cluster(1);
+				
+				clusters.add(c1);
+				clusters.add(c2);
+			}
+			else {
+				double dist = 0;
+				for(int i = 0; i < imgs.size();i++) {
+					for(int j = 0; j < imgs.size(); j++) {
+						if(i != j) {
+							dist = imgs.get(i).calculateDistanceTo(imgs.get(j));
+							if(dist > max_dist) {
+								max_dist = dist;
+							}
+							else if(dist < min_dist) {
+								min_dist = dist;
+							}
+						}
+					}
+				}
+				double seg = (max_dist - min_dist) / (K+1);
+				
+				Cluster c1 = new ClusterImg();
+				c1.setCentral_value(seg);
+				c1.setId_cluster(0);
+				
+				Cluster c2 = new ClusterImg();
+				c2.setCentral_value(seg*2);
+				c2.setId_cluster(1);
+				
+				clusters.add(c1);
+				clusters.add(c2);
+			}
 		}
 
 		private void initClustersInversa() {
-			// TODO Auto-generated method stub
-			
+			 int index = this.total_files-1;
+		        //inicializo los cluster con un archivo aleatorio que no pertenezca a otro cluster
+		        for(int i = 0; i < K; i++) {
+		        	Cluster cluster = null;
+                    if(this.areSignals) {
+                    	this.signals.get(index).setId_cluster(i);
+                    	cluster = new ClusterSig(i, signals.get(index));
+                    }
+                    else {
+                    	this.imgs.get(index).setId_cluster(i);
+                    	cluster = new ClusterImg(i, imgs.get(index));
+                    }	                    
+                    clusters.add(cluster);
+                    index--;
+		        }
 		}
 		
 	    private int getIdNearestCluster(Object obj) {
@@ -187,16 +268,14 @@ public class KMeansImp implements KMeans{
 
 	        for(Cluster cluster: clusters) {
 	            double dist;
-	            double sum = 0;
 	            
 	            if(this.areSignals) {
 	            	Signal sig = (Signal) obj;
-	            	sum = this.calculateDistanceSignal(sig, cluster);
+	            	dist = this.calculateDistanceSignal(sig, cluster);
 	            }else {
 	            	Image img = (Image) obj;
-	            	sum = this.calculateDistanceImgs(img, cluster);
+	            	dist = this.calculateDistanceImgs(img, cluster);
 	            }
-	            dist = Math.sqrt(sum);
 
 	            if(dist < min_dist) {
 	                min_dist = dist;
@@ -216,18 +295,34 @@ public class KMeansImp implements KMeans{
             	}
             }
             
-			return sum;
+			return Math.sqrt(sum);
 	    }
 	    
 	    private double calculateDistanceSignal(Signal sig, Cluster cluster) {
-            double sum = 0;
-            List<Double> list = new ArrayList<Double>(sig.getSignal().values());
-            
-            for(int i = 0; i < sig.getSignal().size(); i++) {
-            		sum += Math.pow(cluster.getCentral_value() - list.get(i), 2);
-            }
-            
-			return sum;
+	    	 double sum = 0;
+
+		    	Signal centroid = (Signal) cluster.getCentroid();
+		    	
+		    	int size=0;
+		    	
+		    	//Elegimos el menor tamaño de la señal para no salirnos del array
+		        if(sig.getSignal().size() > centroid.getSignal().size())
+		        	size = centroid.getSignal().size();
+		        else
+		        	size = sig.getSignal().size();
+		        	        
+		        Object[] list_t = sig.getSignal().keySet().toArray();
+		        Object[] list_t_centroid = centroid.getSignal().keySet().toArray();
+		        
+		        for(int i = 0; i < size; i++) {
+		        	double key1 = (Double) list_t[i];
+		        	double key2 = (Double) list_t_centroid[i];
+		        	
+		        	sum += Math.pow(key1 - key2 , 2);
+		        	sum += Math.pow(sig.getSignal().get(key1) - centroid.getSignal().get(key2) , 2);
+		        }
+
+				return Math.sqrt(sum);
 	    }
 
 

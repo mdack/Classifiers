@@ -112,13 +112,12 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 		
 		switch(cas) {
 			case(DispatcherResults.Agrupamientocorrect):{
-				Integer r = (int) c.getDatos();
-							JOptionPane.showMessageDialog(null,
-						"Cluster al que pertenece" + r,
-						"Correcto", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null,
+			"Cluster creados!",
+			"Correcto", JOptionPane.PLAIN_MESSAGE);
 				this.dispose();
 				TResult transfer = (TResult) c.getDatos();
-				MainView.getInstance().getTaDisplay().append(transfer.toString());
+				System.out.println(transfer.toString());
 			}break;
 			case(DispatcherResults.AgrupamientoError):{
 				JOptionPane.showMessageDialog(null,

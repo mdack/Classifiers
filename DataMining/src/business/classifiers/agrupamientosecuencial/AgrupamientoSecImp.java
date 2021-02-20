@@ -1,6 +1,9 @@
 package business.classifiers.agrupamientosecuencial;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -25,6 +28,9 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 
 	@Override
 	public TResult executeAlgorithm(TAgrupamientoSec transfer) {
+		Date date = new Date();
+		DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+		
 		Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 		
 		if(transfer.gettZip().isAreSignals()) {
@@ -35,7 +41,9 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 			this.total_files = imgs.size();
 			this.areSignals = false;
 		}
+		System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
 		
+		System.out.println("Empieza el agrupamiento secuencial : " + hourdateFormat.format(date));
 		//Selecciona aleatoriamente primer centro
 		int index = getFirstCluster();
 		
@@ -59,6 +67,8 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 			
 			this.loopImgs(transfer.getR(), transfer.getM(), transfer);
 		}
+		
+		System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
 		
 		TResult result = new TResult();
 		result.setList(clusters);
@@ -165,8 +175,9 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 			}else {
 			//Calcular distancia de patron actual mas cercano (a su centroide)
 				
-				double distance = Double.MAX_VALUE;
-				int nearest_cluster = this.getIdNearestCluster(signals.get(p), distance);
+				int nearest_cluster = this.getIdNearestCluster(signals.get(p), Double.MAX_VALUE);
+				
+				double distance = this.calculateDistanceSignal(signals.get(p), clusters.get(nearest_cluster));
 			
 			//Si distancia <= R -> se asigna a agrupamiento más cercano y se recalcula centro
 				if(distance <= R) {
@@ -197,8 +208,10 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 			}else {
 			//Calcular distancia de patron actual mas cercano (a su centroide)
 				
-				double distance = Double.MAX_VALUE;
-				int nearest_cluster = this.getIdNearestCluster(imgs.get(p), distance);
+				
+				int nearest_cluster = this.getIdNearestCluster(imgs.get(p), Double.MAX_VALUE);
+				double distance = this.calculateDistanceImgs(imgs.get(p), clusters.get(nearest_cluster));
+				
 			
 			//Si distancia <= R -> se asigna a agrupamiento más cercano y recalculamos centro
 				if(distance <= R) {
@@ -255,16 +268,30 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
     }
     
     private double calculateDistanceSignal(Signal sig, Cluster cluster) {
-        double sum = 0;
-        List<Double> list = new ArrayList<Double>(sig.getSignal().values());
-    	Signal centroid = (Signal) cluster.getCentroid();
-    	List<Double> s_centroid = new ArrayList<Double>(centroid.getSignal().values());
-    	
-        for(int i = 0; i < sig.getSignal().size(); i++) {
-        	sum += Math.pow(s_centroid.get(i) - list.get(i), 2);
-        }
-        
-		return sum;
+    	 double sum = 0;
+
+	    	Signal centroid = (Signal) cluster.getCentroid();
+	    	
+	    	int size=0;
+	    	
+	    	//Elegimos el menor tamaño de la señal para no salirnos del array
+	        if(sig.getSignal().size() > centroid.getSignal().size())
+	        	size = centroid.getSignal().size();
+	        else
+	        	size = sig.getSignal().size();
+	        	        
+	        Object[] list_t = sig.getSignal().keySet().toArray();
+	        Object[] list_t_centroid = centroid.getSignal().keySet().toArray();
+	        
+	        for(int i = 0; i < size; i++) {
+	        	double key1 = (Double) list_t[i];
+	        	double key2 = (Double) list_t_centroid[i];
+	        	
+	        	sum += Math.pow(key1 - key2 , 2);
+	        	sum += Math.pow(sig.getSignal().get(key1) - centroid.getSignal().get(key2) , 2);
+	        }
+
+			return Math.sqrt(sum);
     }
 
 	private int getFirstCluster() {

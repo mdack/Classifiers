@@ -82,8 +82,12 @@ public class JHierarchicalImp extends JHierarchical {
 		
 		switch(cas) {
 			case(DispatcherResults.HierarchicalCorrect):{
+				JOptionPane.showMessageDialog(null,
+			"¡Cluster creados!",
+			"Correcto", JOptionPane.PLAIN_MESSAGE);
+	this.dispose();
 				TResult transfer = (TResult) c.getDatos();
-				MainView.getInstance().getTaDisplay().append(transfer.toString());
+				System.out.println(transfer.toString());
 			}break;
 			case(DispatcherResults.HierarchicalError):{
 				JOptionPane.showMessageDialog(null,

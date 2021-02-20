@@ -103,7 +103,6 @@ public class JKMeansImp extends JKMeans{
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
 				this.dispose();
 				transfer = (TResult) c.getDatos();
-				MainView.getInstance().getTaDisplay().append(transfer.toString());
 				System.out.println(transfer.toString());
 			}break;
 			case(DispatcherResults.KMeansError):{
