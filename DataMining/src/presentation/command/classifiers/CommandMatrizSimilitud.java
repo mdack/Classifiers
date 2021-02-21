@@ -16,8 +16,7 @@ public class CommandMatrizSimilitud implements Command{
 		FactoryAS factory = FactoryAS.getInstance();
 		
 		MatrizSim kmeans = factory.executeMatrizSimilitud();
-		Context context_1 = (Context) datos;
-		TResult id = kmeans.executeAlgorithm((TMatrizSim)context_1.getDatos());
+		TResult id = kmeans.executeAlgorithm((TMatrizSim)datos);
 		
 		Context contexto = new Context();
 		contexto.setDatos(id);

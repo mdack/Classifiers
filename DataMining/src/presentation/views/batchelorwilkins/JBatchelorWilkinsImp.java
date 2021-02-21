@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import business.factory.FactoryAS;
+import business.files.Data;
 import business.transfers.TResult;
 import presentation.dispatcher.Context;
 import presentation.dispatcher.DispatcherResults;
@@ -88,6 +90,10 @@ public class JBatchelorWilkinsImp extends JBatchelorWilkins {
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
 				this.dispose();
 				TResult transfer = (TResult) c.getDatos();
+				
+				Data data = FactoryAS.getInstance().writeResult();
+				data.writeCluster(transfer);
+				
 				System.out.println(transfer.toString());
 			}break;
 			case(DispatcherResults.BatchelorWilkinsError):{

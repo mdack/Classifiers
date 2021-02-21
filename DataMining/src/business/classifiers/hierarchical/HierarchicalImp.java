@@ -181,14 +181,14 @@ public class HierarchicalImp implements Hierarchical{
 
 	                if (link1 != null) {
 	                    Double distVal = link1.getLinkageDistance();
-	                    Double weightVal = (double) link1.getOtherCluster(iClust).calculateValue();
-	                    distanceValues.add(new Distance(distVal, weightVal));
+	                    //Double weightVal = (double) link1.getOtherCluster(iClust).calculateValue();
+	                    //distanceValues.add(new Distance(distVal, weightVal));
 	                    distances.remove(link1);
 	                }
 	                if (link2 != null) {
 	                    Double distVal = link2.getLinkageDistance();
-	                    Double weightVal = (double) link2.getOtherCluster(iClust).calculateValue();
-	                    distanceValues.add(new Distance(distVal, weightVal));
+	                    //Double weightVal = (double) link2.getOtherCluster(iClust).calculateValue();
+	                    //distanceValues.add(new Distance(distVal, weightVal));
 	                    distances.remove(link2);
 	                }
 

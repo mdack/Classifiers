@@ -45,14 +45,19 @@ public class Image implements AdaptativeElement{
 	
 	
 	public double calculateValue() {
-		int sum = 0;
-		for(int i = 0; i < rows;i++) {
-			for(int j = 0; j < cols; j++) {
-				sum += image.get(i).get(j);
+		if(!image.isEmpty()) {
+			int sum = 0;
+			for(int i = 0; i < rows;i++) {
+				for(int j = 0; j < cols; j++) {
+					sum += image.get(i).get(j);
+				}
 			}
+			
+			return sum / (rows*cols);
 		}
-		
-		return sum / (rows*cols);
+		else {
+			return 0;
+		}
 	}
 
 	public void convertMatrixToList(double[][] list_aux) {

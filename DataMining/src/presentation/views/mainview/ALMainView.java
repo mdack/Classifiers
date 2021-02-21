@@ -35,6 +35,7 @@ public class ALMainView implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		tZip = MainView.getInstance().gettZip();
 		
+		if(tZip != null) {
 		if(file.isSelected())
 			tZip.setAreSignals(true);
 		else
@@ -42,35 +43,41 @@ public class ALMainView implements ActionListener{
 		
 		
 		if(!tZip.getList().isEmpty()) {
-			switch(c.getSelectedIndex()) {
-			case 0:
-				JAdaptative ventana5 = JAdaptative.getInstance();
-				ventana5.setVisible(true);
-				break;
-			case 1:
-				JBatchelorWilkins ventana4 = JBatchelorWilkins.getInstance();
-				ventana4.setVisible(true);
-				break;
-			case 2:
-				JHierarchical ventana0 = JHierarchical.getInstance();
-				ventana0.setVisible(true);
-				break;
-			case 3:
-				JKMeans ventana1 = JKMeans.getInstance();;
-				ventana1.setVisible(true);
-				break;
-			case 4:
-				JAgrupamientoSec ventana2 = JAgrupamientoSec.getInstance();
-				ventana2.setVisible(true);
-				break;
-			case 5:
-				JMatrizSimilitud ventana3 = JMatrizSimilitud.getInstance();
-				ventana3.setVisible(true);
-				break;
+				switch(c.getSelectedIndex()) {
+				case 0:
+					JAdaptative ventana5 = JAdaptative.getInstance();
+					ventana5.setVisible(true);
+					break;
+				case 1:
+					JBatchelorWilkins ventana4 = JBatchelorWilkins.getInstance();
+					ventana4.setVisible(true);
+					break;
+				case 2:
+					JHierarchical ventana0 = JHierarchical.getInstance();
+					ventana0.setVisible(true);
+					break;
+				case 3:
+					JKMeans ventana1 = JKMeans.getInstance();;
+					ventana1.setVisible(true);
+					break;
+				case 4:
+					JAgrupamientoSec ventana2 = JAgrupamientoSec.getInstance();
+					ventana2.setVisible(true);
+					break;
+				case 5:
+					JMatrizSimilitud ventana3 = JMatrizSimilitud.getInstance();
+					ventana3.setVisible(true);
+					break;
+				}
+			}else {
+				JOptionPane.showMessageDialog(null,
+						"Error al intentar cargar ventana de parámetros",
+						"Error crítico", JOptionPane.ERROR_MESSAGE);
 			}
-		}else {
+		}
+		else {
 			JOptionPane.showMessageDialog(null,
-					"Error al intentar cargar ventana de parámetros",
+					"¡Tienes que escoger un fichero .zip!",
 					"Error crítico", JOptionPane.ERROR_MESSAGE);
 		}
 	}

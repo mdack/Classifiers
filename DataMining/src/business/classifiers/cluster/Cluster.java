@@ -36,8 +36,6 @@ public abstract class Cluster implements Comparable<Cluster>{
 	public void setId_cluster(int id_cluster) {
 		this.id_cluster = id_cluster;
 	}
-		
-	public abstract float calculateValue();
 
 	public abstract List<Signal> getSignals();
 
@@ -56,6 +54,8 @@ public abstract class Cluster implements Comparable<Cluster>{
 	public abstract void addClustersImg(List<Image> imgs);
 
 	public abstract void addItem(Object obj);
+	
+	public abstract void removeItem(Object obj);
 	
 	public abstract String toString();
 

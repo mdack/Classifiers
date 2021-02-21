@@ -6,6 +6,7 @@ import presentation.command.classifiers.CommandAgrupamientoSec;
 import presentation.command.classifiers.CommandBatchelorWilkins;
 import presentation.command.classifiers.CommandHierarchical;
 import presentation.command.classifiers.CommandKMeans;
+import presentation.command.classifiers.CommandMatrizSimilitud;
 import presentation.command.file.CommandFile;
 import presentation.controller.BusinessEvent;
 
@@ -27,6 +28,8 @@ public class CommandFactoryImp extends CommandFactory {
 			return new CommandAgrupamientoSec();
 		case BusinessEvent.ADAPTATIVE:
 			return new CommandAdaptative();
+		case BusinessEvent.MATRIZSIMILITUD:
+			return new CommandMatrizSimilitud();
 		}
 		
 		return null;

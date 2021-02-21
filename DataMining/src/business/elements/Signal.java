@@ -1,7 +1,6 @@
 package business.elements;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import business.classifiers.adaptative.AdaptativeElement;
@@ -28,15 +27,25 @@ public class Signal implements AdaptativeElement{
 	}
 
 
-	public double calculateValue() {
-		int sum = 0;
-		List<Double> list = new ArrayList<Double>(signal.values());
+	public double[] calculateValue() {
+		double[] values = new double[2];
+		values[0] = 0;
+		values[1] = 0;
 		
-		for(int i = 0; i < list.size();i++) {
-			sum += list.get(i);
+		if(!signal.values().isEmpty()) {
+			double sum1 = 0;
+			double sum2 = 0;
+		
+			for(Map.Entry<Double,Double> entry : signal.entrySet()) {
+				sum1 += entry.getKey();
+				sum2 += entry.getValue();
+			}
+			
+			values[0] = sum1/signal.size();
+			values[1] = sum2/signal.size();
 		}
 		
-		return sum / list.size();
+		return values;
 	}
 
 	public double calculateDistanceTo(Signal sig) {		

@@ -11,26 +11,36 @@ public class ClusterSig extends Cluster {
 	
 	private List<Signal> list_files = new ArrayList<>();
 	private Signal centroid;
+	private double[] central_values = new double[2];
 
 	public ClusterSig(int i, Signal signal) {
 		super(i);
 		list_files.add(signal);
 		centroid = signal;
+		this.setCentral_values(this.calculateValue());
 	}
 
 	public ClusterSig() {
 		super();
 	}
 
-	@Override
-	public float calculateValue() {
-		float value = 0;
+	public double[] calculateValue() {
+		double[] values = new double[2];
+		values[0] = 0;
+		values[1] = 0;
 		
 		for(Signal sig: this.list_files) {
-				value += sig.calculateValue();
+			double[] v = sig.calculateValue();	
+			
+			values[0] += v[0];
+			values[1] += v[1];
+
 		}
+		
+		values[0] = values[0] / list_files.size();
+		values[1] = values[1] / list_files.size();
 	
-		return value / list_files.size();
+		return values;
 	}
 
 	@Override
@@ -146,6 +156,20 @@ public class ClusterSig extends Cluster {
 		String cad = "Cluster " + this.id_cluster +  " con centro: " + centroid.getName() + "\n";
 		cad += "Total patrones: " + list_files.size();
 		return cad;
+	}
+
+	@Override
+	public void removeItem(Object obj) {
+		 Signal sig = (Signal) obj;
+		 this.list_files.remove(sig);	
+	}
+
+	public double[] getCentral_values() {
+		return central_values;
+	}
+
+	public void setCentral_values(double[] central_values) {
+		this.central_values = central_values;
 	}
 
 }

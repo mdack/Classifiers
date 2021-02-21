@@ -15,6 +15,7 @@ public class ClusterImg extends Cluster {
 		super(i);
 		list_files.add(image);
 		centroid = image;
+		this.central_value = this.calculateValue();
 	}	
 	
 	public ClusterImg() {
@@ -25,7 +26,6 @@ public class ClusterImg extends Cluster {
 		return list_files;
 	}
 	
-	@Override
 	public float calculateValue() {
 		float value = 0;
 			for(Image img: this.list_files) {
@@ -120,6 +120,12 @@ public class ClusterImg extends Cluster {
 		String cad = "Cluster " + this.id_cluster +  " con centro: " + centroid.getName() + "\n";
 		cad += "Total patrones: " + list_files.size();
 		return cad;
+	}
+
+	@Override
+	public void removeItem(Object obj) {
+		Image img = (Image) obj;
+		this.list_files.remove(img);
 	}
 	
 	

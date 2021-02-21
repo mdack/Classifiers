@@ -121,7 +121,7 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 							double distance = Double.MAX_VALUE;
 							int m = this.getIdNearestCluster(cl.getCentroid(), distance);
 							
-							this.mezclaClusters(i, m);
+							this.mezclaClusters(m, i);
 						}
 					}
 					

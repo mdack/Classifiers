@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import business.classifiers.cluster.Cluster;
 import business.classifiers.cluster.ClusterImg;
@@ -91,13 +92,28 @@ public class KMeansImp implements KMeans{
 	        boolean done = true;
 
 	        for(Cluster cluster: clusters) {
-	        	double new_value = cluster.calculateValue();
-	        	double old_value = cluster.getCentral_value();
-	                cluster.setCentral_value(new_value);
+	        	if(this.areSignals) {
+	        		ClusterSig cl = (ClusterSig) cluster;
+	        		double[] new_value = cl.calculateValue();
+	        		double[] old_value = cl.getCentral_values();
+	                cl.setCentral_values(new_value);
 
-	                if(Math.abs(new_value - old_value) > TOL) { //Nivel de tolerancia para ver si los clusters ya están estabilizados
+	                double result = (new_value[0] - old_value[0]) + (new_value[1] - old_value[1]);
+	                
+	                if(Math.abs(result) > TOL) { //Nivel de tolerancia para ver si los clusters ya están estabilizados
 	                    done = false;
 	                }
+	        	}
+	        	else {
+	        		ClusterImg cl = (ClusterImg) cluster;
+	        		double new_value = cl.calculateValue();
+	        		double value = cl.getCentral_value();
+	        		cl.setCentral_value(new_value);
+	        		
+	        		if(Math.abs(new_value - value) > TOL) {
+	        			done = false;
+	        		}
+	        	}
 	        }
 
 	        return done;
@@ -110,11 +126,11 @@ public class KMeansImp implements KMeans{
 
                 if(id_old_cluster != id_nearest_center) { //si le toca un nuevo cluster
                     if(id_old_cluster != -1)  //Se borra del anterior
-                        clusters.get(id_old_cluster).getImages().remove(img);
+                        clusters.get(id_old_cluster).removeItem(img);;
 
                     //Se añade en el nuevo cluster
                     img.setId_cluster(id_nearest_center);
-                    clusters.get(id_nearest_center).getImages().add(img);
+                    clusters.get(id_nearest_center).addItem(img);
                 }
             }
 		}
@@ -167,14 +183,12 @@ public class KMeansImp implements KMeans{
 	                    Cluster cluster = null;
 	                    if(this.areSignals) {
 	                    	this.signals.get(index_point).setId_cluster(i);
-	                    	cluster = new ClusterSig(i, signals.get(index_point));
-	                    	cluster.setCentroid(signals.get(index_point));
+	                    	cluster = new ClusterSig(i, signals.get(index_point));	                    	
 	                    }
 	                    else {
 	                    	this.imgs.get(index_point).setId_cluster(i);
 	                    	cluster = new ClusterImg(i, imgs.get(index_point));
-	                    	cluster.setCentroid(imgs.get(index_point));
-	                    }	                    
+	                    }	
 	                    clusters.add(cluster);
 	                    found = true;
 	                }
@@ -299,30 +313,16 @@ public class KMeansImp implements KMeans{
 	    }
 	    
 	    private double calculateDistanceSignal(Signal sig, Cluster cluster) {
-	    	 double sum = 0;
+	    	 ClusterSig cl = (ClusterSig) cluster;
 
-		    	Signal centroid = (Signal) cluster.getCentroid();
-		    	
-		    	int size=0;
-		    	
-		    	//Elegimos el menor tamaño de la señal para no salirnos del array
-		        if(sig.getSignal().size() > centroid.getSignal().size())
-		        	size = centroid.getSignal().size();
-		        else
-		        	size = sig.getSignal().size();
-		        	        
-		        Object[] list_t = sig.getSignal().keySet().toArray();
-		        Object[] list_t_centroid = centroid.getSignal().keySet().toArray();
-		        
-		        for(int i = 0; i < size; i++) {
-		        	double key1 = (Double) list_t[i];
-		        	double key2 = (Double) list_t_centroid[i];
-		        	
-		        	sum += Math.pow(key1 - key2 , 2);
-		        	sum += Math.pow(sig.getSignal().get(key1) - centroid.getSignal().get(key2) , 2);
-		        }
-
-				return Math.sqrt(sum);
+	    	double sum1 = 0;
+			double sum2 = 0;
+			
+				for(Map.Entry<Double,Double> entry : sig.getSignal().entrySet()) {
+					sum1 += Math.pow(cl.getCentral_values()[0] - entry.getKey() , 2);
+					sum2 += Math.pow(cl.getCentral_values()[1] - entry.getValue() , 2);
+				}
+			return Math.sqrt(sum1+sum2);
 	    }
 
 
