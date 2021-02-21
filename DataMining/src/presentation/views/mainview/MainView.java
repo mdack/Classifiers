@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.text.DefaultCaret;
 
 import business.transfers.TZip;
 import presentation.dispatcher.Context;
@@ -34,21 +34,20 @@ public class MainView extends JFrame{
 		
 	private TZip tZip = null;
 	private JTextArea taDisplay;
+	public String text = "";
 	
 	private static MainView instance;
 	
 	public MainView() {
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		    	initComponents();
-		    }
-		  });
+		instance = this;
+		initComponents();
 	}
 	
 	private void initComponents(){
 		//main window configuration
 		this.setTitle(NAME_TITLE);	//Window title
-		this.setMinimumSize(new Dimension(700,500));	//Minimum size of the window
+		this.setMinimumSize(new Dimension(700,500));
+        this.setResizable(false); //Minimum size of the window
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);	//When you close the window, the app stops running
 		this.setLocationRelativeTo(null);
 		
@@ -60,7 +59,7 @@ public class MainView extends JFrame{
 		addBottom(window);	//Bottom added (South region)
 				
 		//Panel added to the frame
-		this.add(window);	
+		this.add(window);
 	}
 	public static MainView getInstance() {
 		if(instance==null){
@@ -96,7 +95,7 @@ public class MainView extends JFrame{
 	}
 	
 	private void addBottom(JPanel window){
-		JLabel south = new JLabel ("Software v2.0.0");		//Label for the bottom info
+		JLabel south = new JLabel ("Software v3.0.0");		//Label for the bottom info
 		south.setBackground(Color.orange);					//Background color
 		south.setFont(new Font("Header",Font.ITALIC, 12));	//Header font. Size 18.
 		south.setForeground(Color.BLACK);					//Font color
@@ -165,10 +164,12 @@ public class MainView extends JFrame{
 		taDisplay = new JTextArea();
 		taDisplay.setLineWrap(true);
 		taDisplay.setEditable(false);
+		taDisplay.setFocusable(true);
+		DefaultCaret caret = (DefaultCaret) taDisplay.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		taDisplay.setText("Consola de resultados: \n");
 		
 		scroll = new JScrollPane(taDisplay);
-		scroll.setBounds(30, 30, 300, 200);	
 		
 		return scroll;
 	}
@@ -187,7 +188,7 @@ public class MainView extends JFrame{
 		case DispatcherResults.readZipOK:
 			tZip = (TZip) c.getDatos();
 			taDisplay.append(tZip.toString());
-			taDisplay.append("Se han obtenido los archivos del zip correctamente.\\n");
+			taDisplay.append("\nSe han obtenido los archivos del zip correctamente.\n");
 			break;
 		case DispatcherResults.readZipError:
 			taDisplay.append("No se ha podido leer el archivo zip.\n");
@@ -210,17 +211,9 @@ public class MainView extends JFrame{
 		this.tZip = tZip;
 	}
 	
-	public JTextArea getTaDisplay() {
-		return taDisplay;
-	}
-
-	public void setTaDisplay(JTextArea taDisplay) {
-		this.taDisplay = taDisplay;
-	}
-
-	public void updateTextarea(String text) {
+	public void UpdateArea(String text) {
 		taDisplay.append(text);
 	}
-
+	
 	
 }

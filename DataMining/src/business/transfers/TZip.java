@@ -34,12 +34,12 @@ public class TZip {
 	}
 	
 	public String toString() {
-		String text = "Archivos del zip: " + this.path + "\n";
+		String text = "\nArchivos del zip: " + this.path + "\n";
 		
 		text += "\n****************************************************************\n";
 		
 		for(int i = 0; i < list.size(); i++) {
-			text += "Archivo " + i + ": " + list.get(i).toString() + "\n";
+			text += "Archivo " + i + ": " + list.get(i).getName() + "\n";
 		}
 		
 		text += "\n****************************************************************\n";

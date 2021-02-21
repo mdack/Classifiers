@@ -16,6 +16,7 @@ import business.factory.FactoryAS;
 import business.files.Data;
 import business.transfers.TKMeans;
 import business.transfers.TResult;
+import presentation.views.mainview.MainView;
 
 
 public class KMeansImp implements KMeans{
@@ -59,18 +60,19 @@ public class KMeansImp implements KMeans{
 				this.areSignals = false;
 			}
 			
-			System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
-			
-			System.out.println("Empieza algoritmo K-Means : " + hourdateFormat.format(date));
+			MainView.getInstance().UpdateArea("Se han cargado todos los archivos : " + hourdateFormat.format(date) + "\n");
+			MainView.getInstance().UpdateArea("\n ******************************************************************************** \n");
+			MainView.getInstance().UpdateArea("Empieza algoritmo K-Means : " + hourdateFormat.format(date) + "\n");
 			
 			this.K = transfer.getK();
 	        this.clusters = new ArrayList<>();
 			
-			initClusters(transfer.gettInit());
+			//Inicialización
+	        initClusters(transfer.gettInit());
 			
+			//Asignación y actualización de los centros
 		    boolean	goal = false;
 
-	        //Asigno cada patron a un cluster y recalculo
 	        while(!goal) {
 	        	if(transfer.gettZip().isAreSignals()) {
 	        		this.loopKMeans_Signals();
@@ -80,7 +82,7 @@ public class KMeansImp implements KMeans{
 	            goal = recalculateCluster();
 	        }		
 	        
-	        System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
+	        MainView.getInstance().UpdateArea("El algoritmo ha terminado : " + hourdateFormat.format(date) + "\n");
 	        
 			TResult result = new TResult();
 			result.setList(clusters);
@@ -88,6 +90,232 @@ public class KMeansImp implements KMeans{
 			return result;
 		}
 		
+		// ---------------------------------------------------------------------------------
+		// INICIALIZACION
+		// ---------------------------------------------------------------------------------
+
+				private void initClusters(int gettInit) {
+					switch(gettInit) {
+					case 0:
+						this.initClustersArbitraria();
+						break;
+					case 1:
+						initClustersInversa();
+						break;
+					case 2:
+						initClusterDirecta();
+						break;
+					}
+					
+				}
+				
+			    private void initClustersArbitraria(){
+			        ArrayList<Integer> prohibited_indexes = new ArrayList<>();
+
+			        //inicializo los cluster con un archivo aleatorio que no pertenezca a otro cluster
+			        for(int i = 0; i < K; i++) {
+			            boolean found = false;
+
+			            while(!found) {
+			                int index_point = (int) Math.floor(Math.random()*this.total_files);
+
+			                if(!prohibited_indexes.contains(index_point)) {
+			                    prohibited_indexes.add(index_point);
+			                    
+			                    Cluster cluster = null;
+			                    if(this.areSignals) {
+			                    	this.signals.get(index_point).setId_cluster(i);
+			                    	cluster = new ClusterSig(i, signals.get(index_point));	                    	
+			                    }
+			                    else {
+			                    	this.imgs.get(index_point).setId_cluster(i);
+			                    	cluster = new ClusterImg(i, imgs.get(index_point));
+			                    }	
+			                    clusters.add(cluster);
+			                    found = true;
+			                }
+			            }
+			        }
+			    }
+
+				private void initClusterDirecta() {
+					double max_t = Double.MIN_VALUE;
+					double min_t = Double.MAX_VALUE;
+					double max_s = Double.MIN_VALUE;
+					double min_s = Double.MAX_VALUE;
+					double max_dist = Double.MIN_VALUE;
+					double min_dist = Double.MAX_VALUE;
+					
+					for(int l = 0; l < K; l++) {
+						//Obtener la menor y mayor distancia entre los patrones
+						if(this.areSignals) {
+							
+							for(int i = 0; i < signals.size();i++) {
+								double[] v = signals.get(i).calculateValue();
+										
+								if(v[0] > max_t) {
+									max_t = v[0];
+								}
+								else if(v[0] < min_t) {
+									min_t = v[0];
+								}
+								
+								if(v[1] > max_s) {
+									max_s = v[1];
+								}
+								else if(v[1] < min_s) {
+									min_s = v[1];
+								}
+								
+							}
+							
+							double seg1 = (max_t - min_t) / (K+1);
+							double seg2 = (max_s - min_s) / (K+1);
+							
+							ClusterSig c1 = new ClusterSig();
+							double[] values = new double[2];
+							values[0] = seg1;
+							values[1] = seg2;
+							c1.setCentral_values(values);
+							c1.setId_cluster(l);
+				
+							clusters.add(c1);
+						}
+							
+						else {
+							double dist = 0;
+							for(int i = 0; i < imgs.size();i++) {
+								for(int j = 0; j < imgs.size(); j++) {
+									if(i != j) {
+										dist = imgs.get(i).calculateDistanceTo(imgs.get(j));
+										if(dist > max_dist) {
+											max_dist = dist;
+										}
+										else if(dist < min_dist) {
+											min_dist = dist;
+										}
+									}
+								}
+							}
+							double seg = (max_dist - min_dist) / (K+1);
+							
+							Cluster c1 = new ClusterImg();
+							c1.setCentral_value(seg);
+							c1.setId_cluster(l);
+
+							clusters.add(c1);
+						}
+					}
+				}
+
+				private void initClustersInversa() {
+					 int index = this.total_files-1;
+				        //inicializo los cluster con un archivo aleatorio que no pertenezca a otro cluster
+				        for(int i = 0; i < K; i++) {
+				        	Cluster cluster = null;
+		                    if(this.areSignals) {
+		                    	this.signals.get(index).setId_cluster(i);
+		                    	cluster = new ClusterSig(i, signals.get(index));
+		                    }
+		                    else {
+		                    	this.imgs.get(index).setId_cluster(i);
+		                    	cluster = new ClusterImg(i, imgs.get(index));
+		                    }	                    
+		                    clusters.add(cluster);
+		                    index--;
+				        }
+				}
+				
+				// ---------------------------------------------------------------------------------------
+				// BUCLES
+				// ---------------------------------------------------------------------------------------	
+				
+				private void loopKMeans_Imgs() {
+		            for (Image img : this.imgs) {
+		                int id_old_cluster = img.getId_cluster();
+		                int id_nearest_center = getIdNearestCluster(img);
+
+		                if(id_old_cluster != id_nearest_center) { //si le toca un nuevo cluster
+		                    if(id_old_cluster != -1)  //Se borra del anterior
+		                        clusters.get(id_old_cluster).removeItem(img);;
+
+		                    //Se añade en el nuevo cluster
+		                    img.setId_cluster(id_nearest_center);
+		                    clusters.get(id_nearest_center).addItem(img);
+		                }
+		            }
+				}
+				
+				private void loopKMeans_Signals() {
+					
+		            for (Signal sig : this.signals) {
+		                int id_old_cluster = sig.getId_cluster();
+		                int id_nearest_center = getIdNearestCluster(sig);
+
+		                if(id_old_cluster != id_nearest_center) { //si le toca un nuevo cluster
+		                    if(id_old_cluster != -1)  //Se borra del anterior
+		                        clusters.get(id_old_cluster).removeItem(sig);
+
+		                    //Se añade en el nuevo cluster
+		                    sig.setId_cluster(id_nearest_center);
+		                    clusters.get(id_nearest_center).addItem(sig);
+		                }
+		            }
+				}
+				
+				   private int getIdNearestCluster(Object obj) {
+				        double min_dist = Float.MAX_VALUE;
+				        int id_cluster = 0;
+
+				        for(Cluster cluster: clusters) {
+				            double dist;
+				            
+				            if(this.areSignals) {
+				            	Signal sig = (Signal) obj;
+				            	dist = this.calculateDistanceSignal(sig, cluster);
+				            }else {
+				            	Image img = (Image) obj;
+				            	dist = this.calculateDistanceImgs(img, cluster);
+				            }
+
+				            if(dist < min_dist) {
+				                min_dist = dist;
+				                id_cluster = cluster.getId_cluster();
+				            }
+				        }
+
+				        return id_cluster;
+				    }
+				    
+				    private double calculateDistanceImgs(Image img, Cluster cluster) {
+			            double sum = 0;
+			            
+			            for(int i = 0; i < img.getRows(); i++) {
+			            	for(int j = 0; j < img.getCols(); j++) {
+			            		sum += Math.pow(cluster.getCentral_value() - img.getPixel(i, j), 2);
+			            	}
+			            }
+			            
+						return Math.sqrt(sum);
+				    }
+				    
+				    private double calculateDistanceSignal(Signal sig, Cluster cluster) {
+				    	 ClusterSig cl = (ClusterSig) cluster;
+
+				    	double sum1 = 0;
+						double sum2 = 0;
+						
+							for(Map.Entry<Double,Double> entry : sig.getSignal().entrySet()) {
+								sum1 += Math.pow(cl.getCentral_values()[0] - entry.getKey() , 2);
+								sum2 += Math.pow(cl.getCentral_values()[1] - entry.getValue() , 2);
+							}
+						return Math.sqrt(sum1+sum2);
+				    }
+				
+		
+		// ---------------------------------------------------------------------------------------
+		// CENTROIDE
+		// ---------------------------------------------------------------------------------------		
 	    private boolean recalculateCluster(){
 	        boolean done = true;
 
@@ -119,211 +347,4 @@ public class KMeansImp implements KMeans{
 	        return done;
 	    }
 		
-		private void loopKMeans_Imgs() {
-            for (Image img : this.imgs) {
-                int id_old_cluster = img.getId_cluster();
-                int id_nearest_center = getIdNearestCluster(img);
-
-                if(id_old_cluster != id_nearest_center) { //si le toca un nuevo cluster
-                    if(id_old_cluster != -1)  //Se borra del anterior
-                        clusters.get(id_old_cluster).removeItem(img);;
-
-                    //Se añade en el nuevo cluster
-                    img.setId_cluster(id_nearest_center);
-                    clusters.get(id_nearest_center).addItem(img);
-                }
-            }
-		}
-		
-		private void loopKMeans_Signals() {
-			
-            for (Signal sig : this.signals) {
-                int id_old_cluster = sig.getId_cluster();
-                int id_nearest_center = getIdNearestCluster(sig);
-
-                if(id_old_cluster != id_nearest_center) { //si le toca un nuevo cluster
-                    if(id_old_cluster != -1)  //Se borra del anterior
-                        clusters.get(id_old_cluster).getSignals().remove(sig);
-
-                    //Se añade en el nuevo cluster
-                    sig.setId_cluster(id_nearest_center);
-                    clusters.get(id_nearest_center).getSignals().add(sig);
-                }
-            }
-		}
-
-		private void initClusters(int gettInit) {
-			switch(gettInit) {
-			case 0:
-				this.initClustersArbitraria();
-				break;
-			case 1:
-				initClustersInversa();
-				break;
-			case 2:
-				initClusterDirecta();
-				break;
-			}
-			
-		}
-		
-	    private void initClustersArbitraria(){
-	        ArrayList<Integer> prohibited_indexes = new ArrayList<>();
-
-	        //inicializo los cluster con un archivo aleatorio que no pertenezca a otro cluster
-	        for(int i = 0; i < K; i++) {
-	            boolean found = false;
-
-	            while(!found) {
-	                int index_point = (int) Math.floor(Math.random()*this.total_files);
-
-	                if(!prohibited_indexes.contains(index_point)) {
-	                    prohibited_indexes.add(index_point);
-	                    
-	                    Cluster cluster = null;
-	                    if(this.areSignals) {
-	                    	this.signals.get(index_point).setId_cluster(i);
-	                    	cluster = new ClusterSig(i, signals.get(index_point));	                    	
-	                    }
-	                    else {
-	                    	this.imgs.get(index_point).setId_cluster(i);
-	                    	cluster = new ClusterImg(i, imgs.get(index_point));
-	                    }	
-	                    clusters.add(cluster);
-	                    found = true;
-	                }
-	            }
-	        }
-	    }
-
-		private void initClusterDirecta() {
-			double max_dist = Double.MIN_VALUE;
-			double min_dist = Double.MAX_VALUE;
-			
-			//Obtener la menor y mayor distancia entre los patrones
-			if(this.areSignals) {
-				double dist = 0;
-				for(int i = 0; i < signals.size();i++) {
-					for(int j = 0; j < signals.size(); j++) {
-						if(i != j) {
-							dist = signals.get(i).calculateDistanceTo(signals.get(j));
-							if(dist > max_dist) {
-								max_dist = dist;
-							}
-							else if(dist < min_dist) {
-								min_dist = dist;
-							}
-						}
-					}
-				}
-				double seg = (max_dist - min_dist) / (K+1);
-				Cluster c1 = new ClusterSig();
-				c1.setCentral_value(seg);
-				c1.setId_cluster(0);
-				
-				Cluster c2 = new ClusterSig();
-				c2.setCentral_value(seg*2);
-				c2.setId_cluster(1);
-				
-				clusters.add(c1);
-				clusters.add(c2);
-			}
-			else {
-				double dist = 0;
-				for(int i = 0; i < imgs.size();i++) {
-					for(int j = 0; j < imgs.size(); j++) {
-						if(i != j) {
-							dist = imgs.get(i).calculateDistanceTo(imgs.get(j));
-							if(dist > max_dist) {
-								max_dist = dist;
-							}
-							else if(dist < min_dist) {
-								min_dist = dist;
-							}
-						}
-					}
-				}
-				double seg = (max_dist - min_dist) / (K+1);
-				
-				Cluster c1 = new ClusterImg();
-				c1.setCentral_value(seg);
-				c1.setId_cluster(0);
-				
-				Cluster c2 = new ClusterImg();
-				c2.setCentral_value(seg*2);
-				c2.setId_cluster(1);
-				
-				clusters.add(c1);
-				clusters.add(c2);
-			}
-		}
-
-		private void initClustersInversa() {
-			 int index = this.total_files-1;
-		        //inicializo los cluster con un archivo aleatorio que no pertenezca a otro cluster
-		        for(int i = 0; i < K; i++) {
-		        	Cluster cluster = null;
-                    if(this.areSignals) {
-                    	this.signals.get(index).setId_cluster(i);
-                    	cluster = new ClusterSig(i, signals.get(index));
-                    }
-                    else {
-                    	this.imgs.get(index).setId_cluster(i);
-                    	cluster = new ClusterImg(i, imgs.get(index));
-                    }	                    
-                    clusters.add(cluster);
-                    index--;
-		        }
-		}
-		
-	    private int getIdNearestCluster(Object obj) {
-	        double min_dist = Float.MAX_VALUE;
-	        int id_cluster = 0;
-
-	        for(Cluster cluster: clusters) {
-	            double dist;
-	            
-	            if(this.areSignals) {
-	            	Signal sig = (Signal) obj;
-	            	dist = this.calculateDistanceSignal(sig, cluster);
-	            }else {
-	            	Image img = (Image) obj;
-	            	dist = this.calculateDistanceImgs(img, cluster);
-	            }
-
-	            if(dist < min_dist) {
-	                min_dist = dist;
-	                id_cluster = cluster.getId_cluster();
-	            }
-	        }
-
-	        return id_cluster;
-	    }
-	    
-	    private double calculateDistanceImgs(Image img, Cluster cluster) {
-            double sum = 0;
-            
-            for(int i = 0; i < img.getRows(); i++) {
-            	for(int j = 0; j < img.getCols(); j++) {
-            		sum += Math.pow(cluster.getCentral_value() - img.getPixel(i, j), 2);
-            	}
-            }
-            
-			return Math.sqrt(sum);
-	    }
-	    
-	    private double calculateDistanceSignal(Signal sig, Cluster cluster) {
-	    	 ClusterSig cl = (ClusterSig) cluster;
-
-	    	double sum1 = 0;
-			double sum2 = 0;
-			
-				for(Map.Entry<Double,Double> entry : sig.getSignal().entrySet()) {
-					sum1 += Math.pow(cl.getCentral_values()[0] - entry.getKey() , 2);
-					sum2 += Math.pow(cl.getCentral_values()[1] - entry.getValue() , 2);
-				}
-			return Math.sqrt(sum1+sum2);
-	    }
-
-
 }

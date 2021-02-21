@@ -16,6 +16,7 @@ import business.elements.FileData;
 import business.elements.Image;
 import business.elements.Signal;
 import business.transfers.TResult;
+import presentation.views.mainview.MainView;
 
 public class DataImp implements Data{
 
@@ -88,9 +89,7 @@ public class DataImp implements Data{
 	public List<Signal> readSignals() {
 		List<Signal> list = new ArrayList<>();
 
-		for(FileData fd : list_files) {
-			System.out.println(fd.getName() + "\n");
-			
+		for(FileData fd : list_files) {			
 			String text = null;
 			try (Scanner scanner = new Scanner(fd.getData(), StandardCharsets.UTF_8.name())) {
 				TreeMap<Double,Double> list_s = new TreeMap<>();
@@ -129,27 +128,46 @@ public class DataImp implements Data{
             if (directorio.mkdirs()) {
             	writeResults(transfer.getList());         	
             	
-                System.out.println("Resultados copiados en la ruta C:/Resultados-Clasificadores/");
+            	MainView.getInstance().UpdateArea("Resultados copiados en la ruta C:/Resultados-Clasificadores/\n");
             } else {
-                System.out.println("Error al crear directorio");
+            	MainView.getInstance().UpdateArea("Error al crear directorio\n");
             }
         }else {
-        	directorio.delete();
+        	deleteFolder(directorio);
         	
-        	if (directorio.mkdirs()) {
-            	writeResults(transfer.getList());
-            	System.out.println("Resultados copiados en la ruta C:/Resultados-Clasificadores/");
-        	}
-        	else {
-                System.out.println("Error al escribir resultados");
-            }
+        	try {
+				Thread.sleep(3000);
+				MainView.getInstance().UpdateArea("Directorio vaciado...\n");
+	            writeResults(transfer.getList());
+	            MainView.getInstance().UpdateArea("Resultados copiados en la ruta C:/Resultados-Clasificadores/\n");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
+			}
+
         }
 		
 	}
+	
+	public static void deleteFolder(File folder) { 
+		File[] files = folder.listFiles(); 
+		if(files!=null) { 
+			//some JVMs return null for empty dirs 
+			for(File f: files) { 
+				if(f.isDirectory()) { 
+					deleteFolder(f); 
+				} 
+				else { 
+					f.delete(); 
+				} 
+			} 
+		} 
+	}
+
 
 	private void writeResults(List<Cluster> list) {
 		for(int i = 0; i < list.size(); i++) {
-    		File directorio2 = new File("C:/Resultados-Clasificadores/Cluster-" + i);
+    		File directorio2 = new File("C:/Resultados-Clasificadores/Cluster" + i);
             	if (directorio2.mkdirs()) {
             		List<Image> list_img = list.get(i).getImages();
             		
@@ -189,10 +207,12 @@ public class DataImp implements Data{
 		           if (null != fichero)
 		              fichero.close();
 		           } catch (Exception e2) {
-		              e2.printStackTrace();
+		        	   System.out.println(e2.getMessage());
 		           }
 		        }	
 			}
+			
+			if(centroide != null) {
 				PrintWriter pw_c = null;
 				FileWriter fichero_c = null;
 		        try {
@@ -209,9 +229,10 @@ public class DataImp implements Data{
 				           if (null != fichero_c)
 				              fichero_c.close();
 				           } catch (Exception e2) {
-				              e2.printStackTrace();
+				        	   System.out.println(e2.getMessage());
 				           }
-				        }
+				}
+			}
 		}
 	}
         
@@ -242,33 +263,36 @@ public class DataImp implements Data{
 		           if (null != fichero)
 		              fichero.close();
 		           } catch (Exception e2) {
-		              e2.printStackTrace();
+		        	   System.out.println(e2.getMessage());
 		           }
 		        }
 			}
-			PrintWriter pw_c = null;
-			FileWriter fichero_c = null;
-	        try {
-				fichero_c = new FileWriter("C:/Resultados-Clasificadores/Cluster" + id + "/centroide.txt");
-				pw_c = new PrintWriter(fichero_c);
-				for (int i = 0; i < centroide.getRows(); i++) {
-	            	for(int j = 0; j < centroide.getCols(); j++) {
-	            		int r = i+1;
-	            		int c = j+1;
-	            		pw_c.println("\t" + r + "\t" + c + "\t" + centroide.getPixel(i, j));
-	            	}
-	            }    
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}finally {
-		           try {
-		           if (null != fichero_c)
-		              fichero_c.close();
-		           } catch (Exception e2) {
-		              e2.printStackTrace();
-		           }
+			
+			if(centroide != null) {
+				PrintWriter pw_c = null;
+				FileWriter fichero_c = null;
+		        try {
+					fichero_c = new FileWriter("C:/Resultados-Clasificadores/Cluster" + id + "/centroide.txt");
+					pw_c = new PrintWriter(fichero_c);
+					for (int i = 0; i < centroide.getRows(); i++) {
+		            	for(int j = 0; j < centroide.getCols(); j++) {
+		            		int r = i+1;
+		            		int c = j+1;
+		            		pw_c.println("\t" + r + "\t" + c + "\t" + centroide.getPixel(i, j));
+		            	}
+		            }    
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}finally {
+			           try {
+			           if (null != fichero_c)
+			              fichero_c.close();
+			           } catch (Exception e2) {
+			        	   System.out.println(e2.getMessage());
+			           }
 		        }
+			}
 		}
 		
 	}

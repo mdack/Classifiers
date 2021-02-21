@@ -25,7 +25,7 @@ import presentation.views.mainview.MainView;
 @SuppressWarnings("serial")
 public class JKMeansImp extends JKMeans{
 
-	private final static String[] inits = {"Arbitraria", "Inversa", "Directa"};
+	private final static String[] inits = {"Arbitraria", "Inversa", "Proporcional"};
 	
 	private TResult transfer;
 	
@@ -99,23 +99,29 @@ public class JKMeansImp extends JKMeans{
 		Integer cas = (Integer) c.getEvento();
 		
 		switch(cas) {
-			case(DispatcherResults.KMeansCorrect):{
-							JOptionPane.showMessageDialog(null,
+			case(DispatcherResults.KMeansCorrect):
+				transfer = (TResult) c.getDatos();
+								
+				JOptionPane.showMessageDialog(null,
 						"Cluster creados!",
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
-				this.dispose();
-				transfer = (TResult) c.getDatos();
 				
 				Data data = FactoryAS.getInstance().writeResult();
 				data.writeCluster(transfer);
 				
+				MainView.getInstance().UpdateArea(transfer.toString());
 				System.out.println(transfer.toString());
-			}break;
-			case(DispatcherResults.KMeansError):{
+								
+				this.dispose();
+				
+				
+			break;
+			case(DispatcherResults.KMeansError):
 				JOptionPane.showMessageDialog(null,
 						"Error al intentar ejecutar clasificador KMeans",
-						"Error crítico", JOptionPane.ERROR_MESSAGE);
-			}break;
+						"Error crítico", 
+						JOptionPane.ERROR_MESSAGE);
+			break;
 		}
 	}
 

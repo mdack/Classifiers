@@ -153,8 +153,13 @@ public class ClusterSig extends Cluster {
 
 	@Override
 	public String toString() {
-		String cad = "Cluster " + this.id_cluster +  " con centro: " + centroid.getName() + "\n";
-		cad += "Total patrones: " + list_files.size();
+		String cad = "Cluster " + this.id_cluster + " : \n";
+		
+		if(centroid != null)
+			cad +=  "Centro: " + centroid.getName() + "\n";
+		
+		cad += "Total patrones: " + list_files.size() + "\n";
+		
 		return cad;
 	}
 
