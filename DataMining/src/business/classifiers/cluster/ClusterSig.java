@@ -24,6 +24,10 @@ public class ClusterSig extends Cluster {
 		super();
 	}
 
+	public ClusterSig(int id) {
+		super(id);
+	}
+
 	public double[] calculateValue() {
 		double[] values = new double[2];
 		values[0] = 0;

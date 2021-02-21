@@ -1,24 +1,26 @@
-package business.classifiers.hierarchical;
+package business.classifiers.cluster;
 
 public class Distance implements Comparable<Distance>, Cloneable {
 
-    private Double distance;
-    private Double weight;
+    private double distance;
+    private double weight;
 
     public Distance() {
-		this(0.0);
+		this.distance = 0;
+		this.weight = 1;
     }
 
-    public Distance(Double distance) {
-		this(distance, 1.0);
+    public Distance(double distance) {
+		this.distance = distance;
+		this.weight = 1;
     }
 
-    public Distance(Double distance, Double weight) {
+    public Distance(double distance, double weight) {
         this.distance = distance;
         this.weight = weight;
     }
 
-    public Double getDistance() {
+    public double getDistance() {
         return distance;
     }
 
@@ -26,7 +28,7 @@ public class Distance implements Comparable<Distance>, Cloneable {
         this.distance = distance;
     }
 
-    public Double getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -35,16 +37,21 @@ public class Distance implements Comparable<Distance>, Cloneable {
     }
 
     public boolean isNaN() {
-        return distance == null || distance.isNaN();
+        return distance == 0;
     }
 
     @Override
     public int compareTo(Distance distance) {
-        return distance == null ? 1 : getDistance().compareTo(distance.getDistance());
+    	if(distance == null) {
+    		return 1;
+    	}
+    	else {
+    		return 0;
+    	}
     }
-
+    
     @Override
     public String toString() {
-		return String.format("distance : %.2f, weight : %.2f", distance, weight);
+		return " distancia: " + distance + ", peso: " + weight + "\n";
 	}
 }

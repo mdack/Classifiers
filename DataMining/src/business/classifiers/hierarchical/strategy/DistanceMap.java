@@ -1,4 +1,4 @@
-package business.classifiers.hierarchical;
+package business.classifiers.hierarchical.strategy;
 
 import java.util.*;
 
@@ -59,6 +59,7 @@ public class DistanceMap {
 
     public ClusterPair removeFirst() {
         Item poll = data.poll();
+        
         while (poll != null && poll.removed) {
             poll = data.poll();
         }
@@ -67,6 +68,7 @@ public class DistanceMap {
         }
         ClusterPair link = poll.pair;
         pairHash.remove(poll.hash);
+        
         return link;
     }
 

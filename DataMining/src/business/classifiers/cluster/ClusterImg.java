@@ -22,6 +22,10 @@ public class ClusterImg extends Cluster {
 		super();
 	}
 
+	public ClusterImg(int id) {
+		super(id);
+	}
+
 	public List<Image> getImages() {;
 		return list_files;
 	}

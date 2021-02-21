@@ -34,7 +34,8 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 		
 		Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 		
-		System.out.println("Obteniendo información de archivos : " + hourdateFormat.format(date));
+		MainView.getInstance().UpdateArea("Obteniendo información de archivos : " + hourdateFormat.format(date) + "\n");
+		
 		if(transfer.gettZip().isAreSignals()) {
 			this.signals = data.readSignals();
 			this.total_files = signals.size();
@@ -47,7 +48,7 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 		
 		MainView.getInstance().UpdateArea("Se han cargado todos los archivos : " + hourdateFormat.format(date) + "\n");
 		MainView.getInstance().UpdateArea("\n ******************************************************************************** \n");
-		MainView.getInstance().UpdateArea("Empieza el algoritmo Batchelor y Wilkins : " + hourdateFormat.format(date));
+		MainView.getInstance().UpdateArea("Empieza el algoritmo Batchelor y Wilkins : " + hourdateFormat.format(date) + "\n");
 		
 		//1º Centro: Escogemos un patrón al azar
 		int index = this.getFirstCluster();
@@ -56,8 +57,8 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 		int second_cluster = 0;
 		
 		if(this.areSignals) {
-			cluster = new ClusterSig(A, signals.get(index));
 			signals.get(index).setId_cluster(A);
+			cluster = new ClusterSig(A, signals.get(index));
 			signals.remove(index);
 			
 			clusters.add(cluster);
@@ -73,6 +74,7 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 				}
 			}
 			
+			signals.get(second_cluster).setId_cluster(A);
 			clusters.add(new ClusterSig(A, signals.get(second_cluster)));
 			signals.remove(second_cluster);
 			
@@ -83,14 +85,14 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 			this.agruparPatronesSig();
 		}
 		else {
-			cluster = new ClusterImg(A, imgs.get(index));
 			imgs.get(index).setId_cluster(A);
+			cluster = new ClusterImg(A, imgs.get(index));
 			imgs.remove(index);
 			
 			clusters.add(cluster);
 			A++;
 			
-			//2ª Centro: Escogemos archivo más alejado del primero
+			//2ª Centro: Escogemos patrón más alejado del primero
 			for(int i = 0; i < imgs.size(); i++) {
 				double dist = this.calculateDistanceImgs(imgs.get(i), cluster);
 				
@@ -100,6 +102,7 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 				}
 			}
 			
+			imgs.get(second_cluster).setId_cluster(A);
 			clusters.add(new ClusterImg(A, imgs.get(second_cluster)));
 			imgs.remove(second_cluster);
 			A++;
@@ -119,30 +122,71 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 		return result;
 	}
 	
-	/**
-	 * Agrupar según regla de la mínima distancia
-	 */
-	private void agruparPatronesImg() {
-		for(int i = 0; i < imgs.size();i++) {
-			double distance = Double.MAX_VALUE;
-			
-			int m = this.getIdNearestCluster(imgs.get(i), distance);
-			clusters.get(m).getImages().add(imgs.get(i));
-			clusters.get(m).recalculateCentroid();
-		}
-	}
-
+	// ---------------------------------------------------------------------------------
+	// INICIALIZACION
+	// ---------------------------------------------------------------------------------
 	
-	private void agruparPatronesSig() {
+	private int getFirstCluster() {
+		Random rdn = new Random();
+		return rdn.nextInt(total_files);
+	}
+	
+	/**
+	 * Creamos T con las imagenes 
+	 */
+	private void initClustersImgs() {
 		
-		for(int i = 0; i < signals.size();i++) {			
-			int m = this.getIdNearestCluster(signals.get(i), Double.MAX_VALUE);
-			clusters.get(m).getSignals().add(signals.get(i));
-			clusters.get(m).recalculateCentroid();
+		for(int i = 0; i< imgs.size(); i++) {
+			double distance = Double.MAX_VALUE;
+			int m = this.getIdNearestCluster(imgs.get(i), distance);
+			imgs.get(i).setId_cluster(m);
+		}
+	}
+	
+	  private void initClustersSig() {
+			for(int i = 0; i< signals.size(); i++) {
+				double distance = Double.MAX_VALUE;
+				int m = this.getIdNearestCluster(signals.get(i), distance);
+				signals.get(i).setId_cluster(m);
+			}
+		
+	}
+	
+	// ---------------------------------------------------------------------------------------
+	// BUCLES
+	// ---------------------------------------------------------------------------------------
+	
+
+	private void loopSignals(TBatchelorWilkins transfer) {
+		boolean fin = false;
+
+		double umbral = calculateUmbral();
+		while(!fin) {	
+			//Crear conjunto T: compuesto por archivos más cercanos a los centros
+			initClustersSig();
+			
+			//Obtener n ->máximo  de  las  distancias  mínimas  de  los  patrones  a  los agrupamientos
+			
+			//Si la distancia de Xn > umbral -> se crea nuevo agrupamiento 
+			int n = 0;
+			double max_dist = this.findMaxDistanceofSignals(n);
+			
+			if(max_dist > umbral) {
+				signals.get(n).setId_cluster(A);
+				Cluster cl = new ClusterSig(A, signals.get(n));
+				cl.recalculateCentroid();
+				
+				signals.remove(n);
+				clusters.add(cl);
+				A++;
+			}
+			else {
+				fin = true;
+			}
 		}
 		
 	}
-
+	
 	/**
 	 * Bucle principal
 	 * @param transfer
@@ -162,11 +206,12 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 			double max_dist = findMaxDistanceofTImgs(n);
 			
 			if(max_dist > umbral) {
+				imgs.get(n).setId_cluster(A);
 				Cluster cl = new ClusterImg(A, imgs.get(n));
 				cl.recalculateCentroid();
+				
 				clusters.add(cl);
 				imgs.remove(n);
-				
 				A++;
 			}
 			else {
@@ -175,15 +220,7 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 		}
 		
 	}
-
-	/**
-	 * Calcula umbral centrandose en los dos centros más alejados
-	 * @return umbral
-	 */
-	private double calculateUmbral() {
-		return ((clusters.get(0).calculateDistanceTo(clusters.get(1)) * teta) / 1);
-	}
-
+	
 	private double findMaxDistanceofTImgs(int n) {
 		double max_dist = Double.MIN_VALUE;
 		for(int i = 0; i< imgs.size(); i++) {
@@ -213,56 +250,48 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 		return max_dist;
 	}
 
+
 	/**
-	 * Creamos T con las imagenes 
+	 * Calcula umbral centrandose en los dos centros más alejados
+	 * @return umbral
 	 */
-	private void initClustersImgs() {
-		
-		for(int i = 0; i< imgs.size(); i++) {
-			double distance = Double.MAX_VALUE;
-			int m = this.getIdNearestCluster(imgs.get(i), distance);
-			imgs.get(i).setId_cluster(m);
-		}
-	}
-
-	private void loopSignals(TBatchelorWilkins transfer) {
-		boolean fin = false;
-
-		double umbral = calculateUmbral();
-		while(!fin) {	
-			//Crear conjunto T: compuesto por archivos más cercanos a los centros
-			initClustersSig();
-			
-			//Obtener n ->máximo  de  las  distancias  mínimas  de  los  patrones  a  los agrupamientos
-			
-			//Si la distancia de Xn > umbral -> se crea nuevo agrupamiento 
-			int n = 0;
-			double max_dist = this.findMaxDistanceofSignals(n);
-			
-			if(max_dist > umbral) {
-				Cluster cl = new ClusterSig(A, signals.get(n));
-				cl.recalculateCentroid();
-				
-				signals.remove(n);
-				clusters.add(cl);
-				A++;
-			}
-			else {
-				fin = true;
-			}
-		}
-		
+	private double calculateUmbral() {
+		return (clusters.get(0).calculateDistanceTo(clusters.get(1)) * teta);
 	}
 	
-	  private void initClustersSig() {
-			for(int i = 0; i< signals.size(); i++) {
-				double distance = Double.MAX_VALUE;
-				int m = this.getIdNearestCluster(signals.get(i), distance);
-				signals.get(i).setId_cluster(m);
-			}
+	
+	// ---------------------------------------------------------------------------------------
+	// AGRUPAMIENTO
+	// ---------------------------------------------------------------------------------------	
+	
+	/**
+	 * Agrupar según regla de la mínima distancia
+	 */
+	private void agruparPatronesImg() {
+		for(int i = 0; i < imgs.size();i++) {
+			double distance = Double.MAX_VALUE;
+			
+			int m = this.getIdNearestCluster(imgs.get(i), distance);
+			clusters.get(m).addItem(imgs.get(i));
+			clusters.get(m).recalculateCentroid();
+		}
+	}
+
+	
+	private void agruparPatronesSig() {
+		
+		for(int i = 0; i < signals.size();i++) {			
+			int m = this.getIdNearestCluster(signals.get(i), Double.MAX_VALUE);
+			clusters.get(m).addItem(signals.get(i));
+			clusters.get(m).recalculateCentroid();
+		}
 		
 	}
 
+	// ---------------------------------------------------------------------------------------
+	// DISTANCIAS
+	// ---------------------------------------------------------------------------------------	
+	
 	/**
 	 * Obtenemos el cluster más cercano
 	 * @param obj
@@ -288,9 +317,8 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 	                id_cluster = cluster.getId_cluster();
 	            }
 	        }
-
 	        return id_cluster;
-	    }
+	}
 	    
 	
     
@@ -333,10 +361,4 @@ public class BatchelorWilkinsImp implements BatchelorWilkins{
 
 			return Math.sqrt(sum);
     }
-
-	private int getFirstCluster() {
-		Random rdn = new Random();
-		return rdn.nextInt(total_files);
-	}
-
 }

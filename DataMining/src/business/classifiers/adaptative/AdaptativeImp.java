@@ -34,6 +34,8 @@ public class AdaptativeImp implements Adaptative {
 		
 		Data data = FactoryAS.getInstance().readData2(transfer.getZip().getList());
 		
+		MainView.getInstance().UpdateArea("Obteniendo información de archivos : " + hourdateFormat.format(date) + "\n");
+		
 		T = transfer.getT();
 		O = transfer.getO();
 		

@@ -34,6 +34,8 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 		
 		Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 		
+		MainView.getInstance().UpdateArea("Obteniendo información de archivos : " + hourdateFormat.format(date) + "\n");
+		
 		if(transfer.gettZip().isAreSignals()) {
 			this.signals = data.readSignals();
 			this.total_files = signals.size();
@@ -45,7 +47,7 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 		
 		MainView.getInstance().UpdateArea("Se han cargado todos los archivos : " + hourdateFormat.format(date) + "\n");
 		MainView.getInstance().UpdateArea("\n ******************************************************************************** \n");
-		MainView.getInstance().UpdateArea("Empieza el agrupamiento secuencial : " + hourdateFormat.format(date));
+		MainView.getInstance().UpdateArea("Empieza el agrupamiento secuencial : " + hourdateFormat.format(date) + "\n");
 		
 		//Selecciona aleatoriamente primer centro
 		int index = getFirstCluster();
@@ -275,16 +277,14 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
 
         for(Cluster cluster: clusters) {
             double dist;
-            double sum = 0;
             
             if(this.areSignals) {
             	Signal sig = (Signal) obj;
-            	sum = this.calculateDistanceSignal(sig, cluster);
+            	dist = this.calculateDistanceSignal(sig, cluster);
             }else {
             	Image img = (Image) obj;
-            	sum = this.calculateDistanceImgs(img, cluster);
+            	dist = this.calculateDistanceImgs(img, cluster);
             }
-            dist = Math.sqrt(sum);
 
             if(dist < distance) {
                 distance = dist;
@@ -305,7 +305,7 @@ public class AgrupamientoSecImp implements AgrupamientoSec{
         	}
         }
         
-		return sum;
+		return Math.sqrt(sum);
     }
     
     private double calculateDistanceSignal(Signal sig, Cluster cluster) {

@@ -34,6 +34,8 @@ public class MatrizSimImpl implements MatrizSim{
 		
 		Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 		
+		MainView.getInstance().UpdateArea("Obteniendo información de archivos : " + hourdateFormat.format(date) + "\n");
+		
 		if(transfer.gettZip().isAreSignals()) {
 			this.signals = data.readSignals();
 			this.total_files = signals.size();
@@ -45,7 +47,7 @@ public class MatrizSimImpl implements MatrizSim{
 		
 		MainView.getInstance().UpdateArea("Se han cargado todos los archivos : " + hourdateFormat.format(date) + "\n");
 		MainView.getInstance().UpdateArea("\n ******************************************************************************** \n");
-		MainView.getInstance().UpdateArea("Empieza el algoritmo de matriz por similitud : " + hourdateFormat.format(date));
+		MainView.getInstance().UpdateArea("Empieza el algoritmo de matriz por similitud : " + hourdateFormat.format(date) + "\n");
 		
 		teta = transfer.getO();
 		matrix = new double[total_files][total_files];
@@ -111,6 +113,7 @@ public class MatrizSimImpl implements MatrizSim{
 					if(matrix[i][k] == 1 && r[k] != 1) {
 						cl.addItem(signals.get(k));
 					}else if(signals.get(i).calculateDistanceTo(signals.get(k)) <= teta) {
+						signals.get(k).setId_cluster(cl.getId_cluster());
 						cl.addItem(signals.get(k));
 						r[k] = 1;
 					}
@@ -123,21 +126,9 @@ public class MatrizSimImpl implements MatrizSim{
 		
 	}
 
-	private void calculateDistancesSig() {
-		for(int i = 0; i < signals.size(); i++) {
-			for(int j = 0; j < signals.size(); j++) {
-					double dist = signals.get(i).calculateDistanceTo(signals.get(j));
-					if(dist <= teta) {
-						matrix[i][j] = 1;
-					}
-			}
-		}
-	}
-
 	private void loopImgs(int row, double[] r) {
 		Cluster cl = new ClusterImg(A, imgs.get(row));
 		cl.setCentroid(imgs.get(row));
-		imgs.remove(row);
 		
 		for(int i = 0; i < r.length; i++) {
 			if(r[i] == 1) {
@@ -167,6 +158,17 @@ public class MatrizSimImpl implements MatrizSim{
 					}
 			}
 		}		
+	}
+	
+	private void calculateDistancesSig() {
+		for(int i = 0; i < signals.size(); i++) {
+			for(int j = 0; j < signals.size(); j++) {
+					double dist = signals.get(i).calculateDistanceTo(signals.get(j));
+					if(dist <= teta) {
+						matrix[i][j] = 1;
+					}
+			}
+		}
 	}
 	
 	private double[] getRowNumerosa(int r_numerosa) {

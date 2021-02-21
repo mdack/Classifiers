@@ -64,6 +64,7 @@ public class JHierarchicalImp extends JHierarchical {
 		datos.add(lLink);
 		cbLinked.addItem("Single Link");
 		cbLinked.addItem("Complete Link");
+		cbLinked.addItem("Average Link");
 		datos.add(cbLinked);
 		
 		btExecute.setText(" Ejecutar ");
@@ -87,13 +88,13 @@ public class JHierarchicalImp extends JHierarchical {
 				JOptionPane.showMessageDialog(null,
 			"¡Cluster creados!",
 			"Correcto", JOptionPane.PLAIN_MESSAGE);
+				this.dispose();
 				TResult transfer = (TResult) c.getDatos();
 				
 				Data data = FactoryAS.getInstance().writeResult();
 				data.writeCluster(transfer);
 				
-				MainView.getInstance().UpdateArea(transfer.toString());	
-				this.dispose();
+				MainView.getInstance().UpdateArea(transfer.getList().get(0).toNewickString(0));	
 			}break;
 			case(DispatcherResults.HierarchicalError):{
 				JOptionPane.showMessageDialog(null,

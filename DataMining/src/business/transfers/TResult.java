@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import business.classifiers.cluster.Cluster;
-import business.classifiers.hierarchical.LinkageStrategy;
+import business.classifiers.hierarchical.strategy.LinkageStrategy;
 
 public class TResult {
 	private int N;

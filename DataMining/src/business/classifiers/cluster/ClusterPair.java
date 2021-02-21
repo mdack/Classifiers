@@ -1,18 +1,3 @@
-/*******************************************************************************
- * Copyright 2013 Lars Behnke
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 
 package business.classifiers.cluster;
 
@@ -59,14 +44,9 @@ public class ClusterPair implements Comparable<ClusterPair> {
         this.linkageDistance = distance;
     }
 
-    /**
-     * @return a new ClusterPair with the two left/right inverted
-     */
     public ClusterPair reverse() {
         return new ClusterPair(getrCluster(), getlCluster(), getLinkageDistance());
     }
-
-
 
     @Override
     public int compareTo(ClusterPair o) {
@@ -81,34 +61,29 @@ public class ClusterPair implements Comparable<ClusterPair> {
 
         return result;
     }
-/*
-    public Cluster agglomerate(int clusterIdx) {
-        return agglomerate("clstr#" + clusterIdx);
-    }
 
-    public Cluster agglomerate(String name) {
-        Cluster cluster = new Cluster(name);
+    public Cluster agglomerate(int id, boolean isSignal) {
+    	
+        Cluster cluster = null;
+        if(isSignal)
+        	cluster = new ClusterSig(id);
+        else
+        	cluster = new ClusterImg(id);
+        
         cluster.setDistance(new Distance(getLinkageDistance()));
-        //New clusters will track their children's leaf names; i.e. each cluster knows what part of the original data it contains
-        cluster.appendLeafNames(lCluster.getLeafNames());
-        cluster.appendLeafNames(rCluster.getLeafNames());
+       
         cluster.addChild(lCluster);
         cluster.addChild(rCluster);
         lCluster.setParent(cluster);
         rCluster.setParent(cluster);
 
-        Double lWeight = lCluster.getWeightValue();
-        Double rWeight = rCluster.getWeightValue();
+     
+        double lWeight = lCluster.getWeightValue();
+        double rWeight = rCluster.getWeightValue();
         double weight = lWeight + rWeight;
+        
         cluster.getDistance().setWeight(weight);
 
         return cluster;
     }
-
-*/
-
-	public Cluster agglomerate(int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

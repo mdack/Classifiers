@@ -38,7 +38,6 @@ public class DataImp implements Data{
 		for(FileData fd : list_files) {
 			double row = 0;
 			List<List<Double>> list_rows = new ArrayList<List<Double>>();
-				System.out.println(fd.getName() + "\n");
 				
 	            String text = null;
 	            try (Scanner scanner = new Scanner(fd.getData(), StandardCharsets.UTF_8.name())) {

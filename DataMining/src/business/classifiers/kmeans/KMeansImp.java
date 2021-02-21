@@ -51,6 +51,8 @@ public class KMeansImp implements KMeans{
 			
 			Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 			
+			MainView.getInstance().UpdateArea("Obteniendo información de archivos : " + hourdateFormat.format(date) + "\n");
+			
 			if(transfer.gettZip().isAreSignals()) {
 				this.signals = data.readSignals();
 				this.total_files = signals.size();

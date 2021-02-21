@@ -14,20 +14,13 @@
  * limitations under the License.
  ******************************************************************************/
 
-package business.classifiers.hierarchical;
+package business.classifiers.hierarchical.strategy;
 
 import java.util.Collection;
 
-public class SingleLinkageStrategy implements LinkageStrategy {
+import business.classifiers.cluster.Distance;
 
-	@Override
-	public Distance calculateDistance(Collection<Distance> distances) {
-		double min = Double.NaN;
+public interface LinkageStrategy {
 
-		for (Distance dist : distances) {
-		    if (Double.isNaN(min) || dist.getDistance() < min)
-		        min = dist.getDistance();
-		}
-		return new Distance(min);
-	}
+    public Distance calculateDistance(Collection<Distance> distances);
 }

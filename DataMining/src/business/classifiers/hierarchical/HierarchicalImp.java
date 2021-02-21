@@ -11,6 +11,12 @@ import business.classifiers.cluster.Cluster;
 import business.classifiers.cluster.ClusterImg;
 import business.classifiers.cluster.ClusterPair;
 import business.classifiers.cluster.ClusterSig;
+import business.classifiers.cluster.Distance;
+import business.classifiers.hierarchical.strategy.AverageLinkageStrategy;
+import business.classifiers.hierarchical.strategy.CompleteLinkageStrategy;
+import business.classifiers.hierarchical.strategy.DistanceMap;
+import business.classifiers.hierarchical.strategy.LinkageStrategy;
+import business.classifiers.hierarchical.strategy.SingleLinkageStrategy;
 import business.elements.Image;
 import business.elements.Signal;
 import business.factory.FactoryAS;
@@ -37,7 +43,8 @@ public class HierarchicalImp implements Hierarchical{
 		
 		Data data = FactoryAS.getInstance().readData2(transfer.gettZip().getList());
 		
-		System.out.println("Obteniendo información de archivos : " + hourdateFormat.format(date));
+		MainView.getInstance().UpdateArea("Obteniendo información de archivos : " + hourdateFormat.format(date) + "\n");
+		
 		if(transfer.gettZip().isAreSignals()) {
 			this.signals = data.readSignals();
 			this.total_files = signals.size();
@@ -49,7 +56,7 @@ public class HierarchicalImp implements Hierarchical{
 		
 		MainView.getInstance().UpdateArea("Se han cargado todos los archivos : " + hourdateFormat.format(date) + "\n");
 		MainView.getInstance().UpdateArea("\n ******************************************************************************** \n");
-		MainView.getInstance().UpdateArea("Empieza el algoritmo Jerárquico aglomerativo : " + hourdateFormat.format(date));
+		MainView.getInstance().UpdateArea("Empieza el algoritmo Jerárquico aglomerativo : " + hourdateFormat.format(date) + "\n");
 		
 		m_distances = new double[total_files][total_files];
 		
@@ -79,19 +86,10 @@ public class HierarchicalImp implements Hierarchical{
 		return result;
 	}
 	
-	private LinkageStrategy getLinkStrategy(THierarchical transfer) {
-		LinkageStrategy ls = null;
-		switch(transfer.getTipo_link()) {
-		case 0:
-			ls = new SingleLinkageStrategy();
-			break;
-		case 1:
-			ls = new CompleteLinkageStrategy();
-			break;
-		}
-		return ls;
-	}
-
+	// ---------------------------------------------------------------------------------
+	// INICIALIZACION
+	// ---------------------------------------------------------------------------------
+		
 	private void calculateDistancesSig() {
 		for(int i = 0; i < signals.size(); i++) {
 			for(int j = 0; j < signals.size(); j++) {
@@ -111,17 +109,123 @@ public class HierarchicalImp implements Hierarchical{
 		}		
 	}
 	
+	private void createClusters() {
+
+		for (int i = 0; i < this.total_files; i++) {
+			Cluster cluster = null;
+			
+			if(this.areSignals) {
+				signals.get(i).setId_cluster(i);
+				cluster = new ClusterSig(i, signals.get(i));
+			}
+			else {
+				imgs.get(i).setId_cluster(i);
+				cluster = new ClusterImg(i, imgs.get(i));
+			}
+			
+			clusters.add(cluster);
+		}
+	}
+	
+	// ---------------------------------------------------------------------------------
+	// BUCLE
+	// ---------------------------------------------------------------------------------
+	
+	public void agglomerate(LinkageStrategy linkageStrategy) {
+        ClusterPair minDistLink = distances.removeFirst();
+        
+        if (minDistLink != null) {
+            clusters.remove(minDistLink.getrCluster());
+            clusters.remove(minDistLink.getlCluster());
+
+            Cluster oldClusterL = minDistLink.getlCluster();
+            Cluster oldClusterR = minDistLink.getrCluster();
+            Cluster newCluster = minDistLink.agglomerate(globalClusterIndex++, this.areSignals);
+
+            for (Cluster cluster : clusters) {
+                ClusterPair link1 = findByClusters(cluster, oldClusterL);
+                ClusterPair link2 = findByClusters(cluster, oldClusterR);
+                ClusterPair newLinkage = new ClusterPair();
+                newLinkage.setlCluster(cluster);
+                newLinkage.setrCluster(newCluster);
+                Collection<Distance> distanceValues = new ArrayList<Distance>();
+
+                if (link1 != null) {
+                    double distVal = link1.getLinkageDistance();
+                    double weightVal = 0;   
+                    
+                    if(!this.areSignals) {
+                    	ClusterImg clImg = (ClusterImg) link1.getOtherCluster(cluster);
+                    	weightVal = clImg.calculateValue();
+                    }else {
+                    	ClusterSig clSig = (ClusterSig) link1.getOtherCluster(cluster);
+                    	double[] weightVals = clSig.calculateValue();
+                    	weightVal = weightVals[0] + weightVals[1];
+                    }
+                    
+                    distanceValues.add(new Distance(distVal, weightVal));
+                    distances.remove(link1);
+                }
+                if (link2 != null) {
+                    double distVal = link2.getLinkageDistance();
+                    double weightVal = 0;
+                    
+                    if(!this.areSignals) {
+                    	ClusterImg clImg = (ClusterImg) link2.getOtherCluster(cluster);
+                    	weightVal = clImg.calculateValue();
+                    }else {
+                    	ClusterSig clSig = (ClusterSig) link2.getOtherCluster(cluster);
+                    	double[] weightVals = clSig.calculateValue();
+                    	weightVal = weightVals[0] + weightVals[1];
+                    }
+                    
+                    distanceValues.add(new Distance(distVal, weightVal));
+                    distances.remove(link2);
+                }
+
+                Distance newDistance = linkageStrategy.calculateDistance(distanceValues);
+
+                newLinkage.setLinkageDistance(newDistance.getDistance());
+                distances.add(newLinkage);
+            }
+            clusters.add(newCluster);
+        }
+    }
+	
+	// ---------------------------------------------------------------------------------
+	// ESTRATEGIA
+	// ---------------------------------------------------------------------------------
+	
+	private LinkageStrategy getLinkStrategy(THierarchical transfer) {
+		LinkageStrategy ls = null;
+		switch(transfer.getTipo_link()) {
+		case 0:
+			ls = new SingleLinkageStrategy();
+			break;
+		case 1:
+			ls = new CompleteLinkageStrategy();
+			break;
+		case 2:
+			ls = new AverageLinkageStrategy();
+			break;
+		}
+		return ls;
+	}
+	
+	// ---------------------------------------------------------------------------------
+	// DISTANCIAS
+	// ---------------------------------------------------------------------------------
+	
 	    private DistanceMap createLinkages() {
 	        DistanceMap linkages = new DistanceMap();
 	        for (int col = 0; col < clusters.size(); col++) {
-	            Cluster cluster_col = clusters.get(col);
 	            for (int row = col + 1; row < clusters.size(); row++) {
 	            	int index = accessFunction(row, col, clusters.size());
 	            	if(index < clusters.size()) {
 		                ClusterPair link = new ClusterPair();
 		                Double d = m_distances[0][index];
 		                link.setLinkageDistance(d);
-		                link.setlCluster(cluster_col);
+		                link.setlCluster(clusters.get(col));
 		                link.setrCluster(clusters.get(row));
 		                linkages.add(link);
 	            	}
@@ -129,26 +233,6 @@ public class HierarchicalImp implements Hierarchical{
 	        }
 	        return linkages;
 	    }
-		
-	private void createClusters() {
-
-		for (int i = 0; i < this.total_files; i++) {
-			Cluster cluster = null;
-			
-			if(this.areSignals) {
-				cluster = new ClusterSig(i, signals.get(i));
-			}
-			else {
-				cluster = new ClusterImg(i, imgs.get(i));
-			}
-			
-			clusters.add(cluster);
-		}
-	}
-
-	private static int accessFunction(int i, int j, int n) {
-		return n * j - j * (j + 1) / 2 + i - 1 - j;
-	}
 	
 	 public DistanceMap getDistances() {
 	        return distances;
@@ -164,45 +248,10 @@ public class HierarchicalImp implements Hierarchical{
 	        return clusters;
 	    }
 
-	    public void agglomerate(LinkageStrategy linkageStrategy) {
-	        ClusterPair minDistLink = distances.removeFirst();
-	        if (minDistLink != null) {
-	            clusters.remove(minDistLink.getrCluster());
-	            clusters.remove(minDistLink.getlCluster());
-
-	            Cluster oldClusterL = minDistLink.getlCluster();
-	            Cluster oldClusterR = minDistLink.getrCluster();
-	            Cluster newCluster = minDistLink.agglomerate(++globalClusterIndex);
-
-	            for (Cluster iClust : clusters) {
-	                ClusterPair link1 = findByClusters(iClust, oldClusterL);
-	                ClusterPair link2 = findByClusters(iClust, oldClusterR);
-	                ClusterPair newLinkage = new ClusterPair();
-	                newLinkage.setlCluster(iClust);
-	                newLinkage.setrCluster(newCluster);
-	                Collection<Distance> distanceValues = new ArrayList<Distance>();
-
-	                if (link1 != null) {
-	                    Double distVal = link1.getLinkageDistance();
-	                    //Double weightVal = (double) link1.getOtherCluster(iClust).calculateValue();
-	                    //distanceValues.add(new Distance(distVal, weightVal));
-	                    distances.remove(link1);
-	                }
-	                if (link2 != null) {
-	                    Double distVal = link2.getLinkageDistance();
-	                    //Double weightVal = (double) link2.getOtherCluster(iClust).calculateValue();
-	                    //distanceValues.add(new Distance(distVal, weightVal));
-	                    distances.remove(link2);
-	                }
-
-	                Distance newDistance = linkageStrategy.calculateDistance(distanceValues);
-
-	                newLinkage.setLinkageDistance(newDistance.getDistance());
-	                distances.add(newLinkage);
-	            }
-	            clusters.add(newCluster);
-	        }
-	    }
+		private static int accessFunction(int i, int j, int n) {
+			return n * j - j * (j + 1) / 2 + i - 1 - j;
+		}
+	    
 
 	    private ClusterPair findByClusters(Cluster c1, Cluster c2) {
 	        return distances.findByCodePair(c1, c2);
