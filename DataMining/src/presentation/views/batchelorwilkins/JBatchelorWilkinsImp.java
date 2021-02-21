@@ -88,13 +88,14 @@ public class JBatchelorWilkinsImp extends JBatchelorWilkins {
 							JOptionPane.showMessageDialog(null,
 						"¡Cluster creados!",
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
+							this.dispose();
 				TResult transfer = (TResult) c.getDatos();
 							
 				Data data = FactoryAS.getInstance().writeResult();
 				data.writeCluster(transfer);
 							
 				MainView.getInstance().UpdateArea(transfer.toString());	
-				this.dispose();
+				
 			}break;
 			case(DispatcherResults.BatchelorWilkinsError):{
 				JOptionPane.showMessageDialog(null,

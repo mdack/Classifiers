@@ -95,7 +95,7 @@ public class MainView extends JFrame{
 	}
 	
 	private void addBottom(JPanel window){
-		JLabel south = new JLabel ("Software v3.0.0");		//Label for the bottom info
+		JLabel south = new JLabel ("Software v3.6.1");		//Label for the bottom info
 		south.setBackground(Color.orange);					//Background color
 		south.setFont(new Font("Header",Font.ITALIC, 12));	//Header font. Size 18.
 		south.setForeground(Color.BLACK);					//Font color

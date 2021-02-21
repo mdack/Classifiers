@@ -105,13 +105,11 @@ public class JKMeansImp extends JKMeans{
 				JOptionPane.showMessageDialog(null,
 						"Cluster creados!",
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
-				
+				this.dispose();
 				Data data = FactoryAS.getInstance().writeResult();
 				data.writeCluster(transfer);
 				
-				MainView.getInstance().UpdateArea(transfer.toString());								
-				this.dispose();
-				
+				MainView.getInstance().UpdateArea(transfer.toString());										
 				
 			break;
 			case(DispatcherResults.KMeansError):

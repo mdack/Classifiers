@@ -101,13 +101,14 @@ public class JAdaptativeImp extends JAdaptative {
 							JOptionPane.showMessageDialog(null,
 						"Cluster creados!",
 						"Correcto", JOptionPane.PLAIN_MESSAGE);
+							this.dispose();
 				transfer = (TResult) c.getDatos();
 				
 				Data data = FactoryAS.getInstance().writeResult();
 				data.writeCluster(transfer);
 				
 				MainView.getInstance().UpdateArea(transfer.toString());	
-				this.dispose();
+				
 			}break;
 			case(DispatcherResults.AdaptativeError):{
 				JOptionPane.showMessageDialog(null,
