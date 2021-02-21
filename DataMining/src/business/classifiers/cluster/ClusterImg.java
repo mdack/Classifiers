@@ -129,7 +129,9 @@ public class ClusterImg extends Cluster {
 	@Override
 	public void removeItem(Object obj) {
 		Image img = (Image) obj;
-		this.list_files.remove(img);
+		
+		if(this.list_files.contains(img))
+			this.list_files.remove(img);
 	}
 	
 	

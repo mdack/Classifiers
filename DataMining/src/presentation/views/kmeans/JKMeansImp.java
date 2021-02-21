@@ -109,9 +109,7 @@ public class JKMeansImp extends JKMeans{
 				Data data = FactoryAS.getInstance().writeResult();
 				data.writeCluster(transfer);
 				
-				MainView.getInstance().UpdateArea(transfer.toString());
-				System.out.println(transfer.toString());
-								
+				MainView.getInstance().UpdateArea(transfer.toString());								
 				this.dispose();
 				
 				

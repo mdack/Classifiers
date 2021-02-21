@@ -86,13 +86,13 @@ public class JMatrizSimilitudImp extends JMatrizSimilitud {
 				JOptionPane.showMessageDialog(null,
 			"Cluster creados!",
 			"Correcto", JOptionPane.PLAIN_MESSAGE);
-				this.dispose();
 				TResult transfer = (TResult) c.getDatos();
 				
 				Data data = FactoryAS.getInstance().writeResult();
 				data.writeCluster(transfer);
 				
-				System.out.println(transfer.toString());
+				MainView.getInstance().UpdateArea(transfer.toString());	
+				this.dispose();
 			}break;
 			case(DispatcherResults.MatrizError):{
 				JOptionPane.showMessageDialog(null,

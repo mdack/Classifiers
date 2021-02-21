@@ -19,7 +19,6 @@ import business.files.Data;
 import business.files.DataImp;
 import business.files.Zip;
 import business.files.ZipImp;
-import business.transfers.TResult;
 
 public class FactoryASImp extends FactoryAS {
 

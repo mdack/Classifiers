@@ -15,6 +15,7 @@ import business.factory.FactoryAS;
 import business.files.Data;
 import business.transfers.TMatrizSim;
 import business.transfers.TResult;
+import presentation.views.mainview.MainView;
 
 public class MatrizSimImpl implements MatrizSim{
 	private List<Signal> signals;
@@ -42,9 +43,9 @@ public class MatrizSimImpl implements MatrizSim{
 			this.areSignals = false;
 		}
 		
-		System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
-		
-		System.out.println("Empieza el algoritmo de matriz por similitud : " + hourdateFormat.format(date));
+		MainView.getInstance().UpdateArea("Se han cargado todos los archivos : " + hourdateFormat.format(date) + "\n");
+		MainView.getInstance().UpdateArea("\n ******************************************************************************** \n");
+		MainView.getInstance().UpdateArea("Empieza el algoritmo de matriz por similitud : " + hourdateFormat.format(date));
 		
 		teta = transfer.getO();
 		matrix = new double[total_files][total_files];
@@ -77,7 +78,8 @@ public class MatrizSimImpl implements MatrizSim{
 				pos++;
 			}
 		}
-		System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
+		
+		MainView.getInstance().UpdateArea("El algoritmo ha terminado : " + hourdateFormat.format(date) + "\n");
 		
 		TResult result = new TResult();
 		result.setList(clusters);

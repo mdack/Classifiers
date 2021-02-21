@@ -40,9 +40,11 @@ public class AdaptativeImp implements Adaptative {
 		Cluster cl_1 = null;
 		if(transfer.getZip().isAreSignals()) {
 			this.signals = data.readSignals();
-			System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
 			
-			System.out.println("Empieza el método adaptativo : " + hourdateFormat.format(date));
+			MainView.getInstance().UpdateArea("Se han cargado todos los archivos : " + hourdateFormat.format(date) + "\n");
+			MainView.getInstance().UpdateArea("\n ******************************************************************************** \n");
+			MainView.getInstance().UpdateArea("Empieza el método adaptativo : " + hourdateFormat.format(date) + "\n");
+			
 			// Creamos primer agrupamiento con patrón 1.
 			signals.get(0).changeState(MyState.ASIGNED, A);
 			cl_1 = new ClusterSig(A,signals.get(0));
@@ -62,9 +64,10 @@ public class AdaptativeImp implements Adaptative {
 		}else {
 			this.imgs = data.readImages();
 			this.areSignals = false;
-			System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
 			
-			System.out.println("Empieza el método adaptativo : " + hourdateFormat.format(date));
+			MainView.getInstance().UpdateArea("Se han cargado todos los archivos : " + hourdateFormat.format(date) + "\n");
+			MainView.getInstance().UpdateArea("\n ******************************************************************************** \n");
+			MainView.getInstance().UpdateArea("Empieza método adaptativo : " + hourdateFormat.format(date) + "\n");
 			
 			// Creamos primer agrupamiento con patrón 1.
 			imgs.get(0).changeState(MyState.ASIGNED, A);
@@ -83,7 +86,7 @@ public class AdaptativeImp implements Adaptative {
 			this.regroupImages();
 		}
 
-		System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
+		MainView.getInstance().UpdateArea("El algoritmo ha terminado : " + hourdateFormat.format(date) + "\n");
 		
 		TResult result = new TResult();
 		result.setCluste_rejection(true);

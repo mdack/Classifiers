@@ -11,7 +11,6 @@ import business.classifiers.matrizsimilitud.MatrizSim;
 import business.elements.FileData;
 import business.files.Data;
 import business.files.Zip;
-import business.transfers.TResult;
 
 public abstract class FactoryAS {
 	private static FactoryAS instance;

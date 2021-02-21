@@ -96,6 +96,7 @@ public class ClusterSig extends Cluster {
         for(int i = 0; i < size; i++) {
         	double key1 = (Double) list_t[i];
         	double key2 = (Double) list_t_centroid[i];
+        	
         	sum1 += key1 + key2;
         	sum2 += sig.getSignal().get(key1) + centroid.getSignal().get(key2);
 
@@ -166,7 +167,9 @@ public class ClusterSig extends Cluster {
 	@Override
 	public void removeItem(Object obj) {
 		 Signal sig = (Signal) obj;
-		 this.list_files.remove(sig);	
+		 
+		 if(list_files.contains(sig))
+			 this.list_files.remove(sig);	
 	}
 
 	public double[] getCentral_values() {

@@ -1,11 +1,11 @@
 package business.transfers;
 
 public class TAgrupamientoSec {
-	private int K, M;
-	private double R, C, T;
+	private int K, M, T;
+	private double R, C;
 	private TZip tZip;
 	
-	public TAgrupamientoSec(int k2, double r2, double c2, int m2, double t2, TZip tZip2) {
+	public TAgrupamientoSec(int k2, double r2, double c2, int m2, int t2, TZip tZip2) {
 		K = k2;
 		R = r2;
 		C = c2;
@@ -37,7 +37,7 @@ public class TAgrupamientoSec {
 	public void setM(int m) {
 		M = m;
 	}
-	public double getT() {
+	public int getT() {
 		return T;
 	}
 	public void setT(int t) {

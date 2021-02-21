@@ -39,7 +39,7 @@ public class ALAgrupamientoSec implements ActionListener{
 		double R = Double.valueOf(tR.getText());
 		double C = Double.valueOf(tC.getText());
 		int M = Integer.parseInt(tM.getText());
-		double T = Double.valueOf(tT.getText());
+		int T = Integer.parseInt(tT.getText());
 		
 		TAgrupamientoSec transfer = new TAgrupamientoSec(K, R, C, M, T,tzip);
 		context.setDatos(transfer);

@@ -33,9 +33,9 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 	public void initComponents() {
 		this.setTitle("Agrupamiento Secuencial");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(600,600);
         this.setResizable(false); 
         this.setLocationRelativeTo(null);
-        this.setSize(600,600);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
 		
@@ -61,19 +61,19 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 		//text
 		txK = new JTextField();
 		txK.setEditable(true);
-		txK.setText("4");
+		txK.setText("5");
 		txR = new JTextField();
 		txR.setEditable(true);
-		txR.setText("2");
+		txR.setText("15000");
 		txC = new JTextField();
 		txC.setEditable(true);
-		txC.setText("3.5");
+		txC.setText("5000");
 		txM = new JTextField();
 		txM.setEditable(true);
-		txM.setText("10");
+		txM.setText("15");
 		txT = new JTextField();
 		txT.setEditable(true);
-		txT.setText("20");
+		txT.setText("30");
 		
 	}
 	
@@ -117,13 +117,14 @@ public class JAgrupamientoSecImp extends JAgrupamientoSec {
 				JOptionPane.showMessageDialog(null,
 			"Cluster creados!",
 			"Correcto", JOptionPane.PLAIN_MESSAGE);
-				this.dispose();
+				
 				TResult transfer = (TResult) c.getDatos();
 				
 				Data data = FactoryAS.getInstance().writeResult();
 				data.writeCluster(transfer);
 				
-				System.out.println(transfer.toString());
+				MainView.getInstance().UpdateArea(transfer.toString());	
+				this.dispose();
 			}break;
 			case(DispatcherResults.AgrupamientoError):{
 				JOptionPane.showMessageDialog(null,

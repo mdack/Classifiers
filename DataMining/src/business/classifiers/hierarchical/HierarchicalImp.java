@@ -17,6 +17,7 @@ import business.factory.FactoryAS;
 import business.files.Data;
 import business.transfers.THierarchical;
 import business.transfers.TResult;
+import presentation.views.mainview.MainView;
 
 public class HierarchicalImp implements Hierarchical{
 
@@ -45,9 +46,11 @@ public class HierarchicalImp implements Hierarchical{
 			this.total_files = imgs.size();
 			this.areSignals = false;
 		}
-		System.out.println("Se han cargado todos los archivos : " + hourdateFormat.format(date));
 		
-		System.out.println("Empieza el algoritmo Jerárquico aglomerativo : " + hourdateFormat.format(date));
+		MainView.getInstance().UpdateArea("Se han cargado todos los archivos : " + hourdateFormat.format(date) + "\n");
+		MainView.getInstance().UpdateArea("\n ******************************************************************************** \n");
+		MainView.getInstance().UpdateArea("Empieza el algoritmo Jerárquico aglomerativo : " + hourdateFormat.format(date));
+		
 		m_distances = new double[total_files][total_files];
 		
 		//Calcular las distancias entre todas las parejas de patrones
@@ -65,7 +68,7 @@ public class HierarchicalImp implements Hierarchical{
 		}
 		
 		
-		System.out.println("El algoritmo ha terminado : " + hourdateFormat.format(date));
+        MainView.getInstance().UpdateArea("El algoritmo ha terminado : " + hourdateFormat.format(date) + "\n");
 		
 		TResult result = new TResult();
 		result.setList(clusters);
